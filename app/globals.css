@@ -1,0 +1,1288 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Improve all transitions site-wide */
+  * {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter,
+      backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 47.4% 11.2%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 47.4% 11.2%;
+
+  /* Updated primary colors to pure yellow theme */
+  --primary: 45 93% 47%; /* Yellow 500 - pure yellow instead of amber */
+  --primary-foreground: 0 0% 100%; /* White for better contrast */
+
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+
+  /* Updated accent colors to yellow theme */
+  --accent: 45 93% 47%; /* Yellow 500 */
+  --accent-foreground: 0 0% 100%; /* White for better contrast */
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  /* Updated ring color to yellow */
+  --ring: 45 93% 47%; /* Yellow 500 */
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 222.2 47.4% 11.2%;
+  --foreground: 210 40% 98%;
+
+  --card: 222.2 47.4% 11.2%;
+  --card-foreground: 210 40% 98%;
+
+  --popover: 222.2 47.4% 11.2%;
+  --popover-foreground: 210 40% 98%;
+
+  /* Updated dark mode primary colors to yellow theme */
+  --primary: 45 93% 47%; /* Yellow 500 */
+  --primary-foreground: 0 0% 100%; /* White for better contrast */
+
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+
+  /* Updated dark mode accent colors to yellow theme */
+  --accent: 45 93% 47%; /* Yellow 500 */
+  --accent-foreground: 0 0% 100%; /* White for better contrast */
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  /* Updated dark mode ring color to yellow */
+  --ring: 45 93% 47%; /* Yellow 500 */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-montserrat);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-size: 16px;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+  }
+}
+
+/* Updated button utility classes to use yellow theme instead of amber */
+.btn-primary {
+  @apply bg-yellow-500 text-white hover:bg-yellow-600 font-medium transition-all duration-300;
+}
+
+.btn-secondary {
+  @apply bg-gray-700 text-white hover:bg-gray-800 font-medium transition-all duration-300;
+}
+
+.btn-outline {
+  @apply border-2 border-yellow-500 text-yellow-600 hover:bg-yellow-500 hover:text-white font-medium transition-all duration-300;
+}
+
+.btn-dark {
+  @apply bg-gray-900 text-white hover:bg-black font-medium transition-all duration-300;
+}
+
+.btn-light {
+  @apply bg-gray-100 text-gray-800 hover:bg-gray-200 font-medium transition-all duration-300;
+}
+
+/* Enhanced button styles */
+.btn-enhanced {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-enhanced::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-enhanced:hover::before {
+  left: 100%;
+}
+
+.btn-enhanced:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Ensure proper contrast for all button variants */
+.bg-yellow-400,
+.bg-yellow-500,
+.bg-yellow-600,
+.bg-yellow-700 {
+  @apply text-white;
+}
+
+.bg-white,
+.bg-gray-50,
+.bg-gray-100,
+.bg-gray-200 {
+  @apply text-gray-900;
+}
+
+.bg-gray-700,
+.bg-gray-800,
+.bg-gray-900,
+.bg-black {
+  @apply text-white;
+}
+
+/* Ensure proper contrast for outline buttons */
+.border-yellow-500.bg-transparent {
+  @apply text-yellow-600 dark:text-yellow-400;
+}
+
+.border-yellow-500.bg-transparent:hover {
+  @apply text-white;
+}
+
+.border-white.bg-transparent {
+  @apply text-white;
+}
+
+.border-white.bg-transparent:hover {
+  @apply text-gray-900;
+}
+
+/* Mobile-first responsive typography */
+h1 {
+  @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold;
+}
+
+h2 {
+  @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold;
+}
+
+h3 {
+  @apply text-lg sm:text-xl md:text-2xl font-bold;
+}
+
+p,
+li,
+a {
+  @apply text-base leading-relaxed;
+}
+
+/* Responsive spacing */
+section {
+  @apply py-8 sm:py-12 md:py-16 lg:py-20;
+}
+
+.container {
+  @apply px-4 sm:px-6 lg:px-8 mx-auto w-full max-w-7xl;
+}
+
+/* Enhanced spacing and layout */
+.section-padding {
+  padding: 5rem 0;
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding: 3rem 0;
+  }
+}
+
+/* Responsive grid layouts */
+.responsive-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8;
+}
+
+.responsive-grid-2 {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12;
+}
+
+/* Navbar specific styles */
+.navbar-link {
+  @apply text-base font-medium transition-colors inline-flex items-center;
+}
+
+/* Mobile-friendly interactive elements */
+.mobile-touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button,
+a,
+[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+button:not(.inline),
+[role="button"]:not(.inline),
+a.btn,
+a.button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  min-height: 44px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+button[size="icon"] {
+  min-height: 44px;
+  min-width: 44px;
+  box-sizing: content-box;
+}
+
+/* Responsive images */
+.responsive-image {
+  @apply w-full h-auto object-cover;
+}
+
+.responsive-image-container {
+  @apply relative w-full overflow-hidden rounded-lg;
+  aspect-ratio: 16 / 9;
+}
+
+/* Enhanced gradient backgrounds */
+.gradient-hero {
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.9) 0%,
+    rgba(217, 119, 6, 0.9) 50%,
+    rgba(180, 83, 9, 0.9) 100%
+  );
+}
+
+.gradient-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Ensure high contrast for all text */
+.text-gray-600 {
+  @apply dark:text-gray-300;
+}
+
+.text-gray-700 {
+  @apply dark:text-gray-200;
+}
+
+.text-gray-800 {
+  @apply dark:text-gray-100;
+}
+
+.text-gray-900 {
+  @apply dark:text-white;
+}
+
+/* Enhanced text effects */
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+/* Ensure form elements have proper contrast */
+input,
+select,
+textarea {
+  @apply text-gray-900 dark:text-white bg-white dark:bg-gray-800;
+  font-size: 1rem;
+  min-height: 44px;
+}
+
+/* Updated form focus ring to yellow */
+.form-input {
+  @apply w-full px-3 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500;
+}
+
+/* Custom theme colors */
+.theme-text {
+  @apply text-yellow-600 dark:text-yellow-400;
+}
+
+.theme-bg {
+  @apply bg-yellow-500 dark:bg-yellow-600;
+}
+
+.theme-border {
+  @apply border-yellow-500 dark:border-yellow-400;
+}
+
+.theme-hover {
+  @apply hover:bg-yellow-600 dark:hover:bg-yellow-700;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 640px) {
+  /* Improve text alignment on mobile */
+  .mobile-text-center {
+    text-align: center;
+  }
+
+  .mobile-text-left {
+    text-align: left;
+  }
+
+  /* Adjust spacing on mobile */
+  .mobile-py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .mobile-px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .mobile-my-4 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .mobile-mx-4 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  /* Stack items on mobile */
+  .mobile-stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Center items on mobile */
+  .mobile-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Adjust font sizes on mobile */
+  .mobile-text-sm {
+    font-size: 0.875rem;
+  }
+
+  .mobile-text-base {
+    font-size: 1rem;
+  }
+
+  .mobile-text-lg {
+    font-size: 1.125rem;
+  }
+
+  /* Improve tap targets on mobile */
+  .mobile-tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Hide elements on mobile */
+  .mobile-hidden {
+    display: none;
+  }
+
+  /* Show elements only on mobile */
+  .mobile-only {
+    display: block;
+  }
+
+  /* Adjust image sizes on mobile */
+  .mobile-img-sm {
+    height: 200px;
+  }
+
+  .mobile-img-md {
+    height: 300px;
+  }
+
+  .mobile-img-lg {
+    height: 400px;
+  }
+
+  /* Proper line height for better readability on small screens */
+  p,
+  li {
+    @apply leading-relaxed;
+  }
+
+  /* Ensure buttons are centered on mobile */
+  .flex-col > a,
+  .flex-col > button {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Fix for section content on mobile */
+  section > div > div {
+    text-align: center;
+  }
+
+  /* Adjust grid layouts on mobile */
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Fix for fixed position elements on iOS */
+.fixed,
+.sticky {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Responsive utilities */
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.flex-between {
+  @apply flex items-center justify-between;
+}
+
+.flex-start {
+  @apply flex items-center justify-start;
+}
+
+.flex-end {
+  @apply flex items-center justify-end;
+}
+
+/* Enhanced hover effects */
+.hover-glow {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+  transform: translateY(-2px);
+}
+
+.hover-rotate {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg) scale(1.05);
+}
+
+.hover-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.hover-shine:hover::before {
+  left: 100%;
+}
+
+/* Responsive cards */
+.responsive-card {
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 sm:p-6;
+}
+
+/* Enhanced card styles */
+.card-enhanced {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-enhanced:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 1);
+}
+
+.dark .card-enhanced {
+  background: rgba(31, 41, 55, 0.95);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.dark .card-enhanced:hover {
+  background: rgba(31, 41, 55, 1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive buttons */
+.responsive-button {
+  @apply px-4 py-2 sm:px-6 sm:py-3 rounded-md font-medium transition-colors;
+}
+
+/* Responsive forms */
+.form-group {
+  @apply mb-4 sm:mb-6;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2;
+}
+
+/* Responsive hero sections */
+.hero-section {
+  @apply relative w-full overflow-hidden;
+  min-height: 300px;
+}
+
+@media (min-width: 640px) {
+  .hero-section {
+    min-height: 400px;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-section {
+    min-height: 500px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-section {
+    min-height: 600px;
+  }
+}
+
+/* Responsive text alignment */
+.text-responsive {
+  @apply text-center sm:text-left;
+}
+
+.text-responsive-right {
+  @apply text-center sm:text-right;
+}
+
+/* Responsive gap */
+.gap-responsive {
+  @apply gap-4 sm:gap-6 md:gap-8 lg:gap-10;
+}
+
+/* Responsive width */
+.w-responsive {
+  @apply w-full sm:w-auto;
+}
+
+/* Responsive max-width */
+.max-w-responsive {
+  @apply max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl;
+}
+
+/* Responsive order */
+.order-responsive {
+  @apply order-2 md:order-1;
+}
+
+.order-responsive-reverse {
+  @apply order-1 md:order-2;
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.5s ease-out forwards;
+  }
+
+  .animate-slide-down {
+    animation: slide-down 0.5s ease-out forwards;
+  }
+
+  .animate-slide-left {
+    animation: slide-left 0.5s ease-out forwards;
+  }
+
+  .animate-slide-right {
+    animation: slide-right 0.5s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.5s ease-out forwards;
+  }
+
+  .animate-bounce-in {
+    animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+
+  .animate-delay-700 {
+    animation-delay: 700ms;
+  }
+
+  .animate-delay-1000 {
+    animation-delay: 1000ms;
+  }
+
+  .transition-transform-opacity {
+    transition-property: transform, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
+  .hover-lift {
+    @apply transition-all duration-300;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  }
+
+  .hover-scale {
+    @apply transition-all duration-300;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+
+  .hover-bright {
+    @apply transition-all duration-300;
+  }
+
+  .hover-bright:hover {
+    filter: brightness(1.1);
+  }
+
+  .animate-in {
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: both;
+  }
+
+  .animate-out {
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: both;
+  }
+
+  .fade-in {
+    animation-name: fade-in;
+  }
+
+  .fade-out {
+    animation-name: fade-out;
+  }
+
+  .slide-in-from-right {
+    animation-name: slide-in-from-right;
+  }
+
+  .slide-in-from-left {
+    animation-name: slide-in-from-left;
+  }
+
+  .slide-out-to-right {
+    animation-name: slide-out-to-right;
+  }
+
+  .slide-out-to-left {
+    animation-name: slide-out-to-left;
+  }
+
+  .zoom-in-95 {
+    animation-name: zoom-in-95;
+  }
+
+  .zoom-out-95 {
+    animation-name: zoom-out-95;
+  }
+
+  .spin-in-90 {
+    animation-name: spin-in-90;
+    perspective: 1000px;
+  }
+
+  .spin-in--90 {
+    animation-name: spin-in--90;
+    perspective: 1000px;
+  }
+
+  .spin-out-90 {
+    animation-name: spin-out-90;
+    perspective: 1000px;
+  }
+
+  .spin-out--90 {
+    animation-name: spin-out--90;
+    perspective: 1000px;
+  }
+
+  .duration-300 {
+    animation-duration: 300ms;
+  }
+
+  .duration-500 {
+    animation-duration: 500ms;
+  }
+
+  .duration-700 {
+    animation-duration: 700ms;
+  }
+
+  .duration-800 {
+    animation-duration: 800ms;
+  }
+
+  .duration-1000 {
+    animation-duration: 1000ms;
+  }
+}
+
+/* Advanced animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomInUp {
+  from {
+    opacity: 0;
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+  }
+  60% {
+    opacity: 1;
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+  }
+}
+
+@keyframes bounceIn {
+  from,
+  20%,
+  40%,
+  60%,
+  80%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  0% {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  20% {
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+  40% {
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+  80% {
+    transform: scale3d(0.97, 0.97, 0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes pulse {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+  50% {
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.3);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.3);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+/* Animation utility classes */
+.animate-slideInUp {
+  animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slideInDown {
+  animation: slideInDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-zoomIn {
+  animation: zoomIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-zoomInUp {
+  animation: zoomInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-bounceIn {
+  animation: bounceIn 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-pulse-custom {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+/* Enhanced RTL support */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .flex:not(.flex-col):not(.flex-col-reverse) {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .sm\:flex-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .space-x-2 > * + * {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .space-x-4 > * + * {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+[dir="rtl"] .space-x-reverse > * + * {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+[dir="rtl"] .sm\:space-x-reverse > * + * {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+[dir="rtl"] .ml-1 {
+  margin-left: 0;
+  margin-right: 0.25rem;
+}
+[dir="rtl"] .ml-2 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+[dir="rtl"] .ml-3 {
+  margin-left: 0;
+  margin-right: 0.75rem;
+}
+[dir="rtl"] .ml-4 {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+[dir="rtl"] .mr-1 {
+  margin-right: 0;
+  margin-left: 0.25rem;
+}
+[dir="rtl"] .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+[dir="rtl"] .mr-3 {
+  margin-right: 0;
+  margin-left: 0.75rem;
+}
+[dir="rtl"] .mr-4 {
+  margin-right: 0;
+  margin-left: 1rem;
+}
+
+[dir="rtl"] .pl-1 {
+  padding-left: 0;
+  padding-right: 0.25rem;
+}
+[dir="rtl"] .pl-2 {
+  padding-left: 0;
+  padding-right: 0.5rem;
+}
+[dir="rtl"] .pl-3 {
+  padding-left: 0;
+  padding-right: 0.75rem;
+}
+[dir="rtl"] .pl-4 {
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+[dir="rtl"] .pr-1 {
+  padding-right: 0;
+  padding-left: 0.25rem;
+}
+[dir="rtl"] .pr-2 {
+  padding-right: 0;
+  padding-left: 0.5rem;
+}
+[dir="rtl"] .pr-3 {
+  padding-right: 0;
+  padding-left: 0.75rem;
+}
+[dir="rtl"] .pr-4 {
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+[dir="rtl"] .left-0 {
+  left: auto;
+  right: 0;
+}
+[dir="rtl"] .left-4 {
+  left: auto;
+  right: 1rem;
+}
+[dir="rtl"] .right-0 {
+  right: auto;
+  left: 0;
+}
+[dir="rtl"] .right-4 {
+  right: auto;
+  left: 1rem;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+[dir="rtl"] .rounded-l {
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+[dir="rtl"] .rounded-r {
+  border-radius: 0.375rem 0 0 0.375rem;
+}
+
+[dir="rtl"] .rotate-180 {
+  transform: rotate(0deg);
+}
+[dir="rtl"] .transform {
+  transform: scaleX(-1);
+}
+
+body.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+body.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+[dir="rtl"] .sm\:flex-row-reverse {
+  flex-direction: row;
+}
+
+[dir="rtl"] .md\:flex-row-reverse {
+  flex-direction: row;
+}
+
+[dir="rtl"] .lg\:flex-row-reverse {
+  flex-direction: row;
+}
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Improved button sizing on mobile with RTL support */
+  .btn-enhanced,
+  button,
+  [role="button"] {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  /* RTL mobile button spacing */
+  [dir="rtl"] .btn-enhanced,
+  [dir="rtl"] button,
+  [dir="rtl"] [role="button"] {
+    flex-direction: row-reverse;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Make mobile menu items larger and easier to tap */
+  .mobile-nav-item {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+  }
+
+  /* RTL mobile navigation support */
+  [dir="rtl"] .mobile-nav-item {
+    text-align: right;
+  }
+
+  /* Improve mobile menu appearance */
+  [role="dialog"] {
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+  }
+
+  /* RTL mobile menu shadow */
+  [dir="rtl"] [role="dialog"] {
+    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Ensure navbar is visible on small screens when at top */
+  header {
+    visibility: visible !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Remove any border from navbar */
+header {
+  border-bottom: none !important;
+}
+
+/* Enhanced RTL navbar support */
+[dir="rtl"] header .container {
+  direction: rtl;
+}
+
+[dir="rtl"] .navbar-brand {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* RTL dropdown menu positioning */
+[dir="rtl"] .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+/* Smooth transitions for language switching */
+* {
+  transition: margin 0.3s ease, padding 0.3s ease, text-align 0.3s ease;
+}
+
+/* Prevent layout shift during language transitions */
+.language-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Added yellow gradient utilities */
+.bg-gradient-yellow {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.bg-gradient-yellow-light {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.text-gradient-yellow {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Updated hero section gradients to yellow theme */
+.hero-gradient {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+}
+
+.hero-gradient-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.9) 0%,
+    rgba(245, 158, 11, 0.8) 50%,
+    rgba(217, 119, 6, 0.9) 100%
+  );
+}
+
+/* Updated section background gradients to yellow theme */
+.section-gradient {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%);
+}
+
+.section-gradient-dark {
+  background: linear-gradient(135deg, #451a03 0%, #78350f 50%, #92400e 100%);
+}
