@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next export",
+    "install:ci": "pnpm install --force --registry=https://registry.npmmirror.com",
     "optimize-images": "sharp --input ./public/images --output ./public/optimized",
     "generate-sitemap": "next-sitemap",
     "analyze": "ANALYZE=true next build",
