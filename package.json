@@ -1,9 +1,19 @@
 {
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start",
+    "vercel-build": "next build"
+  },
   "dependencies": {
-    "@emotion/is-prop-valid": "latest",
+    "@emotion/is-prop-valid": "^1.4.0",
+    "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-dialog": "latest",
     "@radix-ui/react-dropdown-menu": "latest",
+    "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "latest",
+    "@radix-ui/react-tabs": "^1.1.13",
     "@supabase/supabase-js": "latest",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -18,11 +28,12 @@
     "tw-animate-css": "latest"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.9",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "^8.5",
-    "tailwindcss": "4.1.13",
+    "tailwindcss": "^4.1.9",
     "typescript": "^5"
   }
 }
