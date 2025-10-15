@@ -301,6 +301,15 @@ const translations = {
     adminPanel: "لوحة التحكم",
     accessDenied: "الوصول مرفوض",
     pleaseLogin: "يرجى تسجيل الدخول للوصول إلى هذه الصفحة",
+
+    // Demo Account
+    demoAccount: "حساب تجريبي",
+    tryDemoAccount: "جرب الحساب التجريبي",
+    demoCredentials: "بيانات الحساب التجريبي",
+    demoEmail: "البريد الإلكتروني: demo@alazab-construction.com",
+    demoPassword: "كلمة المرور: Demo123456",
+    loginWithDemo: "دخول بالحساب التجريبي",
+    demoAccountInfo: "يمكنك استخدام الحساب التجريبي لاستكشاف النظام",
   },
   en: {
     // Navigation
@@ -597,6 +606,15 @@ const translations = {
     adminPanel: "Admin Panel",
     accessDenied: "Access Denied",
     pleaseLogin: "Please login to access this page",
+
+    // Demo Account
+    demoAccount: "Demo Account",
+    tryDemoAccount: "Try Demo Account",
+    demoCredentials: "Demo Account Credentials",
+    demoEmail: "Email: demo@alazab-construction.com",
+    demoPassword: "Password: Demo123456",
+    loginWithDemo: "Login with Demo Account",
+    demoAccountInfo: "You can use the demo account to explore the system",
   },
 }
 

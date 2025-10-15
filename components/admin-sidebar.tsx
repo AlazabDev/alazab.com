@@ -20,6 +20,20 @@ import {
   LogIn,
   LogOut,
   User,
+  Home,
+  Info,
+  Wrench,
+  Calculator,
+  MessageSquare,
+  Phone,
+  Camera,
+  Building,
+  Palette,
+  Package,
+  Sparkles,
+  MapPin,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -35,6 +49,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const isRTL = language === "ar"
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [expandedSections, setExpandedSections] = useState<string[]>(["public"])
   const supabase = createClient()
 
   useEffect(() => {
@@ -55,9 +70,173 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
     window.location.href = "/"
   }
 
+  const toggleSection = (sectionId: string) => {
+    setExpandedSections((prev) =>
+      prev.includes(sectionId) ? prev.filter((id) => id !== sectionId) : [...prev, sectionId],
+    )
+  }
+
+  const menuSections = [
+    {
+      id: "public",
+      titleAr: "الصفحات العامة",
+      titleEn: "Public Pages",
+      icon: Home,
+      color: "text-blue-600",
+      items: [
+        {
+          id: "home",
+          icon: Home,
+          titleAr: "الصفحة الرئيسية",
+          titleEn: "Home",
+          href: "/",
+          color: "text-blue-500",
+        },
+        {
+          id: "about",
+          icon: Info,
+          titleAr: "من نحن",
+          titleEn: "About Us",
+          href: "/about",
+          color: "text-blue-600",
+        },
+        {
+          id: "services",
+          icon: Wrench,
+          titleAr: "خدماتنا",
+          titleEn: "Our Services",
+          href: "/services",
+          color: "text-blue-700",
+        },
+        {
+          id: "projects",
+          icon: Building,
+          titleAr: "مشاريعنا",
+          titleEn: "Our Projects",
+          href: "/projects",
+          color: "text-blue-500",
+        },
+        {
+          id: "gallery",
+          icon: Camera,
+          titleAr: "معرض الصور",
+          titleEn: "Gallery",
+          href: "/gallery",
+          color: "text-blue-600",
+        },
+        {
+          id: "contact",
+          icon: Phone,
+          titleAr: "اتصل بنا",
+          titleEn: "Contact Us",
+          href: "/contact",
+          color: "text-blue-700",
+        },
+      ],
+    },
+    {
+      id: "services",
+      titleAr: "الخدمات المتخصصة",
+      titleEn: "Specialized Services",
+      icon: Wrench,
+      color: "text-green-600",
+      items: [
+        {
+          id: "residential",
+          icon: Home,
+          titleAr: "البناء السكني",
+          titleEn: "Residential Construction",
+          href: "/services/residential",
+          color: "text-green-500",
+        },
+        {
+          id: "luxury-finishing",
+          icon: Sparkles,
+          titleAr: "التشطيبات الفاخرة",
+          titleEn: "Luxury Finishing",
+          href: "/services/luxury-finishing",
+          color: "text-green-600",
+        },
+        {
+          id: "maintenance-renovations",
+          icon: Wrench,
+          titleAr: "الصيانة والتجديدات",
+          titleEn: "Maintenance & Renovations",
+          href: "/services/maintenance-renovations",
+          color: "text-green-700",
+        },
+        {
+          id: "brand-identity",
+          icon: Palette,
+          titleAr: "الهوية التجارية",
+          titleEn: "Brand Identity",
+          href: "/services/brand-identity",
+          color: "text-green-500",
+        },
+        {
+          id: "general-supplies",
+          icon: Package,
+          titleAr: "التوريدات العامة",
+          titleEn: "General Supplies",
+          href: "/services/general-supplies",
+          color: "text-green-600",
+        },
+      ],
+    },
+    {
+      id: "tools",
+      titleAr: "الأدوات والخدمات",
+      titleEn: "Tools & Services",
+      icon: Calculator,
+      color: "text-purple-600",
+      items: [
+        {
+          id: "calculator",
+          icon: Calculator,
+          titleAr: "حاسبة التكلفة",
+          titleEn: "Cost Calculator",
+          href: "/calculator",
+          color: "text-purple-500",
+        },
+        {
+          id: "consultation",
+          icon: MessageSquare,
+          titleAr: "استشارة مجانية",
+          titleEn: "Free Consultation",
+          href: "/consultation",
+          color: "text-purple-600",
+        },
+        {
+          id: "maintenance-request",
+          icon: Wrench,
+          titleAr: "طلب صيانة",
+          titleEn: "Maintenance Request",
+          href: "/maintenance",
+          color: "text-purple-700",
+        },
+        {
+          id: "tracking",
+          icon: MapPin,
+          titleAr: "تتبع المشروع",
+          titleEn: "Project Tracking",
+          href: "/tracking",
+          color: "text-purple-500",
+        },
+      ],
+    },
+  ]
+
   const adminMenuItems = [
     {
-      id: "projects",
+      id: "admin-dashboard",
+      icon: BarChart3,
+      titleAr: "لوحة التحكم",
+      titleEn: "Admin Dashboard",
+      href: "/admin",
+      color: "text-yellow-600",
+    },
+    {
+      id: "projects-admin",
       icon: FolderOpen,
       titleAr: "إدارة المشروعات",
       titleEn: "Project Management",
@@ -65,7 +244,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
       color: "text-yellow-600",
     },
     {
-      id: "maintenance",
+      id: "maintenance-admin",
       icon: Settings,
       titleAr: "إدارة الصيانات",
       titleEn: "Maintenance Management",
@@ -230,42 +409,121 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
               )}
             </div>
 
-            {/* Menu Items - Only show if user is logged in */}
-            {user && (
-              <div className="flex-1 p-4 space-y-2">
-                {adminMenuItems.map((item, index) => {
-                  const Icon = item.icon
-                  return (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
+            <div className="flex-1 p-4 space-y-4">
+              {/* Public Sections - Always visible */}
+              {menuSections.map((section, sectionIndex) => {
+                const SectionIcon = section.icon
+                const isExpanded = expandedSections.includes(section.id)
+
+                return (
+                  <div key={section.id} className="space-y-2">
+                    <button
+                      onClick={() => toggleSection(section.id)}
+                      className="flex items-center justify-between w-full p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 group border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
                     >
-                      <Link
-                        href={item.href}
-                        onClick={onClose}
-                        className="flex items-center gap-4 p-3 rounded-xl hover:bg-yellow-50 dark:hover:bg-gray-800 transition-all duration-200 group border border-transparent hover:border-yellow-200 dark:hover:border-gray-700"
-                      >
+                      <div className="flex items-center gap-3">
                         <div
-                          className={`p-2 rounded-lg bg-yellow-100 dark:bg-gray-800 group-hover:scale-110 transition-transform group-hover:bg-yellow-200 dark:group-hover:bg-gray-700 ${item.color}`}
+                          className={`p-2 rounded-lg bg-gray-100 dark:bg-gray-800 group-hover:scale-110 transition-transform ${section.color}`}
                         >
-                          <Icon className="w-5 h-5" />
+                          <SectionIcon className="w-4 h-4" />
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 dark:text-white text-sm group-hover:text-yellow-700 dark:group-hover:text-yellow-400 transition-colors">
-                            {language === "ar" ? item.titleAr : item.titleEn}
-                          </h3>
-                        </div>
-                        <ChevronRight
-                          className={`w-4 h-4 text-gray-400 group-hover:text-yellow-500 transition-colors ${isRTL ? "rotate-180" : ""}`}
-                        />
-                      </Link>
-                    </motion.div>
-                  )
-                })}
-              </div>
-            )}
+                        <h3 className="font-semibold text-gray-900 dark:text-white text-sm">
+                          {language === "ar" ? section.titleAr : section.titleEn}
+                        </h3>
+                      </div>
+                      {isExpanded ? (
+                        <ChevronUp className="w-4 h-4 text-gray-400" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                      )}
+                    </button>
+
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, maxHeight: 0 }}
+                          animate={{ opacity: 1, maxHeight: 1000 }}
+                          exit={{ opacity: 0, maxHeight: 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="space-y-1 ml-4 overflow-hidden"
+                        >
+                          {section.items.map((item, index) => {
+                            const Icon = item.icon
+                            return (
+                              <motion.div
+                                key={item.id}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                              >
+                                <Link
+                                  href={item.href}
+                                  onClick={onClose}
+                                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 group"
+                                >
+                                  <div
+                                    className={`p-1.5 rounded-md bg-gray-100 dark:bg-gray-800 group-hover:scale-110 transition-transform ${item.color}`}
+                                  >
+                                    <Icon className="w-4 h-4" />
+                                  </div>
+                                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">
+                                    {language === "ar" ? item.titleAr : item.titleEn}
+                                  </span>
+                                </Link>
+                              </motion.div>
+                            )
+                          })}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )
+              })}
+
+              {/* Admin Menu Items - Only show if user is logged in */}
+              {user && (
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="mb-3">
+                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3">
+                      {t("adminPanel")}
+                    </h3>
+                  </div>
+                  <div className="space-y-2">
+                    {adminMenuItems.map((item, index) => {
+                      const Icon = item.icon
+                      return (
+                        <motion.div
+                          key={item.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                        >
+                          <Link
+                            href={item.href}
+                            onClick={onClose}
+                            className="flex items-center gap-4 p-3 rounded-xl hover:bg-yellow-50 dark:hover:bg-gray-800 transition-all duration-200 group border border-transparent hover:border-yellow-200 dark:hover:border-gray-700"
+                          >
+                            <div
+                              className={`p-2 rounded-lg bg-yellow-100 dark:bg-gray-800 group-hover:scale-110 transition-transform group-hover:bg-yellow-200 dark:group-hover:bg-gray-700 ${item.color}`}
+                            >
+                              <Icon className="w-5 h-5" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="font-semibold text-gray-900 dark:text-white text-sm group-hover:text-yellow-700 dark:group-hover:text-yellow-400 transition-colors">
+                                {language === "ar" ? item.titleAr : item.titleEn}
+                              </h3>
+                            </div>
+                            <ChevronRight
+                              className={`w-4 h-4 text-gray-400 group-hover:text-yellow-500 transition-colors ${isRTL ? "rotate-180" : ""}`}
+                            />
+                          </Link>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {user && (
               <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-gray-800 dark:to-gray-900">

@@ -6,153 +6,30 @@ import Image from "next/image"
 import { X, ZoomIn, ChevronLeft, ChevronRight, Filter, Grid3X3, Grid2X2, LayoutGrid } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
+import { getImagesForCategories, type ImageCategory } from "@/lib/supabase-storage"
 
-// Gallery categories and images
+// Gallery categories mapped to Supabase folders
 const galleryCategories = [
-  { id: "all", nameEn: "All Projects", nameAr: "جميع المشاريع" },
-  { id: "luxury", nameEn: "Luxury Finishing", nameAr: "التشطيبات الفاخرة" },
-  { id: "brand", nameEn: "Brand Identity", nameAr: "الهوية التجارية" },
-  { id: "maintenance", nameEn: "Maintenance & Renovations", nameAr: "الصيانة والتجديدات" },
-  { id: "supplies", nameEn: "General Supplies", nameAr: "التوريدات العامة" },
-]
-
-const galleryImages = [
+  { id: "all", nameEn: "All Projects", nameAr: "جميع المشاريع", folders: [] as ImageCategory[] },
   {
-    id: 1,
-    src: "https://al-azab.co/images/service-1.png",
-    category: "luxury",
-    titleEn: "Luxury Villa Interior",
-    titleAr: "تشطيب فيلا فاخرة",
-    descriptionEn: "High-end interior finishing with premium materials",
-    descriptionAr: "تشطيب داخلي راقي بمواد عالية الجودة",
+    id: "luxury",
+    nameEn: "Luxury Finishing",
+    nameAr: "التشطيبات الفاخرة",
+    folders: ["residential", "live_edge"] as ImageCategory[],
   },
   {
-    id: 2,
-    src: "https://al-azab.co/images/service-2.png",
-    category: "brand",
-    titleEn: "Corporate Office Design",
-    titleAr: "تصميم مكتب شركة",
-    descriptionEn: "Modern office space reflecting brand identity",
-    descriptionAr: "مساحة مكتبية عصرية تعكس هوية العلامة التجارية",
+    id: "brand",
+    nameEn: "Brand Identity",
+    nameAr: "الهوية التجارية",
+    folders: ["commercial", "shops"] as ImageCategory[],
   },
   {
-    id: 3,
-    src: "https://al-azab.co/images/service-3.png",
-    category: "maintenance",
-    titleEn: "Building Renovation",
-    titleAr: "تجديد مبنى",
-    descriptionEn: "Complete renovation and modernization project",
-    descriptionAr: "مشروع تجديد وتحديث شامل",
+    id: "maintenance",
+    nameEn: "Maintenance & Renovations",
+    nameAr: "الصيانة والتجديدات",
+    folders: ["maintenance", "construction"] as ImageCategory[],
   },
-  {
-    id: 4,
-    src: "https://al-azab.co/images/service-4.png",
-    category: "supplies",
-    titleEn: "Construction Materials Supply",
-    titleAr: "توريد مواد البناء",
-    descriptionEn: "Premium construction materials and equipment",
-    descriptionAr: "مواد ومعدات بناء عالية الجودة",
-  },
-  {
-    id: 5,
-    src: "https://al-azab.co/images/service-5.png",
-    category: "luxury",
-    titleEn: "Luxury Bathroom Design",
-    titleAr: "تصميم حمام فاخر",
-    descriptionEn: "Elegant bathroom with premium fixtures",
-    descriptionAr: "حمام أنيق بتجهيزات فاخرة",
-  },
-  {
-    id: 6,
-    src: "https://al-azab.co/images/service-6.png",
-    category: "brand",
-    titleEn: "Restaurant Interior",
-    titleAr: "تصميم مطعم",
-    descriptionEn: "Restaurant design reflecting culinary brand",
-    descriptionAr: "تصميم مطعم يعكس هوية العلامة التجارية",
-  },
-  {
-    id: 7,
-    src: "https://al-azab.co/images/service-7.png",
-    category: "maintenance",
-    titleEn: "Facade Restoration",
-    titleAr: "ترميم واجهة",
-    descriptionEn: "Professional facade restoration and maintenance",
-    descriptionAr: "ترميم وصيانة واجهات احترافية",
-  },
-  {
-    id: 8,
-    src: "https://al-azab.co/images/service-8.png",
-    category: "supplies",
-    titleEn: "Equipment Installation",
-    titleAr: "تركيب المعدات",
-    descriptionEn: "Professional equipment installation services",
-    descriptionAr: "خدمات تركيب المعدات الاحترافية",
-  },
-  {
-    id: 9,
-    src: "https://al-azab.co/images/service-9.png",
-    category: "luxury",
-    titleEn: "Modern Kitchen Design",
-    titleAr: "تصميم مطبخ عصري",
-    descriptionEn: "Contemporary kitchen with luxury finishes",
-    descriptionAr: "مطبخ عصري بتشطيبات فاخرة",
-  },
-  {
-    id: 10,
-    src: "https://al-azab.co/images/service-10.png",
-    category: "brand",
-    titleEn: "Retail Store Design",
-    titleAr: "تصميم متجر",
-    descriptionEn: "Retail space designed for brand experience",
-    descriptionAr: "مساحة تجارية مصممة لتجربة العلامة التجارية",
-  },
-  // Additional professional images
-  {
-    id: 11,
-    src: "/luxury-living-room.png",
-    category: "luxury",
-    titleEn: "Luxury Living Room",
-    titleAr: "صالة معيشة فاخرة",
-    descriptionEn: "Sophisticated living space with premium materials",
-    descriptionAr: "مساحة معيشة راقية بمواد عالية الجودة",
-  },
-  {
-    id: 12,
-    src: "/modern-office-exterior.png",
-    category: "brand",
-    titleEn: "Corporate Building",
-    titleAr: "مبنى شركة",
-    descriptionEn: "Modern corporate building design",
-    descriptionAr: "تصميم مبنى شركة عصري",
-  },
-  {
-    id: 13,
-    src: "/construction-site-renovation.png",
-    category: "maintenance",
-    titleEn: "Site Renovation",
-    titleAr: "تجديد موقع",
-    descriptionEn: "Large-scale renovation and upgrade project",
-    descriptionAr: "مشروع تجديد وترقية واسع النطاق",
-  },
-  {
-    id: 14,
-    src: "/construction-warehouse.png",
-    category: "supplies",
-    titleEn: "Materials Warehouse",
-    titleAr: "مستودع المواد",
-    descriptionEn: "Organized construction materials storage",
-    descriptionAr: "تخزين منظم لمواد البناء",
-  },
-  {
-    id: 15,
-    src: "/luxury-hotel-lobby.png",
-    category: "luxury",
-    titleEn: "Hotel Lobby Design",
-    titleAr: "تصميم لوبي فندق",
-    descriptionEn: "Elegant hotel lobby with luxury finishes",
-    descriptionAr: "لوبي فندق أنيق بتشطيبات فاخرة",
-  },
+  { id: "supplies", nameEn: "General Supplies", nameAr: "التوريدات العامة", folders: ["projects"] as ImageCategory[] },
 ]
 
 const layoutOptions = [
@@ -161,23 +38,78 @@ const layoutOptions = [
   { id: "masonry", icon: LayoutGrid, cols: "columns-1 md:columns-2 lg:columns-3" },
 ]
 
+interface GalleryImage {
+  id: string
+  src: string
+  category: string
+  titleEn: string
+  titleAr: string
+  descriptionEn: string
+  descriptionAr: string
+}
+
 export default function GalleryPage() {
   const { t, language } = useLanguage()
   const [selectedCategory, setSelectedCategory] = useState("all")
-  const [selectedImage, setSelectedImage] = useState<number | null>(null)
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [layout, setLayout] = useState("grid")
   const [isLoading, setIsLoading] = useState(true)
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
 
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => setIsLoading(false), 1000)
-    return () => clearTimeout(timer)
+    async function loadImages() {
+      setIsLoading(true)
+      try {
+        // Get all image categories from Supabase
+        const allCategories: ImageCategory[] = [
+          "residential",
+          "commercial",
+          "shops",
+          "maintenance",
+          "construction",
+          "projects",
+          "live_edge",
+        ]
+        const imagesData = await getImagesForCategories(allCategories)
+
+        // Transform images into gallery format
+        const transformedImages: GalleryImage[] = []
+
+        Object.entries(imagesData).forEach(([category, images]) => {
+          images.forEach((image, index) => {
+            // Determine which gallery category this belongs to
+            let galleryCategory = "supplies"
+            if (["residential", "live_edge"].includes(category)) galleryCategory = "luxury"
+            else if (["commercial", "shops"].includes(category)) galleryCategory = "brand"
+            else if (["maintenance", "construction"].includes(category)) galleryCategory = "maintenance"
+
+            transformedImages.push({
+              id: `${category}-${index}`,
+              src: image.url,
+              category: galleryCategory,
+              titleEn: image.name.replace(/\.[^/.]+$/, "").replace(/_/g, " "),
+              titleAr: image.name.replace(/\.[^/.]+$/, "").replace(/_/g, " "),
+              descriptionEn: `${category.charAt(0).toUpperCase() + category.slice(1)} project`,
+              descriptionAr: `مشروع ${category}`,
+            })
+          })
+        })
+
+        setGalleryImages(transformedImages)
+      } catch (error) {
+        console.error("[v0] Error loading gallery images:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadImages()
   }, [])
 
   const filteredImages =
     selectedCategory === "all" ? galleryImages : galleryImages.filter((img) => img.category === selectedCategory)
 
-  const openModal = (imageId: number) => {
+  const openModal = (imageId: string) => {
     setSelectedImage(imageId)
     document.body.style.overflow = "hidden"
   }
@@ -286,56 +218,64 @@ export default function GalleryPage() {
 
       {/* Gallery Grid */}
       <div className="max-w-7xl mx-auto px-4 pb-20">
-        <motion.div
-          layout
-          className={`${
-            layout === "masonry"
-              ? layoutOptions[2].cols + " gap-4 space-y-4"
-              : `grid ${layoutOptions.find((l) => l.id === layout)?.cols} gap-6`
-          }`}
-        >
-          <AnimatePresence>
-            {filteredImages.map((image, index) => (
-              <motion.div
-                key={image.id}
-                layout
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${
-                  layout === "masonry" ? "break-inside-avoid mb-4" : ""
-                }`}
-                onClick={() => openModal(image.id)}
-              >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image
-                    src={image.src || "/placeholder.svg"}
-                    alt={language === "ar" ? image.titleAr : image.titleEn}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        {filteredImages.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              {language === "ar" ? "لا توجد صور في هذه الفئة" : "No images in this category"}
+            </p>
+          </div>
+        ) : (
+          <motion.div
+            layout
+            className={`${
+              layout === "masonry"
+                ? layoutOptions[2].cols + " gap-4 space-y-4"
+                : `grid ${layoutOptions.find((l) => l.id === layout)?.cols} gap-6`
+            }`}
+          >
+            <AnimatePresence>
+              {filteredImages.map((image, index) => (
+                <motion.div
+                  key={image.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  className={`group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${
+                    layout === "masonry" ? "break-inside-avoid mb-4" : ""
+                  }`}
+                  onClick={() => openModal(image.id)}
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image
+                      src={image.src || "/placeholder.svg"}
+                      alt={language === "ar" ? image.titleAr : image.titleEn}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                  {/* Overlay Content */}
-                  <div className="absolute inset-0 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="text-white">
-                      <h3 className="text-xl font-bold mb-2">{language === "ar" ? image.titleAr : image.titleEn}</h3>
-                      <p className="text-sm text-gray-200">
-                        {language === "ar" ? image.descriptionAr : image.descriptionEn}
-                      </p>
+                    {/* Overlay Content */}
+                    <div className="absolute inset-0 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="text-white">
+                        <h3 className="text-xl font-bold mb-2">{language === "ar" ? image.titleAr : image.titleEn}</h3>
+                        <p className="text-sm text-gray-200">
+                          {language === "ar" ? image.descriptionAr : image.descriptionEn}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Zoom Icon */}
+                    <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <ZoomIn className="w-5 h-5 text-white" />
                     </div>
                   </div>
-
-                  {/* Zoom Icon */}
-                  <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <ZoomIn className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
       </div>
 
       {/* Modal */}

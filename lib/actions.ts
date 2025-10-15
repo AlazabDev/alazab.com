@@ -75,3 +75,23 @@ export async function signOut() {
   await supabase.auth.signOut()
   redirect("/auth/login")
 }
+
+export async function signInDemo(prevState: any, formData: FormData) {
+  const supabase = createClient()
+
+  try {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: "demo@alazab-construction.com",
+      password: "Demo123456",
+    })
+
+    if (error) {
+      return { error: error.message }
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Demo login error:", error)
+    return { error: "حدث خطأ في تسجيل الدخول التجريبي" }
+  }
+}

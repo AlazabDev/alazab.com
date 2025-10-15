@@ -33,7 +33,7 @@ export default function ProjectsPage() {
             transition={{ duration: 0.8 }}
             className="max-w-4xl"
           >
-            <div className="inline-block px-4 py-2 bg-amber-500/20 backdrop-blur-sm rounded-full text-amber-300 text-sm font-medium mb-6">
+            <div className="inline-block px-4 py-2 bg-yellow-500/20 backdrop-blur-sm rounded-full text-yellow-300 text-sm font-medium mb-6">
               {language === "ar" ? "معرض أعمالنا" : "Our Portfolio"}
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
@@ -58,7 +58,7 @@ export default function ProjectsPage() {
             viewport={{ once: true }}
             className="text-center mb-16 max-w-3xl mx-auto"
           >
-            <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-4">
+            <div className="inline-block px-4 py-2 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium mb-4">
               {language === "ar" ? "معرض أعمالنا" : "Our Portfolio"}
             </div>
             <h2 className="text-4xl font-bold mb-6">{language === "ar" ? "مشاريع مميزة" : "Featured Projects"}</h2>
@@ -144,7 +144,7 @@ export default function ProjectsPage() {
       </section>
 
       {/* Process Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-amber-50/30">
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-yellow-50/30">
         <div className="container mx-auto px-4">
           <div
             className={`grid md:grid-cols-2 gap-16 items-center max-w-6xl mx-auto ${language === "ar" ? "md:grid-cols-2" : ""}`}
@@ -156,7 +156,7 @@ export default function ProjectsPage() {
               viewport={{ once: true }}
               className={language === "ar" ? "order-2 md:order-1" : ""}
             >
-              <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-4">
+              <div className="inline-block px-4 py-2 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium mb-4">
                 {language === "ar" ? "منهجيتنا" : "Our Approach"}
               </div>
               <h2 className="text-4xl font-bold mb-6">
@@ -177,7 +177,7 @@ export default function ProjectsPage() {
                     viewport={{ once: true }}
                     className="flex items-start"
                   >
-                    <div className="bg-gradient-to-br from-amber-400 to-amber-600 w-12 h-12 rounded-2xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+                    <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 w-12 h-12 rounded-2xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
                       <span className="text-white font-bold text-lg">{index + 1}</span>
                     </div>
                     <div>
@@ -202,14 +202,14 @@ export default function ProjectsPage() {
                 className="object-cover hover:scale-105 transition-transform duration-700"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-amber-900/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-yellow-900/20 to-transparent" />
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600">
+      <section className="py-20 bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600">
         <div className="container mx-auto px-4 text-center max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -220,7 +220,7 @@ export default function ProjectsPage() {
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
               {language === "ar" ? "هل أنت مستعد لبدء مشروعك؟" : "Ready to Start Your Project?"}
             </h2>
-            <p className="text-amber-100 text-lg md:text-xl max-w-3xl mx-auto mb-10 leading-relaxed">
+            <p className="text-yellow-100 text-lg md:text-xl max-w-3xl mx-auto mb-10 leading-relaxed">
               {language === "ar"
                 ? "اتصل بنا اليوم لمناقشة كيف يمكننا تحقيق رؤيتك بنفس التميز المعروض في معرض أعمالنا"
                 : "Contact us today to discuss how we can bring your vision to life with the same excellence showcased in our portfolio"}
@@ -229,7 +229,7 @@ export default function ProjectsPage() {
               <Link href="/contact">
                 <Button
                   size="lg"
-                  className="bg-white text-amber-600 hover:bg-gray-100 font-bold px-8 py-4 text-lg shadow-xl"
+                  className="bg-white text-yellow-600 hover:bg-gray-100 font-bold px-8 py-4 text-lg shadow-xl"
                 >
                   {language === "ar" ? "تواصل معنا" : "Get in Touch"}
                   <ArrowRight className={`h-5 w-5 ${language === "ar" ? "mr-2 rotate-180" : "ml-2"}`} />
@@ -244,15 +244,15 @@ export default function ProjectsPage() {
 }
 
 // Project Card Component
-function ProjectCard({ project, index }) {
+function ProjectCard({ project, index }: { project: any; index: number }) {
   const { language } = useLanguage()
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: Math.min(index * 0.1, 0.5) }}
+      viewport={{ once: true, margin: "-50px" }}
     >
       <Card className="overflow-hidden group h-full hover:shadow-2xl transition-all duration-500 border border-gray-100">
         <div className="relative h-64 w-full">
@@ -268,7 +268,7 @@ function ProjectCard({ project, index }) {
               <h3 className="text-xl font-bold text-white mb-2">
                 {language === "ar" ? project.titleAr : project.title}
               </h3>
-              <p className="text-amber-300 mb-4">{language === "ar" ? project.categoryAr : project.categoryEn}</p>
+              <p className="text-yellow-300 mb-4">{language === "ar" ? project.categoryAr : project.categoryEn}</p>
               <Link href={`/projects/${project.id}`}>
                 <Button
                   variant="outline"
@@ -283,7 +283,7 @@ function ProjectCard({ project, index }) {
         </div>
         <CardHeader className="p-6">
           <CardTitle className="text-xl">{language === "ar" ? project.titleAr : project.title}</CardTitle>
-          <CardDescription className="text-amber-600">
+          <CardDescription className="text-yellow-600">
             {language === "ar" ? project.categoryAr : project.categoryEn}
           </CardDescription>
         </CardHeader>
@@ -296,7 +296,7 @@ function ProjectCard({ project, index }) {
           <Link href={`/projects/${project.id}`}>
             <Button
               variant="outline"
-              className="border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white w-full bg-transparent"
+              className="border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-white w-full bg-transparent"
             >
               {language === "ar" ? "عرض التفاصيل" : "View Details"}
               <ArrowRight className={`h-4 w-4 ${language === "ar" ? "mr-2 rotate-180" : "ml-2"}`} />
