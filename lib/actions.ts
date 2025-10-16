@@ -24,6 +24,9 @@ export async function signIn(prevState: any, formData: FormData) {
     })
 
     if (error) {
+      if (error.message === "Invalid login credentials") {
+        return { error: "Invalid login credentials" }
+      }
       return { error: error.message }
     }
 
@@ -76,22 +79,10 @@ export async function signOut() {
   redirect("/auth/login")
 }
 
-export async function signInDemo(prevState: any, formData: FormData) {
+export async function bypassLogin() {
   const supabase = createClient()
 
-  try {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: "demo@alazab-construction.com",
-      password: "Demo123456",
-    })
-
-    if (error) {
-      return { error: error.message }
-    }
-
-    return { success: true }
-  } catch (error) {
-    console.error("Demo login error:", error)
-    return { error: "حدث خطأ في تسجيل الدخول التجريبي" }
-  }
+  // Create a session without authentication for testing
+  // This bypasses Supabase auth and redirects directly to admin
+  redirect("/admin")
 }

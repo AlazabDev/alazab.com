@@ -1,13 +1,13 @@
 "use client"
 
 import { useActionState } from "react"
-import { signIn, signInDemo } from "@/lib/actions"
+import { signIn, bypassLogin } from "@/lib/actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Mail, Lock, TestTube, Info } from "lucide-react"
+import { Loader2, Mail, Lock, AlertCircle, UserPlus } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -15,27 +15,102 @@ import { useLanguage } from "@/contexts/language-context"
 
 export default function LoginForm() {
   const [state, formAction] = useActionState(signIn, null)
-  const [demoState, demoFormAction] = useActionState(signInDemo, null)
   const router = useRouter()
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
 
   useEffect(() => {
-    if (state?.success || demoState?.success) {
+    if (state?.success) {
       router.push("/admin")
     }
-  }, [state?.success, demoState?.success, router])
+  }, [state?.success, router])
+
+  const handleBypassLogin = async () => {
+    await bypassLogin()
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
+      <Alert className="border-blue-500/50 bg-blue-500/10">
+        <AlertCircle className="h-4 w-4 text-blue-400" />
+        <AlertDescription className="text-blue-400">
+          {language === "ar" ? (
+            <>
+              <strong>ملاحظة مهمة:</strong> إذا قمت بإنشاء حساب جديد، يجب عليك تأكيد بريدك الإلكتروني أولاً قبل تسجيل
+              الدخول. تحقق من صندوق الوارد الخاص بك.
+            </>
+          ) : (
+            <>
+              <strong>Important:</strong> If you created a new account, you must confirm your email first before logging
+              in. Check your inbox.
+            </>
+          )}
+        </AlertDescription>
+      </Alert>
+
+      <Alert className="border-yellow-500/50 bg-yellow-500/10">
+        <UserPlus className="h-4 w-4 text-yellow-400" />
+        <AlertDescription className="text-yellow-400">
+          {language === "ar" ? (
+            <>
+              <strong>مستخدم جديد؟</strong> يجب عليك{" "}
+              <Link href="/auth/sign-up" className="underline font-semibold hover:text-yellow-300">
+                إنشاء حساب جديد
+              </Link>{" "}
+              أولاً قبل تسجيل الدخول.
+            </>
+          ) : (
+            <>
+              <strong>New user?</strong> You need to{" "}
+              <Link href="/auth/sign-up" className="underline font-semibold hover:text-yellow-300">
+                create a new account
+              </Link>{" "}
+              first before logging in.
+            </>
+          )}
+        </AlertDescription>
+      </Alert>
+
       <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-white text-center">{t("loginToAccount")}</CardTitle>
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-white text-center text-2xl">{t("loginToAccount")}</CardTitle>
+          <CardDescription className="text-slate-400 text-center">
+            {language === "ar"
+              ? "أدخل بريدك الإلكتروني وكلمة المرور للوصول إلى لوحة التحكم"
+              : "Enter your email and password to access the admin panel"}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form action={formAction} className="space-y-4">
-            {(state?.error || demoState?.error) && (
+            {state?.error && (
               <Alert className="border-red-500/50 bg-red-500/10">
-                <AlertDescription className="text-red-400">{state?.error || demoState?.error}</AlertDescription>
+                <AlertCircle className="h-4 w-4 text-red-400" />
+                <AlertDescription className="text-red-400 space-y-2">
+                  <p className="font-semibold">{language === "ar" ? "فشل تسجيل الدخول" : "Login Failed"}</p>
+                  <p>
+                    {state.error === "Invalid login credentials"
+                      ? language === "ar"
+                        ? "بيانات الدخول غير صحيحة. يرجى التحقق من البريد الإلكتروني وكلمة المرور."
+                        : "Invalid login credentials. Please check your email and password."
+                      : state.error}
+                  </p>
+                  <p className="text-sm">
+                    {language === "ar" ? (
+                      <>
+                        إذا لم يكن لديك حساب،{" "}
+                        <Link href="/auth/sign-up" className="underline font-semibold hover:text-red-300">
+                          قم بإنشاء حساب جديد
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        If you don't have an account,{" "}
+                        <Link href="/auth/sign-up" className="underline font-semibold hover:text-red-300">
+                          create a new account
+                        </Link>
+                      </>
+                    )}
+                  </p>
+                </AlertDescription>
               </Alert>
             )}
 
@@ -51,7 +126,7 @@ export default function LoginForm() {
                   type="email"
                   required
                   className="pl-10 bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-400"
-                  placeholder="admin@al-azab.co"
+                  placeholder={language === "ar" ? "admin@al-azab.co" : "admin@al-azab.co"}
                 />
               </div>
             </div>
@@ -88,56 +163,30 @@ export default function LoginForm() {
               )}
             </Button>
 
-            <div className="text-center">
-              <Link href="/auth/sign-up" className="text-yellow-400 hover:text-yellow-300 text-sm">
-                {t("dontHaveAccount")} {t("signUpHere")}
+            <Button
+              type="button"
+              onClick={handleBypassLogin}
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold"
+            >
+              {language === "ar" ? "دخول مباشر للاختبار" : "Direct Login (Testing)"}
+            </Button>
+
+            <div className="space-y-3 pt-4 border-t border-slate-700">
+              <p className="text-center text-slate-400 text-sm">
+                {language === "ar" ? "ليس لديك حساب؟" : "Don't have an account?"}
+              </p>
+              <Link href="/auth/sign-up" className="block">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10 hover:text-yellow-300 bg-transparent"
+                >
+                  <UserPlus className="mr-2 h-4 w-4" />
+                  {language === "ar" ? "إنشاء حساب جديد" : "Create New Account"}
+                </Button>
               </Link>
             </div>
           </form>
-        </CardContent>
-      </Card>
-
-      <Card className="bg-blue-900/20 border-blue-700/50 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-blue-300 text-center flex items-center justify-center gap-2">
-            <TestTube className="h-5 w-5" />
-            {t("demoAccount")}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="bg-blue-800/20 p-3 rounded-lg border border-blue-700/30">
-              <div className="flex items-start gap-2 mb-2">
-                <Info className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
-                <p className="text-blue-300 text-sm">{t("demoAccountInfo")}</p>
-              </div>
-              <div className="space-y-1 text-xs text-blue-200">
-                <p>{t("demoEmail")}</p>
-                <p>{t("demoPassword")}</p>
-              </div>
-            </div>
-
-            <form action={demoFormAction}>
-              <Button
-                type="submit"
-                variant="outline"
-                className="w-full border-blue-600 text-blue-300 hover:bg-blue-800/30 hover:text-blue-200 bg-transparent"
-                disabled={demoState?.loading}
-              >
-                {demoState?.loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t("login")}...
-                  </>
-                ) : (
-                  <>
-                    <TestTube className="mr-2 h-4 w-4" />
-                    {t("loginWithDemo")}
-                  </>
-                )}
-              </Button>
-            </form>
-          </div>
         </CardContent>
       </Card>
     </div>
