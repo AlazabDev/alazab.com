@@ -20,6 +20,7 @@
     "@radix-ui/react-slot": "latest",
     "@radix-ui/react-switch": "1.1.0",
     "@radix-ui/react-tabs": "^1.1.13",
+    "@react-email/render": "latest",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
     "class-variance-authority": "^0.7.1",
@@ -30,6 +31,7 @@
     "next-themes": "latest",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "resend": "latest",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "tw-animate-css": "latest"
