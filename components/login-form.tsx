@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState } from "react"
-import { signIn, bypassLogin } from "@/lib/actions"
+import { signIn } from "@/lib/actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -24,29 +24,8 @@ export default function LoginForm() {
     }
   }, [state?.success, router])
 
-  const handleBypassLogin = async () => {
-    await bypassLogin()
-  }
-
   return (
     <div className="space-y-4">
-      <Alert className="border-blue-500/50 bg-blue-500/10">
-        <AlertCircle className="h-4 w-4 text-blue-400" />
-        <AlertDescription className="text-blue-400">
-          {language === "ar" ? (
-            <>
-              <strong>ملاحظة مهمة:</strong> إذا قمت بإنشاء حساب جديد، يجب عليك تأكيد بريدك الإلكتروني أولاً قبل تسجيل
-              الدخول. تحقق من صندوق الوارد الخاص بك.
-            </>
-          ) : (
-            <>
-              <strong>Important:</strong> If you created a new account, you must confirm your email first before logging
-              in. Check your inbox.
-            </>
-          )}
-        </AlertDescription>
-      </Alert>
-
       <Alert className="border-yellow-500/50 bg-yellow-500/10">
         <UserPlus className="h-4 w-4 text-yellow-400" />
         <AlertDescription className="text-yellow-400">
@@ -161,14 +140,6 @@ export default function LoginForm() {
               ) : (
                 t("login")
               )}
-            </Button>
-
-            <Button
-              type="button"
-              onClick={handleBypassLogin}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold"
-            >
-              {language === "ar" ? "دخول مباشر للاختبار" : "Direct Login (Testing)"}
             </Button>
 
             <div className="space-y-3 pt-4 border-t border-slate-700">

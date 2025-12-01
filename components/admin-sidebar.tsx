@@ -34,6 +34,7 @@ import {
   MapPin,
   ChevronDown,
   ChevronUp,
+  Smartphone,
 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -158,12 +159,12 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           color: "text-green-600",
         },
         {
-          id: "maintenance-renovations",
-          icon: Wrench,
-          titleAr: "الصيانة والتجديدات",
-          titleEn: "Maintenance & Renovations",
-          href: "/services/maintenance-renovations",
-          color: "text-green-700",
+          id: "uberfix",
+          icon: Smartphone,
+          titleAr: "UberFix - تطبيق الصيانات",
+          titleEn: "UberFix - Maintenance App",
+          href: "/uberfix",
+          color: "text-yellow-500",
         },
         {
           id: "brand-identity",
@@ -207,12 +208,13 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           color: "text-purple-600",
         },
         {
-          id: "maintenance-request",
-          icon: Wrench,
-          titleAr: "طلب صيانة",
-          titleEn: "Maintenance Request",
-          href: "/maintenance",
-          color: "text-purple-700",
+          id: "uberfix-app",
+          icon: Smartphone,
+          titleAr: "احجز صيانة - UberFix",
+          titleEn: "Book Maintenance - UberFix",
+          href: "https://uberfix.shop",
+          color: "text-yellow-500",
+          external: true,
         },
         {
           id: "tracking",
@@ -242,14 +244,6 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
       titleEn: "Project Management",
       href: "/admin/projects",
       color: "text-yellow-600",
-    },
-    {
-      id: "maintenance-admin",
-      icon: Settings,
-      titleAr: "إدارة الصيانات",
-      titleEn: "Maintenance Management",
-      href: "/admin/maintenance",
-      color: "text-yellow-700",
     },
     {
       id: "customers",

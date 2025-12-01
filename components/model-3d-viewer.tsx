@@ -67,9 +67,7 @@ export function Model3DViewer({ model, showControls = true, autoRotate = false, 
           text: language === "ar" ? model.description_ar : model.description_en,
           url: model.model_url,
         })
-      } catch (error) {
-        console.log("Error sharing:", error)
-      }
+      } catch (error) {}
     } else {
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(model.model_url)

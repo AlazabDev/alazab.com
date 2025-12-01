@@ -79,10 +79,4 @@ export async function signOut() {
   redirect("/auth/login")
 }
 
-export async function bypassLogin() {
-  const supabase = createClient()
-
-  // Create a session without authentication for testing
-  // This bypasses Supabase auth and redirects directly to admin
-  redirect("/admin")
-}
+/* Removed bypassLogin function - not needed for production */

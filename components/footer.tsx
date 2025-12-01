@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react"
+import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Twitter, Smartphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -72,10 +72,11 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/services/maintenance-renovations"
-                  className="text-gray-400 text-sm sm:text-base hover:text-yellow-500 transition-colors inline-block"
+                  href="/uberfix"
+                  className="text-gray-400 text-sm sm:text-base hover:text-yellow-500 transition-colors inline-flex items-center gap-2"
                 >
-                  {language === "ar" ? "الصيانة والتجديدات" : "Maintenance & Renovations"}
+                  <Smartphone className="h-4 w-4" />
+                  {language === "ar" ? "UberFix - تطبيق الصيانات" : "UberFix - Maintenance App"}
                 </Link>
               </li>
               <li>
@@ -113,18 +114,18 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/testimonials"
+                  href="/gallery"
                   className="text-gray-400 text-sm sm:text-base hover:text-yellow-500 transition-colors inline-block"
                 >
-                  {language === "ar" ? "آراء العملاء" : "Testimonials"}
+                  {language === "ar" ? "معرض الأعمال" : "Gallery"}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/careers"
+                  href="/calculator"
                   className="text-gray-400 text-sm sm:text-base hover:text-yellow-500 transition-colors inline-block"
                 >
-                  {language === "ar" ? "الوظائف" : "Careers"}
+                  {language === "ar" ? "حاسبة التكلفة" : "Cost Calculator"}
                 </Link>
               </li>
               <li>
