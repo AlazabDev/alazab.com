@@ -6,30 +6,25 @@ import Image from "next/image"
 import { X, ZoomIn, ChevronLeft, ChevronRight, Filter, Grid3X3, Grid2X2, LayoutGrid } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
-import { getImagesForCategories, type ImageCategory } from "@/lib/supabase-storage"
 
-// Gallery categories mapped to Supabase folders
+const SUPABASE_STORAGE_URL = "https://zrrffsjbfkphridqyais.supabase.co/storage/v1/object/public/az_gallery/images"
+
+const GALLERY_IMAGES = {
+  residential: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg", "8.jpg"],
+  commercial: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+  shops: ["abuauf_18.jpg", "abuauf_19.jpg", "abuauf_20.jpg", "abuauf_21.jpg", "abuauf_22.jpg"],
+  live_edge: ["1.jpg", "2.jpg", "3.jpg", "4.jpg"],
+  construction: ["1.jpg", "2.jpg", "3.jpg"],
+  projects: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+}
+
+// Gallery categories
 const galleryCategories = [
-  { id: "all", nameEn: "All Projects", nameAr: "جميع المشاريع", folders: [] as ImageCategory[] },
-  {
-    id: "luxury",
-    nameEn: "Luxury Finishing",
-    nameAr: "التشطيبات الفاخرة",
-    folders: ["residential", "live_edge"] as ImageCategory[],
-  },
-  {
-    id: "brand",
-    nameEn: "Brand Identity",
-    nameAr: "الهوية التجارية",
-    folders: ["commercial", "shops"] as ImageCategory[],
-  },
-  {
-    id: "maintenance",
-    nameEn: "Maintenance & Renovations",
-    nameAr: "الصيانة والتجديدات",
-    folders: ["maintenance", "construction"] as ImageCategory[],
-  },
-  { id: "supplies", nameEn: "General Supplies", nameAr: "التوريدات العامة", folders: ["projects"] as ImageCategory[] },
+  { id: "all", nameEn: "All Projects", nameAr: "جميع المشاريع" },
+  { id: "luxury", nameEn: "Luxury Finishing", nameAr: "التشطيبات الفاخرة" },
+  { id: "brand", nameEn: "Brand Identity", nameAr: "الهوية التجارية" },
+  { id: "construction", nameEn: "Construction", nameAr: "البناء والإنشاءات" },
+  { id: "supplies", nameEn: "General Supplies", nameAr: "التوريدات العامة" },
 ]
 
 const layoutOptions = [
@@ -49,7 +44,7 @@ interface GalleryImage {
 }
 
 export default function GalleryPage() {
-  const { t, language } = useLanguage()
+  const { language } = useLanguage()
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [layout, setLayout] = useState("grid")
@@ -57,53 +52,88 @@ export default function GalleryPage() {
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
 
   useEffect(() => {
-    async function loadImages() {
-      setIsLoading(true)
-      try {
-        // Get all image categories from Supabase
-        const allCategories: ImageCategory[] = [
-          "residential",
-          "commercial",
-          "shops",
-          "maintenance",
-          "construction",
-          "projects",
-          "live_edge",
-        ]
-        const imagesData = await getImagesForCategories(allCategories)
+    const images: GalleryImage[] = []
 
-        // Transform images into gallery format
-        const transformedImages: GalleryImage[] = []
+    // Residential images -> luxury category
+    GALLERY_IMAGES.residential.forEach((img, index) => {
+      images.push({
+        id: `residential-${index}`,
+        src: `${SUPABASE_STORAGE_URL}/residential/${img}`,
+        category: "luxury",
+        titleEn: `Luxury Residential Project ${index + 1}`,
+        titleAr: `مشروع سكني فاخر ${index + 1}`,
+        descriptionEn: "Premium residential finishing and interior design",
+        descriptionAr: "تشطيبات سكنية فاخرة وتصميم داخلي متميز",
+      })
+    })
 
-        Object.entries(imagesData).forEach(([category, images]) => {
-          images.forEach((image, index) => {
-            // Determine which gallery category this belongs to
-            let galleryCategory = "supplies"
-            if (["residential", "live_edge"].includes(category)) galleryCategory = "luxury"
-            else if (["commercial", "shops"].includes(category)) galleryCategory = "brand"
-            else if (["maintenance", "construction"].includes(category)) galleryCategory = "maintenance"
+    // Live edge images -> luxury category
+    GALLERY_IMAGES.live_edge.forEach((img, index) => {
+      images.push({
+        id: `live_edge-${index}`,
+        src: `${SUPABASE_STORAGE_URL}/live_edge/${img}`,
+        category: "luxury",
+        titleEn: `Live Edge Design ${index + 1}`,
+        titleAr: `تصميم حافة حية ${index + 1}`,
+        descriptionEn: "Unique live edge wood furniture and designs",
+        descriptionAr: "أثاث وتصاميم خشبية فريدة بحافة حية",
+      })
+    })
 
-            transformedImages.push({
-              id: `${category}-${index}`,
-              src: image.url,
-              category: galleryCategory,
-              titleEn: image.name.replace(/\.[^/.]+$/, "").replace(/_/g, " "),
-              titleAr: image.name.replace(/\.[^/.]+$/, "").replace(/_/g, " "),
-              descriptionEn: `${category.charAt(0).toUpperCase() + category.slice(1)} project`,
-              descriptionAr: `مشروع ${category}`,
-            })
-          })
-        })
+    // Commercial images -> brand category
+    GALLERY_IMAGES.commercial.forEach((img, index) => {
+      images.push({
+        id: `commercial-${index}`,
+        src: `${SUPABASE_STORAGE_URL}/commercial/${img}`,
+        category: "brand",
+        titleEn: `Commercial Project ${index + 1}`,
+        titleAr: `مشروع تجاري ${index + 1}`,
+        descriptionEn: "Professional commercial space design and branding",
+        descriptionAr: "تصميم مساحات تجارية احترافية وهوية تجارية",
+      })
+    })
 
-        setGalleryImages(transformedImages)
-      } catch (error) {
-        console.error("[v0] Error loading gallery images:", error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
+    // Shops images -> brand category
+    GALLERY_IMAGES.shops.forEach((img, index) => {
+      images.push({
+        id: `shops-${index}`,
+        src: `${SUPABASE_STORAGE_URL}/shops/${img}`,
+        category: "brand",
+        titleEn: `Retail Shop Design ${index + 1}`,
+        titleAr: `تصميم محل تجاري ${index + 1}`,
+        descriptionEn: "Modern retail shop interior design",
+        descriptionAr: "تصميم داخلي عصري للمحلات التجارية",
+      })
+    })
 
-    loadImages()
+    // Construction images -> construction category
+    GALLERY_IMAGES.construction.forEach((img, index) => {
+      images.push({
+        id: `construction-${index}`,
+        src: `${SUPABASE_STORAGE_URL}/construction/${img}`,
+        category: "construction",
+        titleEn: `Construction Project ${index + 1}`,
+        titleAr: `مشروع إنشاء ${index + 1}`,
+        descriptionEn: "Professional construction and building projects",
+        descriptionAr: "مشاريع بناء وإنشاءات احترافية",
+      })
+    })
+
+    // Projects images -> supplies category
+    GALLERY_IMAGES.projects.forEach((img, index) => {
+      images.push({
+        id: `projects-${index}`,
+        src: `${SUPABASE_STORAGE_URL}/projects/${img}`,
+        category: "supplies",
+        titleEn: `Supply Project ${index + 1}`,
+        titleAr: `مشروع توريدات ${index + 1}`,
+        descriptionEn: "General supplies and materials projects",
+        descriptionAr: "مشاريع توريدات ومواد عامة",
+      })
+    })
+
+    setGalleryImages(images)
+    setIsLoading(false)
   }, [])
 
   const filteredImages =
@@ -177,7 +207,7 @@ export default function GalleryPage() {
           className={`flex flex-col md:flex-row gap-4 items-center justify-between ${language === "ar" ? "md:flex-row-reverse" : ""}`}
         >
           {/* Category Filter */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 justify-center">
             {galleryCategories.map((category) => (
               <Button
                 key={category.id}
@@ -186,7 +216,7 @@ export default function GalleryPage() {
                 className={`${
                   selectedCategory === category.id
                     ? "bg-yellow-500 hover:bg-yellow-600 text-white"
-                    : "border-yellow-200 hover:border-yellow-400 hover:bg-yellow-50"
+                    : "border-yellow-200 hover:border-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
                 } transition-all duration-300`}
               >
                 <Filter className={`w-4 h-4 ${language === "ar" ? "ml-2" : "mr-2"}`} />
@@ -241,18 +271,23 @@ export default function GalleryPage() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  transition={{ duration: 0.5, delay: index * 0.03 }}
                   className={`group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${
                     layout === "masonry" ? "break-inside-avoid mb-4" : ""
                   }`}
                   onClick={() => openModal(image.id)}
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-gray-200 dark:bg-gray-700">
                     <Image
                       src={image.src || "/placeholder.svg"}
                       alt={language === "ar" ? image.titleAr : image.titleEn}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.src = "/construction-site-overview.png"
+                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -331,12 +366,16 @@ export default function GalleryPage() {
                   alt={language === "ar" ? selectedImageData.titleAr : selectedImageData.titleEn}
                   fill
                   className="object-contain rounded-lg"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = "/construction-site-overview.png"
+                  }}
                 />
               </div>
 
               {/* Image Info */}
               <div className="bg-white dark:bg-gray-800 p-6 rounded-b-lg">
-                <h3 className="text-2xl font-bold mb-2">
+                <h3 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
                   {language === "ar" ? selectedImageData.titleAr : selectedImageData.titleEn}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">

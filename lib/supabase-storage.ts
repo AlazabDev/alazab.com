@@ -1,6 +1,8 @@
 "use client"
 
-// Supabase Storage configuration - Public bucket access
+import { createClient } from "@/lib/supabase/client"
+
+// Supabase Storage configuration
 const SUPABASE_URL = "https://zrrffsjbfkphridqyais.supabase.co"
 const BUCKET_NAME = "az_gallery"
 
@@ -20,97 +22,62 @@ export const IMAGE_CATEGORIES = {
 
 export type ImageCategory = keyof typeof IMAGE_CATEGORIES
 
-// Get public URL for an image
 export function getImageUrl(category: ImageCategory, filename: string): string {
   const path = `${IMAGE_CATEGORIES[category]}/${filename}`
   return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${path}`
 }
 
-// List all images in a category using public API
 export async function listImages(category: ImageCategory): Promise<string[]> {
-  const path = IMAGE_CATEGORIES[category]
-
   try {
-    // Use the public list endpoint for public buckets
-    const response = await fetch(`${SUPABASE_URL}/storage/v1/object/list/${BUCKET_NAME}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prefix: path,
-        limit: 100,
-        offset: 0,
-        sortBy: { column: "name", order: "asc" },
-      }),
+    const supabase = createClient()
+    const path = IMAGE_CATEGORIES[category]
+
+    const { data, error } = await supabase.storage.from(BUCKET_NAME).list(path, {
+      limit: 200,
+      offset: 0,
+      sortBy: { column: "name", order: "asc" },
     })
 
-    if (!response.ok) {
-      // If the API doesn't work, fall back to predefined images
-      return getHardcodedImages(category)
+    if (error) {
+      // Fallback: try to fetch images directly from known URLs
+      return []
     }
-
-    const data = await response.json()
 
     // Filter out folders and return only image files
     return (
       data
-        ?.filter((file: { name: string }) => {
+        ?.filter((file) => {
           const ext = file.name.split(".").pop()?.toLowerCase()
           return ["jpg", "jpeg", "png", "webp", "gif"].includes(ext || "")
         })
-        .map((file: { name: string }) => file.name) || getHardcodedImages(category)
+        .map((file) => file.name) || []
     )
-  } catch (error) {
-    console.error(`[v0] Error listing images from ${category}:`, error)
-    // Fall back to hardcoded images for production reliability
-    return getHardcodedImages(category)
+  } catch {
+    return []
   }
 }
 
-function getHardcodedImages(category: ImageCategory): string[] {
-  const imageMap: Record<ImageCategory, string[]> = {
-    commercial: [
-      "abuauf_18.jpg",
-      "abuauf_17.jpg",
-      "abuauf_16.jpg",
-      "abuauf_15.jpg",
-      "abuauf_14.jpg",
-      "abuauf_13.jpg",
-      "abuauf_12.jpg",
-      "abuauf_11.jpg",
-      "abuauf_10.jpg",
-      "abuauf_9.jpg",
-    ],
-    construction: [
-      "construction_1.jpg",
-      "construction_2.jpg",
-      "construction_3.jpg",
-      "construction_4.jpg",
-      "construction_5.jpg",
-    ],
-    residential: [
-      "residential_1.jpg",
-      "residential_2.jpg",
-      "residential_3.jpg",
-      "residential_4.jpg",
-      "residential_5.jpg",
-    ],
-    shops: ["abuauf_18.jpg", "abuauf_17.jpg", "abuauf_16.jpg", "abuauf_15.jpg", "abuauf_14.jpg"],
-    projects: ["project_1.jpg", "project_2.jpg", "project_3.jpg", "project_4.jpg"],
-    maintenance: ["2008390_pi_bd_5650a_273468_crop.jpg"],
-    live_edge: ["live_edge_1.jpg", "live_edge_2.jpg"],
-    logo: [],
-    cuate: [],
-    uberfix: ["uberfix_1.jpg", "uberfix_2.jpg"],
-  }
-
-  return imageMap[category] || []
+const FALLBACK_IMAGES: Record<ImageCategory, string[]> = {
+  commercial: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+  construction: ["1.jpg", "2.jpg", "3.jpg"],
+  cuate: [],
+  live_edge: ["1.jpg", "2.jpg", "3.jpg", "4.jpg"],
+  logo: [],
+  maintenance: ["2008390_pi_bd_5650a_273468_crop.jpg"],
+  projects: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+  residential: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+  shops: ["abuauf_18.jpg", "abuauf_19.jpg", "abuauf_20.jpg"],
+  uberfix: ["1.jpg", "2.jpg", "3.jpg"],
 }
 
 // Get all images with their full URLs for a category
 export async function getImagesForCategory(category: ImageCategory): Promise<Array<{ name: string; url: string }>> {
-  const filenames = await listImages(category)
+  let filenames = await listImages(category)
+
+  if (filenames.length === 0) {
+    filenames = FALLBACK_IMAGES[category] || []
+  }
+
   return filenames.map((name) => ({
     name,
     url: getImageUrl(category, name),
@@ -137,26 +104,6 @@ export async function getImagesForCategories(
   )
 }
 
-export function buildDirectImageUrl(folder: string, filename: string): string {
-  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/images/${folder}/${filename}`
-}
-
-export function getSampleImages(): Array<{ category: string; url: string; title: string }> {
-  return [
-    { category: "commercial", url: buildDirectImageUrl("shops", "abuauf_18.jpg"), title: "محل أبو عوف" },
-    { category: "commercial", url: buildDirectImageUrl("shops", "abuauf_17.jpg"), title: "تجهيزات المحلات" },
-    { category: "commercial", url: buildDirectImageUrl("shops", "abuauf_16.jpg"), title: "ديكورات تجارية" },
-    { category: "commercial", url: buildDirectImageUrl("shops", "abuauf_15.jpg"), title: "واجهات المحلات" },
-    { category: "commercial", url: buildDirectImageUrl("shops", "abuauf_14.jpg"), title: "تصميم داخلي" },
-    { category: "commercial", url: buildDirectImageUrl("shops", "abuauf_13.jpg"), title: "إضاءة تجارية" },
-    { category: "commercial", url: buildDirectImageUrl("shops", "abuauf_12.jpg"), title: "تشطيبات فاخرة" },
-    { category: "commercial", url: buildDirectImageUrl("shops", "abuauf_11.jpg"), title: "أرضيات" },
-    { category: "commercial", url: buildDirectImageUrl("shops", "abuauf_10.jpg"), title: "سقف معلق" },
-    { category: "commercial", url: buildDirectImageUrl("shops", "abuauf_9.jpg"), title: "تفاصيل الديكور" },
-    {
-      category: "maintenance",
-      url: buildDirectImageUrl("maintenance", "2008390_pi_bd_5650a_273468_crop.jpg"),
-      title: "أعمال صيانة",
-    },
-  ]
+export function getDirectImageUrl(path: string): string {
+  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${path}`
 }
