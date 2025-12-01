@@ -4,9 +4,15 @@
   "outputDirectory": ".next",
   "framework": "nextjs",
   "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "https://zrrffsjbfkphridqyais.supabase.co",
-    "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY": "sb_publishable_2Oz-fWureU0TjpVeVFX4qw_nN6IywPn",
-    "NEXT_PUBLIC_SITE_URL": "https://v0-construction-service-website-eta-nine.vercel.app"
+    "NEXT_PUBLIC_SUPABASE_URL": {
+      "description": "Supabase project URL"
+    },
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": {
+      "description": "Supabase anonymous key"
+    },
+    "NEXT_PUBLIC_SITE_URL": {
+      "description": "Application site URL"
+    }
   },
   "functions": {
     "api/**/*.ts": {
@@ -15,4 +21,3 @@
     }
   }
 }
-

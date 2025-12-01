@@ -123,8 +123,9 @@ export function Navbar() {
       >
         <div className="container mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 max-w-[1920px]">
           <div
-            className={`flex h-16 sm:h-18 md:h-20 lg:h-24 items-center justify-between ${language === "ar" ? "flex-row-reverse" : "flex-row"}`}
+            className={`flex h-14 sm:h-16 md:h-18 lg:h-20 items-center justify-between ${language === "ar" ? "flex-row-reverse" : "flex-row"}`}
           >
+            {/* Logo - Updated image size */}
             <div className="flex items-center">
               <Link href="/" className="flex items-center group">
                 <motion.div
@@ -135,9 +136,9 @@ export function Navbar() {
                   <Image
                     src="https://al-azab.co/images/logaz.gif"
                     alt="Al-Azab Construction Logo"
-                    width={96}
-                    height={96}
-                    className="h-20 w-20 sm:h-22 sm:w-22 md:h-24 md:w-24 lg:h-28 lg:w-28 object-contain"
+                    width={80}
+                    height={80}
+                    className="h-16 w-16 sm:h-18 sm:w-18 md:h-20 md:w-20 lg:h-22 lg:w-22 object-contain"
                     priority
                   />
                 </motion.div>
@@ -161,7 +162,7 @@ export function Navbar() {
                   items={[
                     { href: "/services/luxury-finishing", label: t("nav.services.luxury") },
                     { href: "/services/brand-identity", label: t("nav.services.brand") },
-                    { href: "/uberfix", label: language === "ar" ? "أوبر فيكس للصيانة" : "UberFix Maintenance" },
+                    { href: "/services/maintenance-renovations", label: t("nav.services.maintenance") },
                     { href: "/services/general-supplies", label: t("nav.services.supplies") },
                   ]}
                   pathname={pathname}

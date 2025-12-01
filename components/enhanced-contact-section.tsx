@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle, AlertCircle } from "lucide-react"
+import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -21,43 +21,22 @@ export function EnhancedContactSection() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    setError(null)
 
-    try {
-      const response = await fetch("/api/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          type: "contact",
-        }),
-      })
+    // Simulate form submission
+    await new Promise((resolve) => setTimeout(resolve, 2000))
 
-      if (!response.ok) {
-        throw new Error("فشل في إرسال الرسالة")
-      }
+    setIsSubmitting(false)
+    setIsSubmitted(true)
 
-      setIsSubmitted(true)
-      setTimeout(() => {
-        setIsSubmitted(false)
-        setFormData({ name: "", email: "", phone: "", service: "", message: "" })
-      }, 3000)
-    } catch (err) {
-      setError(
-        language === "ar"
-          ? "حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى."
-          : "An error occurred. Please try again.",
-      )
-    } finally {
-      setIsSubmitting(false)
-    }
+    // Reset form after 3 seconds
+    setTimeout(() => {
+      setIsSubmitted(false)
+      setFormData({ name: "", email: "", phone: "", service: "", message: "" })
+    }, 3000)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -144,26 +123,6 @@ export function EnhancedContactSection() {
                 </motion.div>
               ))}
             </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="rounded-2xl overflow-hidden shadow-lg"
-            >
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.54544629723!2d31.27747577318028!3d29.98819101985533!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1458396627ebf27d%3A0x15bc48a54f2e9a92!2z2KfZhNi52LLYqCDZhNmE2YXZgtin2YjZhNin2Kog2YjYp9mE2KrZiNix2YrYr9in2Ko!5e0!3m2!1sar!2seg!4v1764565148147!5m2!1sar!2seg"
-                width="100%"
-                height="300"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title={language === "ar" ? "موقعنا على الخريطة" : "Our Location on Map"}
-                className="w-full"
-              />
-            </motion.div>
           </motion.div>
 
           {/* Contact Form */}
@@ -186,13 +145,6 @@ export function EnhancedContactSection() {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                {error && (
-                  <div className="flex items-center gap-2 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400">
-                    <AlertCircle className="h-5 w-5 flex-shrink-0" />
-                    <p>{error}</p>
-                  </div>
-                )}
-
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -251,6 +203,7 @@ export function EnhancedContactSection() {
                     <option value="">{t("contact.form.selectService")}</option>
                     <option value="luxury-finishing">{t("nav.services.luxury")}</option>
                     <option value="brand-identity">{t("nav.services.brand")}</option>
+                    <option value="maintenance-renovations">{t("nav.services.maintenance")}</option>
                     <option value="general-supplies">{t("nav.services.supplies")}</option>
                   </select>
                 </div>
@@ -282,7 +235,7 @@ export function EnhancedContactSection() {
                     />
                   ) : (
                     <>
-                      <Send className={`h-5 w-5 ${language === "ar" ? "ml-2" : "mr-2"}`} />
+                      <Send className={`h-5 w-5 ${language === "ar" ? "mr-2" : "ml-2"}`} />
                       {t("contact.form.submit")}
                     </>
                   )}

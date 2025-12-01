@@ -1,362 +1,280 @@
-"use client"
-
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, CheckCircle, Building2, Palette, Package, Sparkles } from "lucide-react"
-import { motion } from "framer-motion"
+import { ArrowRight, CheckCircle } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
-import { useLanguage } from "@/contexts/language-context"
+
+export const metadata = {
+  title: "Our Services | BuildMaster Construction",
+  description:
+    "Explore BuildMaster's comprehensive construction services including residential, commercial, industrial, and architectural design solutions.",
+}
 
 export default function ServicesPage() {
-  const { language } = useLanguage()
-
-  const services = [
-    {
-      title: language === "ar" ? "التشطيبات الفاخرة" : "Luxury Finishing",
-      titleEn: "Luxury Finishing",
-      description:
-        language === "ar"
-          ? "حلول التشطيب الراقية التي تحول مساحاتك إلى تحف فنية أنيقة مع أجود المواد والتصاميم الاستثنائية"
-          : "High-end finishing solutions that transform your spaces into elegant masterpieces with the finest materials and exceptional designs",
-      image: "https://zrrffsjbfkphridqyais.supabase.co/storage/v1/object/public/az_gallery/images/residential/1.jpg",
-      link: "/services/luxury-finishing",
-      icon: Sparkles,
-    },
-    {
-      title: language === "ar" ? "الهوية التجارية" : "Brand Identity",
-      titleEn: "Brand Identity",
-      description:
-        language === "ar"
-          ? "تصميم وتنفيذ المساحات التجارية والمحلات بهوية بصرية متكاملة تعكس علامتك التجارية"
-          : "Design and implementation of commercial spaces and stores with an integrated visual identity that reflects your brand",
-      image: "https://zrrffsjbfkphridqyais.supabase.co/storage/v1/object/public/az_gallery/images/shops/abuauf_18.jpg",
-      link: "/services/brand-identity",
-      icon: Palette,
-    },
-    {
-      title: language === "ar" ? "التوريدات العامة" : "General Supplies",
-      titleEn: "General Supplies",
-      description:
-        language === "ar"
-          ? "توفير جميع مواد البناء والتشطيب عالية الجودة من أفضل المصادر المحلية والعالمية"
-          : "Providing all high-quality construction and finishing materials from the best local and international sources",
-      image: "https://zrrffsjbfkphridqyais.supabase.co/storage/v1/object/public/az_gallery/images/projects/1.jpg",
-      link: "/services/general-supplies",
-      icon: Package,
-    },
-    {
-      title: language === "ar" ? "البناء السكني" : "Residential Construction",
-      titleEn: "Residential Construction",
-      description:
-        language === "ar"
-          ? "بناء المنازل والفيلات والوحدات السكنية بأعلى معايير الجودة والأمان"
-          : "Building homes, villas, and residential units with the highest quality and safety standards",
-      image: "https://zrrffsjbfkphridqyais.supabase.co/storage/v1/object/public/az_gallery/images/construction/1.jpg",
-      link: "/services/residential",
-      icon: Building2,
-    },
-  ]
-
-  const processSteps = [
-    {
-      title: language === "ar" ? "الاستشارة الأولية" : "Initial Consultation",
-      description:
-        language === "ar"
-          ? "نبدأ باستشارة متعمقة لفهم رؤيتك ومتطلباتك وميزانيتك"
-          : "We begin with an in-depth consultation to understand your vision, requirements, and budget",
-    },
-    {
-      title: language === "ar" ? "التصميم والتخطيط" : "Design & Planning",
-      description:
-        language === "ar"
-          ? "يقوم فريق التصميم بإنشاء مخططات تفصيلية وتصورات ثلاثية الأبعاد"
-          : "Our design team creates detailed plans and 3D visualizations",
-    },
-    {
-      title: language === "ar" ? "التنفيذ" : "Execution",
-      description:
-        language === "ar"
-          ? "ينفذ حرفيونا المهرة المشروع مع اهتمام دقيق بالتفاصيل والجودة"
-          : "Our skilled craftsmen execute the project with meticulous attention to detail and quality",
-    },
-    {
-      title: language === "ar" ? "التسليم" : "Delivery",
-      description:
-        language === "ar"
-          ? "نسلم مشروعك في الوقت المحدد مع ضمان شامل على جميع الأعمال"
-          : "We deliver your project on time with comprehensive warranty on all work",
-    },
-  ]
-
-  const benefits = [
-    {
-      title: language === "ar" ? "فريق ذو خبرة" : "Experienced Team",
-      description:
-        language === "ar"
-          ? "فريقنا يجمع عقوداً من الخبرة في جميع جوانب البناء والتصميم"
-          : "Our team brings decades of combined experience in all aspects of construction and design",
-    },
-    {
-      title: language === "ar" ? "جودة الحرفية" : "Quality Craftsmanship",
-      description:
-        language === "ar"
-          ? "نستخدم فقط أجود المواد والتقنيات لضمان المتانة والجمال"
-          : "We use only the finest materials and techniques to ensure durability and aesthetic appeal",
-    },
-    {
-      title: language === "ar" ? "التواصل الشفاف" : "Transparent Communication",
-      description:
-        language === "ar"
-          ? "تحديثات منتظمة وتواصل مفتوح يبقيك على اطلاع طوال المشروع"
-          : "Regular updates and open communication keep you informed throughout the project",
-    },
-    {
-      title: language === "ar" ? "التسليم في الوقت المحدد" : "On-Time Delivery",
-      description:
-        language === "ar"
-          ? "نفتخر بالالتزام بالمواعيد وتسليم المشاريع كما وعدنا"
-          : "We pride ourselves on meeting deadlines and delivering projects as promised",
-    },
-    {
-      title: language === "ar" ? "أسعار تنافسية" : "Competitive Pricing",
-      description:
-        language === "ar"
-          ? "أسعار عادلة وشفافة بدون تكاليف خفية أو مفاجآت غير متوقعة"
-          : "Fair, transparent pricing with no hidden costs or unexpected surprises",
-    },
-  ]
-
   return (
-    <div className={`flex min-h-screen flex-col ${language === "ar" ? "rtl" : "ltr"}`}>
+    <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
-      <section className="relative h-[400px] w-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70 z-10" />
+      <section className="relative h-[300px] sm:h-[400px] w-full overflow-hidden">
+        <div className="absolute inset-0 bg-black/60 z-10" />
         <Image
-          src="https://zrrffsjbfkphridqyais.supabase.co/storage/v1/object/public/az_gallery/images/construction/1.jpg"
-          alt={language === "ar" ? "خدماتنا" : "Our Services"}
+          src="/images/services-hero.png"
+          alt="Construction services"
           fill
           className="object-cover"
           priority
+          sizes="100vw"
         />
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-              {language === "ar" ? "خدماتنا" : "Our Services"}
-            </h1>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
-              {language === "ar"
-                ? "حلول بناء وتشطيب شاملة مصممة خصيصاً لتلبية احتياجاتك ورؤيتك"
-                : "Comprehensive construction and finishing solutions tailored to your specific needs and vision"}
-            </p>
-          </motion.div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 md:mb-4">Our Services</h1>
+          <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-xl sm:max-w-2xl">
+            Comprehensive construction solutions tailored to your specific needs and vision.
+          </p>
         </div>
       </section>
 
       {/* Services Overview */}
-      <section className="py-20 bg-white dark:bg-gray-900">
+      <section className="py-12 md:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16 max-w-3xl mx-auto"
-          >
-            <div className="inline-block px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-full text-sm font-medium mb-4">
-              {language === "ar" ? "ما نقدمه" : "What We Offer"}
+          <div className="text-center mb-10 md:mb-16 max-w-3xl mx-auto">
+            <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-3 md:mb-4">
+              What We Offer
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">
-              {language === "ar" ? "حلول بناء وتشطيب شاملة" : "Comprehensive Construction Solutions"}
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-6">
+              Comprehensive Construction Solutions
             </h2>
-            <p className="text-lg text-gray-700 dark:text-gray-300">
-              {language === "ar"
-                ? "من الفكرة إلى التنفيذ، نقدم خدمات شاملة لتحقيق رؤيتك بدقة وتميز"
-                : "From concept to completion, we provide end-to-end services to bring your vision to life with precision and excellence"}
+            <p className="text-base md:text-lg text-gray-700">
+              From concept to completion, we provide end-to-end services to bring your vision to life with precision and
+              excellence.
             </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 max-w-6xl mx-auto">
             {services.map((service, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group"
+                className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group"
               >
-                <div className="relative h-64 overflow-hidden">
+                <div className="relative h-48 md:h-56 overflow-hidden">
                   <Image
                     src={service.image || "/placeholder.svg"}
                     alt={service.title}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="flex items-center gap-2 text-white">
-                      <service.icon className="h-6 w-6 text-yellow-400" />
-                      <h3 className="text-2xl font-bold">{service.title}</h3>
-                    </div>
-                  </div>
                 </div>
-                <div className="p-6">
-                  <p className="text-gray-700 dark:text-gray-300 mb-6">{service.description}</p>
+                <div className="p-6 md:p-8">
+                  <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">{service.title}</h3>
+                  <p className="text-gray-700 mb-5 md:mb-6 text-sm sm:text-base">{service.description}</p>
                   <Link href={service.link}>
-                    <Button className="bg-yellow-500 hover:bg-yellow-600 text-black w-full">
-                      {language === "ar" ? "اعرف المزيد" : "Learn More"}
-                      <ArrowRight className={`h-4 w-4 ${language === "ar" ? "mr-2 rotate-180" : "ml-2"}`} />
+                    <Button className="bg-amber-500 hover:bg-amber-600 text-black w-full">
+                      Learn More
+                      <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Process Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
+      <section className="py-12 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16 max-w-3xl mx-auto"
-          >
-            <div className="inline-block px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-full text-sm font-medium mb-4">
-              {language === "ar" ? "كيف نعمل" : "Our Process"}
+          <div className="text-center mb-10 md:mb-16 max-w-3xl mx-auto">
+            <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-3 md:mb-4">
+              Our Process
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">
-              {language === "ar" ? "منهجية العمل" : "How We Work"}
-            </h2>
-            <p className="text-lg text-gray-700 dark:text-gray-300">
-              {language === "ar"
-                ? "عملية منظمة تضمن تجربة سلسة من الاستشارة الأولى حتى التسليم النهائي"
-                : "Our streamlined process ensures a smooth experience from initial consultation to project completion"}
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-6">How We Work</h2>
+            <p className="text-base md:text-lg text-gray-700">
+              Our streamlined process ensures a smooth experience from initial consultation to project completion.
             </p>
-          </motion.div>
+          </div>
+          <div className="max-w-5xl mx-auto">
+            <div className="relative">
+              {/* Vertical line - hidden on mobile, visible on larger screens */}
+              <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-amber-200 hidden md:block"></div>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-6">
-              {processSteps.map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-lg"
-                >
-                  <div className="bg-yellow-100 dark:bg-yellow-900/30 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                    <span className="text-yellow-700 dark:text-yellow-400 font-bold text-xl">{index + 1}</span>
+              {/* Process steps - mobile optimized */}
+              <div className="space-y-8 md:space-y-12 relative">
+                {processSteps.map((step, index) => (
+                  <div
+                    key={index}
+                    className={`flex flex-col md:flex-row items-center gap-4 md:gap-8 ${index % 2 === 1 ? "md:flex-row-reverse" : ""}`}
+                  >
+                    <div className="md:w-1/2 relative w-full">
+                      <div className="bg-white p-6 md:p-8 rounded-2xl shadow-md relative z-10">
+                        <div className="bg-amber-100 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mb-3 md:mb-4">
+                          <span className="text-amber-700 font-bold text-lg md:text-xl">{index + 1}</span>
+                        </div>
+                        <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4">{step.title}</h3>
+                        <p className="text-gray-700 text-sm sm:text-base">{step.description}</p>
+                      </div>
+                      {/* Circle on the timeline - hidden on mobile */}
+                      <div className="absolute top-1/2 left-0 md:left-auto md:right-0 transform translate-y-[-50%] translate-x-[-50%] md:translate-x-[50%] w-6 h-6 bg-amber-500 rounded-full border-4 border-white z-20 hidden md:block"></div>
+                    </div>
+                    <div className="md:w-1/2 hidden md:block">{/* This div is just for spacing in the timeline */}</div>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">{step.title}</h3>
-                  <p className="text-gray-700 dark:text-gray-300">{step.description}</p>
-                </motion.div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 bg-white dark:bg-gray-900">
+      <section className="py-12 md:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, x: language === "ar" ? 50 : -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative h-[500px] rounded-2xl overflow-hidden shadow-xl"
-            >
+          <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center max-w-6xl mx-auto">
+            <div className="relative h-[300px] sm:h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl order-2 md:order-1">
               <Image
-                src="https://zrrffsjbfkphridqyais.supabase.co/storage/v1/object/public/az_gallery/images/residential/2.jpg"
-                alt={language === "ar" ? "جودة العمل" : "Quality Work"}
+                src="/images/quality.png"
+                alt="Construction quality"
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: language === "ar" ? -50 : 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="inline-block px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-full text-sm font-medium mb-4">
-                {language === "ar" ? "لماذا نحن" : "Why Choose Us"}
+            </div>
+            <div className="order-1 md:order-2">
+              <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-3 md:mb-4">
+                Why Choose Us
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">
-                {language === "ar" ? "الفرق مع العزب للإنشاءات" : "The Al-Azab Difference"}
-              </h2>
-              <p className="text-lg text-gray-700 dark:text-gray-300 mb-8">
-                {language === "ar"
-                  ? "عندما تختار العزب للإنشاءات، فأنت تختار شريكاً ملتزماً بالتميز والابتكار ورضاك الكامل"
-                  : "When you choose Al-Azab Construction, you're choosing a partner committed to excellence, innovation, and your complete satisfaction"}
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-6">The BuildMaster Difference</h2>
+              <p className="text-base md:text-lg text-gray-700 mb-5 md:mb-8">
+                When you choose BuildMaster, you're choosing a partner committed to excellence, innovation, and your
+                complete satisfaction.
               </p>
-              <div className="space-y-4">
+              <div className="space-y-4 md:space-y-6">
                 {benefits.map((benefit, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: index * 0.1 }}
-                    className="flex items-start"
-                  >
-                    <CheckCircle className="h-6 w-6 text-yellow-500 flex-shrink-0 mt-0.5" />
-                    <div className={language === "ar" ? "mr-3" : "ml-3"}>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">{benefit.title}</h3>
-                      <p className="text-gray-700 dark:text-gray-300 text-sm">{benefit.description}</p>
+                  <div key={index} className="flex items-start">
+                    <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-amber-500 mr-2 md:mr-3 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h3 className="font-semibold text-base md:text-lg">{benefit.title}</h3>
+                      <p className="text-gray-700 text-sm sm:text-base">{benefit.description}</p>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600">
+      <section className="py-12 md:py-20 bg-gray-900 text-white">
         <div className="container mx-auto px-4 text-center max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-              {language === "ar" ? "هل أنت مستعد لبدء مشروعك؟" : "Ready to Start Your Project?"}
-            </h2>
-            <p className="text-yellow-100 text-lg max-w-2xl mx-auto mb-10">
-              {language === "ar"
-                ? "اتصل بنا اليوم للحصول على استشارة مجانية واكتشف كيف يمكننا تحقيق رؤيتك"
-                : "Contact us today for a free consultation and discover how we can bring your vision to life"}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button size="lg" className="bg-white text-yellow-600 hover:bg-gray-100 font-bold px-8">
-                  {language === "ar" ? "احصل على عرض سعر مجاني" : "Get a Free Quote"}
-                  <ArrowRight className={`h-5 w-5 ${language === "ar" ? "mr-2 rotate-180" : "ml-2"}`} />
-                </Button>
-              </Link>
-              <Link href="/uberfix">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white text-white hover:bg-white/20 font-bold px-8 bg-transparent"
-                >
-                  {language === "ar" ? "خدمات الصيانة - UberFix" : "Maintenance - UberFix"}
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6">Ready to Start Your Project?</h2>
+          <p className="text-gray-300 text-sm sm:text-base md:text-lg max-w-xl md:max-w-2xl mx-auto mb-6 md:mb-10">
+            Contact us today for a free consultation and discover how BuildMaster can bring your vision to life.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+            <Link href="/contact">
+              <Button
+                size="lg"
+                className="bg-amber-500 hover:bg-amber-600 text-black font-medium px-6 md:px-8 w-full sm:w-auto"
+              >
+                Get a Free Quote
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
     </div>
   )
 }
+
+// Sample data
+const services = [
+  {
+    title: "Residential Construction",
+    description: "Custom home building, renovations, and additions tailored to your lifestyle and preferences.",
+    image: "/images/residential-1.png",
+    link: "/services/residential",
+  },
+  {
+    title: "Commercial Development",
+    description:
+      "Office buildings, retail spaces, and hospitality venues designed for functionality and aesthetic appeal.",
+    image: "/images/commercial-1.png",
+    link: "/services/commercial",
+  },
+  {
+    title: "Industrial Facilities",
+    description: "Manufacturing plants, warehouses, and distribution centers built for efficiency and durability.",
+    image: "/images/industrial-1.png",
+    link: "/services/industrial",
+  },
+  {
+    title: "Architectural Design",
+    description: "Innovative architectural solutions that balance form, function, and sustainability.",
+    image: "/images/project-3.png",
+    link: "/services/design",
+  },
+  {
+    title: "Project Management",
+    description: "Comprehensive oversight of construction projects from planning to completion.",
+    image: "/images/process.png",
+    link: "/services/management",
+  },
+  {
+    title: "Sustainable Building",
+    description: "Eco-friendly construction practices and materials for environmentally conscious projects.",
+    image: "/images/residential-2.png",
+    link: "/services/sustainable",
+  },
+]
+
+const processSteps = [
+  {
+    title: "Initial Consultation",
+    description:
+      "We begin with a thorough consultation to understand your vision, requirements, and budget constraints.",
+  },
+  {
+    title: "Design & Planning",
+    description:
+      "Our design team creates detailed plans and visualizations, incorporating your feedback at every stage.",
+  },
+  {
+    title: "Permitting & Approvals",
+    description: "We handle all necessary permits and regulatory approvals to ensure your project proceeds smoothly.",
+  },
+  {
+    title: "Construction",
+    description:
+      "Our skilled craftsmen bring your project to life with precision, quality materials, and attention to detail.",
+  },
+  {
+    title: "Quality Assurance",
+    description:
+      "Rigorous quality checks throughout the construction process ensure everything meets our high standards.",
+  },
+  {
+    title: "Project Completion",
+    description: "We deliver your completed project on time and provide comprehensive support even after completion.",
+  },
+]
+
+const benefits = [
+  {
+    title: "Experienced Team",
+    description: "Our team brings decades of combined experience in all aspects of construction and design.",
+  },
+  {
+    title: "Quality Craftsmanship",
+    description: "We use only the finest materials and techniques to ensure durability and aesthetic appeal.",
+  },
+  {
+    title: "Transparent Communication",
+    description: "Regular updates and open communication keep you informed throughout the project.",
+  },
+  {
+    title: "On-Time Delivery",
+    description: "We pride ourselves on meeting deadlines and delivering projects as promised.",
+  },
+  {
+    title: "Competitive Pricing",
+    description: "Fair, transparent pricing with no hidden costs or unexpected surprises.",
+  },
+]
