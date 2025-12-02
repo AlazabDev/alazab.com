@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/microfrontends.json",
+  "applications": {
+    "alazab-construction": {
+      "development": {
+        "fallback": "www.alazab.online"
+      }
+    }
+  }
+}
