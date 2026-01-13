@@ -17,7 +17,7 @@ export default function GeneralSuppliesPage() {
       <section className="relative h-[500px] w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-slate-800/70 to-brown-900/80 z-10" />
         <Image
-          src="https://al-azab.co/images/service-5.png"
+          src="/images/design-mode/service-5.png"
           alt="General Supplies"
           fill
           className="object-cover"
@@ -94,7 +94,7 @@ export default function GeneralSuppliesPage() {
               className={`relative h-[600px] rounded-3xl overflow-hidden shadow-2xl ${language === "ar" ? "order-1 md:order-2" : ""}`}
             >
               <Image
-                src="https://al-azab.co/images/service-6.png"
+                src="/images/design-mode/service-6.png"
                 alt="Supply Chain"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-700"

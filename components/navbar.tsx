@@ -133,7 +133,7 @@ export function Navbar() {
                   className="relative"
                 >
                   <Image
-                    src="https://al-azab.co/images/logaz.gif"
+                    src="/images/design-mode/logaz.gif"
                     alt="Al-Azab Construction Logo"
                     width={96}
                     height={96}

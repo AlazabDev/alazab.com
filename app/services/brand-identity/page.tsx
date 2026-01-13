@@ -17,7 +17,7 @@ export default function BrandIdentityPage() {
       <section className="relative h-[500px] w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-800/70 to-purple-900/80 z-10" />
         <Image
-          src="https://al-azab.co/images/service-6.png"
+          src="/images/design-mode/service-6.png"
           alt="Brand Identity Spaces"
           fill
           className="object-cover"
@@ -92,7 +92,7 @@ export default function BrandIdentityPage() {
               className={`relative h-[600px] rounded-3xl overflow-hidden shadow-2xl ${language === "ar" ? "order-1 md:order-2" : ""}`}
             >
               <Image
-                src="https://al-azab.co/images/service-7.png"
+                src="/images/design-mode/service-7.png"
                 alt="Brand Identity Interior"
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-700"

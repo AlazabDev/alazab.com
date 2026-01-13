@@ -1,128 +1,27 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { X, ZoomIn, ChevronLeft, ChevronRight, Filter, Grid3X3, Grid2X2, LayoutGrid } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import fs from "fs"
+import path from "path"
 
-const LOCAL_GALLERY_IMAGES = [
-  // Design Showcase - Gallery Folder
-  { id: "design-1", src: "/gallery/0024209_egadi-40-x-95-oval-table_450.jpeg", category: "design", type: "furniture" },
-  { id: "design-2", src: "/gallery/0024280_biancamano-chair_450.jpeg", category: "design", type: "furniture" },
-  {
-    id: "design-3",
-    src: "/gallery/0024304_favignana-swivelling-mirror_450.jpeg",
-    category: "design",
-    type: "accessories",
-  },
-  { id: "design-4", src: "/gallery/0025764_doge-console_450.jpeg", category: "design", type: "furniture" },
-  {
-    id: "design-5",
-    src: "/gallery/0026441_egadi-o-40-round-coffee-table-14-high_450.jpeg",
-    category: "design",
-    type: "tables",
-  },
-  {
-    id: "design-6",
-    src: "/gallery/0026474_axum-rectangular-outdoor-coffee-table_450.jpeg",
-    category: "design",
-    type: "outdoor",
-  },
-
-  // Product Collections - Gallery Folder
-  { id: "prod-1", src: "/gallery/0036693_sofas-and-armchairs_366.jpeg", category: "products", type: "sofas" },
-  { id: "prod-2", src: "/gallery/0036701_accessories_366.jpeg", category: "products", type: "accessories" },
-  { id: "prod-3", src: "/gallery/0036703_tables-and-chairs_366.jpeg", category: "products", type: "furniture" },
-  { id: "prod-4", src: "/gallery/0036717_storage_366.jpeg", category: "products", type: "storage" },
-  { id: "prod-5", src: "/gallery/0036728_home-decor_366.jpeg", category: "products", type: "decor" },
-  { id: "prod-6", src: "/gallery/0036730_outdoor-furniture_366.jpeg", category: "products", type: "outdoor" },
-  { id: "prod-7", src: "/gallery/0036770_bedroom_366.jpeg", category: "products", type: "bedroom" },
-
-  // Interior Projects - Projects Folder
-  {
-    id: "proj-1",
-    src: "/projects/modern-black-glass-tv-unit-or-36e8-glass-tv-unit-or-lago.webp",
-    category: "residential",
-    type: "living-room",
-  },
-  {
-    id: "proj-2",
-    src: "/projects/suspended-glass-sideboard-or-sideboard-36e8-glass-or-lago.webp",
-    category: "residential",
-    type: "dining",
-  },
-  {
-    id: "proj-3",
-    src: "/projects/gold-walk-in-wardrobe-with-drawers-or-vista-walk-in-closet-or-lago.webp",
-    category: "residential",
-    type: "bedroom",
-  },
-  {
-    id: "proj-4",
-    src: "/projects/modern-bedroom-design-or-36e8-dresser-or-lago.webp",
-    category: "residential",
-    type: "bedroom",
-  },
-  {
-    id: "proj-5",
-    src: "/projects/glass-suspended-living-room-wall-unit-or-n.o.w.-wall-unit-or-lago.webp",
-    category: "residential",
-    type: "living-room",
-  },
-
-  // Kitchen & Dining - Projects Folder
-  {
-    id: "kitchen-1",
-    src: "/projects/suspended-corner-kitchen-with-pantry-or-36e8-cut-kitchenor-lago.webp",
-    category: "kitchen",
-    type: "modern",
-  },
-  {
-    id: "kitchen-2",
-    src: "/projects/marble-kitchen-with-wooden-peninsula-or-36e8-marble-xglass-kitchen-or-lago.webp",
-    category: "kitchen",
-    type: "luxury",
-  },
-  {
-    id: "kitchen-3",
-    src: "/projects/white-kitchen-pantry-or-36e8-cut-kitchen-or-lago.webp",
-    category: "kitchen",
-    type: "modern",
-  },
-  {
-    id: "kitchen-4",
-    src: "/projects/modern-dining-room-furniture-or-36e8-sideboard-or-lago.webp",
-    category: "kitchen",
-    type: "dining",
-  },
-
-  // Commercial/Office - Projects Folder
-  {
-    id: "office-1",
-    src: "/projects/home-studio-furniture-or-home-office-or-lago.webp",
-    category: "commercial",
-    type: "office",
-  },
-  {
-    id: "office-2",
-    src: "/projects/modern-glass-desk-or-livre-desk-or-lago.webp",
-    category: "commercial",
-    type: "desk",
-  },
-  {
-    id: "office-3",
-    src: "/projects/floating-bookcase-with-corner-desk-or-home-office-or-lago.webp",
-    category: "commercial",
-    type: "workspace",
-  },
-  {
-    id: "office-4",
-    src: "/projects/design-wall-bookshelf-or-lagolinea-bookshelf-or-lago.webp",
-    category: "commercial",
-    type: "storage",
-  },
-]
+const getImagesFromFolder = (folderPath) => {
+  const images = fs.readdirSync(folderPath).map((file) => ({
+    id: file.split(".")[0],
+    src: `/public/${folderPath}/${file}`,
+    category: folderPath.split("/")[1],
+    type: folderPath.split("/")[2],
+    title: file
+      .split(".")[0]
+      .replace(/-/g, " ")
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (l) => l.toUpperCase()),
+  }))
+  return images
+}
 
 const galleryCategories = [
   { id: "all", nameEn: "All Projects", nameAr: "جميع المشاريع" },
@@ -131,6 +30,7 @@ const galleryCategories = [
   { id: "kitchen", nameEn: "Kitchen & Dining", nameAr: "المطابخ والطعام" },
   { id: "commercial", nameEn: "Office & Commercial", nameAr: "مكتبي وتجاري" },
   { id: "products", nameEn: "Product Collections", nameAr: "مجموعات المنتجات" },
+  { id: "brand", nameEn: "Premium Brands", nameAr: "العلامات المميزة" },
 ]
 
 const layoutOptions = [
@@ -144,6 +44,7 @@ interface GalleryImage {
   src: string
   category: string
   type: string
+  title: string
 }
 
 export default function GalleryPage() {
@@ -153,6 +54,15 @@ export default function GalleryPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [layout, setLayout] = useState("grid")
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [LOCAL_GALLERY_IMAGES, setLOCAL_GALLERY_IMAGES] = useState<GalleryImage[]>([])
+
+  useEffect(() => {
+    const galleryFolder = path.join(process.cwd(), "public", "gallery")
+    const projectsFolder = path.join(process.cwd(), "public", "projects")
+    const galleryImages = getImagesFromFolder(galleryFolder)
+    const projectsImages = getImagesFromFolder(projectsFolder)
+    setLOCAL_GALLERY_IMAGES([...galleryImages, ...projectsImages])
+  }, [])
 
   const filteredImages =
     selectedCategory === "all"
