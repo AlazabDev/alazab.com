@@ -41,7 +41,6 @@ export default function HomePageClient() {
 
       {/* Enhanced Hero Section with RTL/LTR Support */}
       <section className="relative w-full overflow-hidden min-h-[500px] sm:min-h-[600px] md:min-h-[700px] lg:min-h-[800px]">
-        {/* Background Image with Parallax Effect */}
         <motion.div
           className="absolute inset-0"
           initial={{ scale: 1.1 }}
@@ -50,7 +49,7 @@ export default function HomePageClient() {
         >
           <Image
             src="/modern-construction-site.png"
-            alt={`${t("hero.badge")} - موقع بناء`}
+            alt={`${t("hero.badge")} - موقع بناء حديث`}
             fill
             priority
             className="object-cover object-center"

@@ -1,0 +1,85 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-10",
+  "totalImages": 225,
+  "folders": {
+    "root": {
+      "description": "Root public folder images",
+      "images": [
+        {
+          "path": "/modern-construction-site.png",
+          "type": "Hero",
+          "usage": "Home page hero section",
+          "size": "Full width background",
+          "alt": "Modern construction site"
+        },
+        {
+          "path": "/luxury-hotel-lobby.png",
+          "type": "Hero",
+          "usage": "Interior design showcase",
+          "size": "Full width background",
+          "alt": "Luxury hotel lobby interior"
+        },
+        {
+          "path": "/luxury-living-room.png",
+          "type": "Hero",
+          "usage": "Living room showcase",
+          "size": "Full width background",
+          "alt": "Luxury living room design"
+        }
+      ]
+    },
+    "images": {
+      "description": "Main images folder for content",
+      "subcategories": {
+        "heroes": ["hero-1.png", "hero-2.png", "hero-3.png", "hero-4.png"],
+        "services": ["services-hero.png", "quality.png", "process.png"],
+        "projects": ["project-1.png", "project-2.png", "project-3.png", "project-5.png", "project-6.png"],
+        "portfolio": [
+          "residential-1.png",
+          "residential-2.png",
+          "industrial-1.png",
+          "industrial-2.png",
+          "commercial-1.png",
+          "commercial-2.png"
+        ],
+        "team": ["team-1.png", "team-2.png", "team-3.png"],
+        "testimonials": ["testimonial-1.png", "testimonial-2.png"],
+        "about": ["about-story.png", "about-team.png"],
+        "contact": ["contact-hero.png"]
+      }
+    },
+    "projects": {
+      "description": "Detailed project showcase images",
+      "count": 90,
+      "usage": "Project detail pages and portfolio galleries",
+      "categories": [
+        "Furniture & Interior Design (50+ images)",
+        "Home Office & Workspace (10+ images)",
+        "Children Room Designs (8+ images)",
+        "Kitchen & Dining (15+ images)"
+      ]
+    },
+    "gallery": {
+      "description": "Product and design showcase gallery",
+      "count": 50,
+      "usage": "Product catalog and inspiration gallery",
+      "categories": ["Furniture Collections", "Design Brands Showcase", "Interior Styles"]
+    }
+  },
+  "optimizations": {
+    "webp": "Modern format for web delivery",
+    "jpeg": "Product and photography images",
+    "png": "Logo and graphics with transparency",
+    "svg": "Icons and vector graphics"
+  },
+  "usage_guidelines": {
+    "homeHero": "Use hero-1.png to hero-4.png for rotating hero sections",
+    "serviceShowcase": "Use /images/services-hero.png and process.png",
+    "projectShowcase": "Use /projects/ folder images for project cards",
+    "portfolioGallery": "Use /gallery/ folder for product showcase",
+    "teamSection": "Use team-1.png, team-2.png, team-3.png",
+    "testimonials": "Use testimonial-1.png, testimonial-2.png",
+    "aboutPage": "Use about-story.png and about-team.png"
+  }
+}

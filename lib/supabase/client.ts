@@ -1,6 +1,5 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 
-// Check if Supabase environment variables are available
 export const isSupabaseConfigured =
   typeof process.env.NEXT_PUBLIC_SUPABASE_URL === "string" &&
   process.env.NEXT_PUBLIC_SUPABASE_URL.length > 0 &&
@@ -9,7 +8,9 @@ export const isSupabaseConfigured =
 
 export function createClient() {
   if (!isSupabaseConfigured) {
-    console.warn("Supabase environment variables are not set. Using dummy client.")
+    if (typeof window === "undefined" && process.env.NODE_ENV === "development") {
+      console.warn("Supabase environment variables are not set. Using dummy client.")
+    }
     return {
       auth: {
         getUser: () => Promise.resolve({ data: { user: null }, error: null }),
