@@ -178,6 +178,71 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   </motion.div>
                 </motion.div>
 
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 20,
+                    delay: 0.25,
+                    mass: 0.8,
+                  }}
+                  className="space-y-4"
+                >
+                  <motion.p
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-lg font-medium text-center"
+                  >
+                    {t("nav.architecture")}
+                  </motion.p>
+                  <motion.div
+                    className="space-y-3"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.35, staggerChildren: 0.1 }}
+                  >
+                    <MobileSubNavItem
+                      href="/architecture"
+                      label={t("nav.architecture.overview")}
+                      isActive={pathname === "/architecture"}
+                      onClick={onClose}
+                    />
+                    <MobileSubNavItem
+                      href="/architecture/concept-design"
+                      label={t("nav.architecture.concept")}
+                      isActive={pathname === "/architecture/concept-design"}
+                      onClick={onClose}
+                    />
+                    <MobileSubNavItem
+                      href="/architecture/interior-architecture"
+                      label={t("nav.architecture.interiors")}
+                      isActive={pathname === "/architecture/interior-architecture"}
+                      onClick={onClose}
+                    />
+                    <MobileSubNavItem
+                      href="/architecture/sustainable-design"
+                      label={t("nav.architecture.sustainable")}
+                      isActive={pathname === "/architecture/sustainable-design"}
+                      onClick={onClose}
+                    />
+                    <MobileSubNavItem
+                      href="/architecture/facade-innovation"
+                      label={t("nav.architecture.facades")}
+                      isActive={pathname === "/architecture/facade-innovation"}
+                      onClick={onClose}
+                    />
+                    <MobileSubNavItem
+                      href="/architecture/urban-planning"
+                      label={t("nav.architecture.urban")}
+                      isActive={pathname === "/architecture/urban-planning"}
+                      onClick={onClose}
+                    />
+                  </motion.div>
+                </motion.div>
+
                 <MobileNavItem
                   href="/projects"
                   label={t("nav.projects")}

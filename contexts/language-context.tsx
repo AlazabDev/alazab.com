@@ -24,6 +24,13 @@ const translations = {
     "nav.about": "من نحن",
     "nav.contact": "اتصل بنا",
     "nav.getQuote": "احصل على عرض سعر",
+    "nav.architecture": "العمارة الحديثة",
+    "nav.architecture.overview": "نظرة عامة",
+    "nav.architecture.concept": "التصميم المفاهيمي",
+    "nav.architecture.interiors": "الهندسة الداخلية",
+    "nav.architecture.sustainable": "التصميم المستدام",
+    "nav.architecture.facades": "واجهات مبتكرة",
+    "nav.architecture.urban": "التخطيط الحضري",
 
     // Services dropdown
     "nav.services.residential": "البناء السكني",
@@ -76,6 +83,22 @@ const translations = {
     "services.interior": "التصميم الداخلي",
     "services.interior.desc": "خدمات التصميم الداخلي تجلب الأناقة والوظائف لأي مساحة، مصممة حسب تفضيلاتك",
     "services.viewAll": "عرض جميع الخدمات",
+
+    // Modern architecture section
+    "architecture.badge": "الهندسة المعمارية الحديثة",
+    "architecture.title": "مسارات تصميم حديثة لمشاريعك القادمة",
+    "architecture.subtitle": "اكتشف صفحات متخصصة تعرض حلول العمارة الحديثة من الفكرة وحتى التفاصيل التنفيذية.",
+    "architecture.card.concept": "التصميم المفاهيمي",
+    "architecture.card.concept.desc": "صياغة فكرة معمارية قوية مدعومة بتحليل الموقع وتجارب المستخدم.",
+    "architecture.card.interiors": "الهندسة الداخلية",
+    "architecture.card.interiors.desc": "مساحات داخلية عصرية توازن بين الجمال والوظائف اليومية.",
+    "architecture.card.sustainable": "التصميم المستدام",
+    "architecture.card.sustainable.desc": "حلول بيئية تقلل الطاقة وتدعم المواد المسؤولة.",
+    "architecture.card.facades": "واجهات مبتكرة",
+    "architecture.card.facades.desc": "واجهات ذكية تعكس هوية المشروع وتدعم الأداء الحراري.",
+    "architecture.card.urban": "التخطيط الحضري",
+    "architecture.card.urban.desc": "مخططات حضرية متكاملة تربط المشروع بالمدينة والمجتمع.",
+    "architecture.viewAll": "استعرض صفحات العمارة",
 
     // CTA section
     "cta.title": "هل أنت مستعد لبدء مشروع البناء الخاص بك؟",
@@ -320,6 +343,13 @@ const translations = {
     "nav.about": "About Us",
     "nav.contact": "Contact",
     "nav.getQuote": "Get a Quote",
+    "nav.architecture": "Modern Architecture",
+    "nav.architecture.overview": "Overview",
+    "nav.architecture.concept": "Concept Design",
+    "nav.architecture.interiors": "Interior Architecture",
+    "nav.architecture.sustainable": "Sustainable Design",
+    "nav.architecture.facades": "Innovative Facades",
+    "nav.architecture.urban": "Urban Planning",
 
     // Services dropdown
     "nav.services.residential": "Residential Construction",
@@ -376,6 +406,22 @@ const translations = {
     "services.interior.desc":
       "Interior design services bring elegance and functionality to any space, tailored to your preferences",
     "services.viewAll": "View All Services",
+
+    // Modern architecture section
+    "architecture.badge": "Modern Architecture",
+    "architecture.title": "Contemporary Design Tracks for New Projects",
+    "architecture.subtitle": "Explore dedicated pages that showcase modern architecture from concept to execution-ready details.",
+    "architecture.card.concept": "Concept Design",
+    "architecture.card.concept.desc": "A strong architectural vision grounded in site analysis and user experience.",
+    "architecture.card.interiors": "Interior Architecture",
+    "architecture.card.interiors.desc": "Modern interiors that balance aesthetics with daily functionality.",
+    "architecture.card.sustainable": "Sustainable Design",
+    "architecture.card.sustainable.desc": "Eco-conscious solutions that reduce energy and elevate responsible materials.",
+    "architecture.card.facades": "Innovative Facades",
+    "architecture.card.facades.desc": "Smart facades that reflect identity while enhancing thermal performance.",
+    "architecture.card.urban": "Urban Planning",
+    "architecture.card.urban.desc": "Integrated urban plans that connect projects to city life.",
+    "architecture.viewAll": "Explore Architecture Pages",
 
     // CTA section
     "cta.title": "Ready to Start Your Construction Project?",

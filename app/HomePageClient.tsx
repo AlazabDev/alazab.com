@@ -19,6 +19,9 @@ import {
   Users,
   Clock,
   CheckCircle,
+  Palette,
+  Leaf,
+  Layers,
 } from "lucide-react"
 import { motion } from "framer-motion"
 import { AnimatedButton } from "@/components/ui/animated-button"
@@ -391,6 +394,83 @@ export default function HomePageClient() {
                   iconRotate={true}
                 >
                   {t("services.viewAll")}
+                  <ArrowRight className={`h-4 w-4 sm:h-5 sm:w-5 ${isRTL ? "mr-2 rotate-180" : "ml-2"}`} />
+                </AnimatedButton>
+              </Link>
+            </div>
+          </ScaleIn>
+        </div>
+      </section>
+
+      {/* Modern Architecture Highlights */}
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <div className="text-center mb-8 sm:mb-12 md:mb-16 max-w-4xl mx-auto">
+              <div className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-400 rounded-full text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+                {t("architecture.badge")}
+              </div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 md:mb-6 text-gray-900 dark:text-white leading-tight">
+                {t("architecture.title")}
+              </h2>
+              <p className="text-sm sm:text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                {t("architecture.subtitle")}
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-6xl mx-auto">
+            {[
+              { key: "concept", icon: Compass, href: "/architecture/concept-design" },
+              { key: "interiors", icon: Palette, href: "/architecture/interior-architecture" },
+              { key: "sustainable", icon: Leaf, href: "/architecture/sustainable-design" },
+              { key: "facades", icon: Layers, href: "/architecture/facade-innovation" },
+              { key: "urban", icon: MapPin, href: "/architecture/urban-planning" },
+            ].map((item, index) => (
+              <HoverCard key={item.key}>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="group h-full"
+                >
+                  <Link
+                    href={item.href}
+                    className="block bg-gray-50 dark:bg-gray-800 rounded-2xl p-5 sm:p-6 md:p-7 shadow-sm hover:shadow-xl transition-all duration-300 h-full"
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-yellow-100 dark:bg-yellow-900/40">
+                        <item.icon className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+                      </div>
+                      <ArrowRight
+                        className={`h-5 w-5 text-yellow-600 dark:text-yellow-400 transition-transform duration-300 ${
+                          isRTL ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"
+                        }`}
+                      />
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
+                      {t(`architecture.card.${item.key}`)}
+                    </h3>
+                    <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                      {t(`architecture.card.${item.key}.desc`)}
+                    </p>
+                  </Link>
+                </motion.div>
+              </HoverCard>
+            ))}
+          </div>
+
+          <ScaleIn delay={0.4}>
+            <div className="mt-8 sm:mt-12 text-center">
+              <Link href="/architecture">
+                <AnimatedButton
+                  size="lg"
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
+                  hoverEffect="shine"
+                  iconRotate={true}
+                >
+                  {t("architecture.viewAll")}
                   <ArrowRight className={`h-4 w-4 sm:h-5 sm:w-5 ${isRTL ? "mr-2 rotate-180" : "ml-2"}`} />
                 </AnimatedButton>
               </Link>
