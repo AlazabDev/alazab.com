@@ -170,22 +170,6 @@ export function Navbar() {
                   isHovered={hoveredItem === "services"}
                 />
 
-                <DropdownNavItem
-                  label={t("nav.architecture")}
-                  items={[
-                    { href: "/architecture", label: t("nav.architecture.overview") },
-                    { href: "/architecture/concept-design", label: t("nav.architecture.concept") },
-                    { href: "/architecture/interior-architecture", label: t("nav.architecture.interiors") },
-                    { href: "/architecture/sustainable-design", label: t("nav.architecture.sustainable") },
-                    { href: "/architecture/facade-innovation", label: t("nav.architecture.facades") },
-                    { href: "/architecture/urban-planning", label: t("nav.architecture.urban") },
-                  ]}
-                  pathname={pathname}
-                  onHover={() => setHoveredItem("architecture")}
-                  onLeave={() => setHoveredItem(null)}
-                  isHovered={hoveredItem === "architecture"}
-                />
-
                 <NavItem
                   href="/projects"
                   label={t("nav.projects")}

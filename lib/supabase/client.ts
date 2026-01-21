@@ -8,9 +8,6 @@ export const isSupabaseConfigured =
 
 export function createClient() {
   if (!isSupabaseConfigured) {
-    if (typeof window === "undefined" && process.env.NODE_ENV === "development") {
-      console.warn("Supabase environment variables are not set. Using dummy client.")
-    }
     return {
       auth: {
         getUser: () => Promise.resolve({ data: { user: null }, error: null }),
