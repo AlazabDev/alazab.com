@@ -20,7 +20,7 @@ const nextConfig = {
     ],
   },
   compress: true,
-  swcMinify: true,
+  reactStrictMode: true,
   productionBrowserSourceMaps: false,
   poweredByHeader: false,
 }
