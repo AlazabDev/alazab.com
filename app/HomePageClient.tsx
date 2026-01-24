@@ -209,6 +209,93 @@ export default function HomePageClient() {
         </motion.div>
       </section>
 
+      {/* Application Purpose Section */}
+      <section className="py-8 sm:py-12 md:py-16 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-b border-gray-200 dark:border-gray-700">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <div className="max-w-4xl mx-auto">
+              <div className="inline-block px-4 py-2 bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-400 rounded-full text-xs sm:text-sm font-medium mb-4">
+                {language === "ar" ? "عن تطبيقنا" : "About Our Platform"}
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-white">
+                {language === "ar" ? "منصتنا الشاملة للخدمات المعمارية والبنائية" : "Comprehensive Platform for Architectural & Construction Services"}
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0">
+                      <Eye className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                        {language === "ar" ? "رؤيتنا" : "Our Vision"}
+                      </h3>
+                      <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
+                        {language === "ar"
+                          ? "تحويل صناعة البناء من خلال توفير حلول متكاملة تجمع بين الجودة والابتكار والاستدامة"
+                          : "Transform the construction industry by providing integrated solutions that combine quality, innovation, and sustainability"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0">
+                      <Target className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                        {language === "ar" ? "مهمتنا" : "Our Mission"}
+                      </h3>
+                      <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
+                        {language === "ar"
+                          ? "تقديم خدمات بناء وتشطيبات احترافية تتجاوز توقعات العملاء بأعلى معايير الجودة والأمان"
+                          : "Deliver professional construction and finishing services that exceed client expectations with the highest quality and safety standards"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0">
+                      <Lightbulb className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                        {language === "ar" ? "قيمنا" : "Our Values"}
+                      </h3>
+                      <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
+                        {language === "ar"
+                          ? "الجودة، الاحترافية، الابتكار، الاستدامة، والالتزام بتوقعات عملائنا"
+                          : "Quality, professionalism, innovation, sustainability, and commitment to client satisfaction"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0">
+                      <HardHat className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                        {language === "ar" ? "تخصصنا" : "Our Expertise"}
+                      </h3>
+                      <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
+                        {language === "ar"
+                          ? "خبرة أكثر من عقد في البناء السكني والتجاري والتشطيبات الفاخرة والصيانة الدورية"
+                          : "Over a decade of experience in residential, commercial, luxury finishing, and maintenance services"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
       {/* Enhanced Contact Info Bar - RTL/LTR Support */}
       <section className="bg-gradient-to-r from-yellow-500 to-yellow-600 py-3 sm:py-4">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">

@@ -50,6 +50,45 @@ export function Footer() {
             </div>
           </div>
 
+          {/* Legal & Compliance */}
+          <div className="text-center sm:text-start">
+            <h3 className="text-lg font-semibold mb-4 text-white">{language === "ar" ? "السياسات القانونية" : "Legal"}</h3>
+            <ul className="space-y-2 sm:space-y-3">
+              <li>
+                <Link
+                  href="/privacy-policy"
+                  className="text-gray-400 text-sm sm:text-base hover:text-yellow-500 transition-colors inline-block"
+                >
+                  {language === "ar" ? "سياسة الخصوصية" : "Privacy Policy"}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms-of-service"
+                  className="text-gray-400 text-sm sm:text-base hover:text-yellow-500 transition-colors inline-block"
+                >
+                  {language === "ar" ? "شروط الخدمة" : "Terms of Service"}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/cookie-policy"
+                  className="text-gray-400 text-sm sm:text-base hover:text-yellow-500 transition-colors inline-block"
+                >
+                  {language === "ar" ? "سياسة الكوكيز" : "Cookie Policy"}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/legal"
+                  className="text-gray-400 text-sm sm:text-base hover:text-yellow-500 transition-colors inline-block"
+                >
+                  {language === "ar" ? "إشعار قانوني" : "Legal Notice"}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Services */}
           <div className="text-center sm:text-start">
             <h3 className="text-lg font-semibold mb-4 text-white">{language === "ar" ? "خدماتنا" : "Our Services"}</h3>
