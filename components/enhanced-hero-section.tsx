@@ -169,7 +169,7 @@ export function EnhancedHeroSection() {
               <Link href="/services" className="w-full sm:w-auto">
                 <AnimatedButton
                   size="lg"
-                  className="btn-enhanced bg-amber-600 hover:bg-amber-700 text-white font-semibold px-8 py-4 w-full sm:w-auto shadow-lg"
+                  className="btn-enhanced bg-[#ffb900] hover:bg-[#e6a500] active:bg-[#cc8f00] text-blue-900 dark:text-blue-800 font-semibold px-8 py-4 w-full sm:w-auto shadow-lg"
                   hoverEffect="lift"
                   iconAnimation={true}
                 >

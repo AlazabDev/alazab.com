@@ -216,7 +216,7 @@ export function Navbar() {
 
               <Link href="/contact#quote-form">
                 <AnimatedButton
-                  className="bg-amber-600 hover:bg-amber-700 text-white font-medium text-sm sm:text-base h-9 sm:h-10 transition-all duration-300 shadow-md hover:shadow-lg"
+                  className="bg-[#ffb900] hover:bg-[#e6a500] active:bg-[#cc8f00] text-blue-900 dark:text-blue-800 font-medium text-sm sm:text-base h-9 sm:h-10 transition-all duration-300 shadow-md hover:shadow-lg"
                   hoverEffect="lift"
                   iconAnimation={true}
                 >
