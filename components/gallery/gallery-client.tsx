@@ -214,7 +214,10 @@ export default function GalleryClient({ images }: GalleryClientProps) {
                     setSelectedImage(image.src)
                     setCurrentImageIndex(index)
                   }}
+
                   className="group relative overflow-hidden rounded-2xl cursor-pointer h-64 sm:h-72 md:h-80 bg-gray-100 dark:bg-gray-800 shadow-sm hover:shadow-xl transition-shadow duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500/70"
+
+                  className="group relative overflow-hidden rounded-xl cursor-pointer h-64 sm:h-72 md:h-80 bg-gray-100 dark:bg-gray-800"
                 >
                   <Image
                     src={image.src || "/placeholder.svg"}
@@ -225,6 +228,7 @@ export default function GalleryClient({ images }: GalleryClientProps) {
                     quality={75}
                     loading="lazy"
                   />
+
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <p className="text-sm uppercase tracking-wide text-yellow-200/90">
@@ -237,6 +241,13 @@ export default function GalleryClient({ images }: GalleryClientProps) {
                       initial={{ scale: 0, opacity: 0 }}
                       whileHover={{ scale: 1, opacity: 1 }}
                       className="bg-yellow-500/90 p-3 rounded-full shadow-lg"
+
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      whileHover={{ scale: 1, opacity: 1 }}
+                      className="bg-yellow-500 p-3 rounded-full"
+
                     >
                       <ZoomIn className="h-6 w-6 text-white" />
                     </motion.div>
