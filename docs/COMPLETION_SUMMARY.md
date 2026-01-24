@@ -131,7 +131,7 @@
 
 ## الملفات المضافة
 
-```
+\`\`\`
 app/
 ├── privacy-policy/page.tsx
 ├── terms-of-service/page.tsx
@@ -155,7 +155,7 @@ app/
 ├── status/page.tsx
 └── integrations/page.tsx
 └── api-docs/page.tsx
-```
+\`\`\`
 
 ---
 

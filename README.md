@@ -28,7 +28,7 @@
 
 ## هيكل المشروع | Project Structure
 
-```
+\`\`\`
 alazab-construction/
 ├── app/                          # Next.js App Router
 │   ├── page.tsx                 # الصفحة الرئيسية | Home
@@ -65,7 +65,7 @@ alazab-construction/
 ├── styles/                      # ملفات CSS
 ├── package.json                 # المتطلبات
 └── tailwind.config.ts          # تكوين Tailwind
-```
+\`\`\`
 
 ## الميزات | Features
 
@@ -114,7 +114,7 @@ alazab-construction/
 
 ## المكتبات والتقنيات | Technologies
 
-```json
+\`\`\`json
 {
   "Framework": "Next.js 16 (App Router)",
   "Styling": "Tailwind CSS v4",
@@ -125,18 +125,18 @@ alazab-construction/
   "Theme": "next-themes (Light/Dark Mode)",
   "Language": "TypeScript"
 }
-```
+\`\`\`
 
 ## البدء | Getting Started
 
 ### المتطلبات | Prerequisites
-```bash
+\`\`\`bash
 Node.js 18+ 
 pnpm أو npm أو yarn
-```
+\`\`\`
 
 ### التثبيت | Installation
-```bash
+\`\`\`bash
 # استنساخ المستودع | Clone the repository
 git clone https://github.com/alazabdevs/alazab-construction.git
 
@@ -152,18 +152,18 @@ npm install
 pnpm dev
 # أو
 npm run dev
-```
+\`\`\`
 
 ### الوصول إلى الموقع | Access the Site
-```
+\`\`\`
 http://localhost:3000
-```
+\`\`\`
 
 ## متغيرات البيئة | Environment Variables
 
 أنشئ ملف `.env.local`:
 
-```env
+\`\`\`env
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
@@ -173,42 +173,42 @@ NEXT_PUBLIC_API_URL=http://localhost:3000
 
 # Email Service
 NEXT_PUBLIC_CONTACT_EMAIL=contact@alazab.com
-```
+\`\`\`
 
 ## النشر | Deployment
 
 ### مع Vercel (موصى به)
-```bash
+\`\`\`bash
 # الدفع إلى GitHub
 git push origin main
 
 # Vercel ستنشر تلقائياً عند الـ Push
-```
+\`\`\`
 
 ### مع Docker
-```bash
+\`\`\`bash
 docker build -t alazab-construction .
 docker run -p 3000:3000 alazab-construction
-```
+\`\`\`
 
 ## المساهمة | Contributing
 
 نرحب بالمساهمات! يرجى اتباع:
 
 1. إنشاء فرع جديد | Create a branch
-   ```bash
+   \`\`\`bash
    git checkout -b feature/your-feature
-   ```
+   \`\`\`
 
 2. الالتزام بالتغييرات | Commit changes
-   ```bash
+   \`\`\`bash
    git commit -m "Add your feature"
-   ```
+   \`\`\`
 
 3. دفع الفرع | Push the branch
-   ```bash
+   \`\`\`bash
    git push origin feature/your-feature
-   ```
+   \`\`\`
 
 4. فتح Pull Request
 

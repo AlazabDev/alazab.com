@@ -34,12 +34,12 @@
 ## الخطوات التالية في OAuth Google Console
 
 ### 1. تحديث معلومات التطبيق
-```
+\`\`\`
 Application name: شركة العزب للبناء والتشطيبات
 Home page URL: https://alazab-website.vercel.app
 Privacy policy URL: https://alazab-website.vercel.app/privacy-policy
 Terms of service URL: https://alazab-website.vercel.app/terms-of-service
-```
+\`\`\`
 
 ### 2. التحقق من الملكية (Domain Verification)
 - التحقق من ملكية النطاق عبر Google Search Console
@@ -47,17 +47,17 @@ Terms of service URL: https://alazab-website.vercel.app/terms-of-service
 - أو إضافة DNS record للتحقق
 
 ### 3. تحديث OAuth Consent Screen
-```
+\`\`\`
 App name: شركة العزب للبناء والتشطيبات
 User support email: info@al-azab.co
 Developer contact: your-email@your-domain.com
-```
+\`\`\`
 
 ### 4. إضافة Authorized Domains
-```
+\`\`\`
 alazab-website.vercel.app
 al-azab.co (إذا كان لديك النطاق الخاص)
-```
+\`\`\`
 
 ## التحسينات المضافة
 
@@ -93,7 +93,7 @@ al-azab.co (إذا كان لديك النطاق الخاص)
 - [Open Graph Debugger](https://developers.facebook.com/tools/debug/og/echo/)
 
 ### Structured Data
-```json
+\`\`\`json
 {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -106,7 +106,7 @@ al-azab.co (إذا كان لديك النطاق الخاص)
     "https://www.instagram.com/alazab"
   ]
 }
-```
+\`\`\`
 
 ## ملاحظات مهمة
 
