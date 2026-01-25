@@ -123,3 +123,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .font-montserrat {
+    font-family: "Montserrat", "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+
+  .font-poppins {
+    font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+
+  .font-cairo {
+    font-family: "Cairo", "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+}

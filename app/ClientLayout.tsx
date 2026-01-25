@@ -4,24 +4,8 @@ import type React from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Montserrat, Poppins } from "next/font/google"
 import { AnimatePresence, motion } from "framer-motion"
 import { usePathname } from "next/navigation"
-
-// Initialize the fonts with display swap for better performance
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-montserrat",
-  display: "swap",
-})
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
-  display: "swap",
-})
 
 export default function ClientLayout({
   children,
@@ -31,8 +15,8 @@ export default function ClientLayout({
   const pathname = usePathname()
 
   return (
-    <html lang="en" className={`${montserrat.variable} ${poppins.variable}`} suppressHydrationWarning>
-      <body className={`${poppins.className} antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <div className="flex min-h-screen flex-col">
             <Navbar />

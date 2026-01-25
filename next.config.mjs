@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+process.env.NEXT_DISABLE_GOOGLE_FONTS = "1"
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
@@ -20,7 +21,7 @@ const nextConfig = {
     ],
   },
   compress: true,
-  swcMinify: true,
+  reactStrictMode: true,
   productionBrowserSourceMaps: false,
   poweredByHeader: false,
 }
