@@ -1,10 +1,10 @@
 {
   "scripts": {
-    "build": "next build",
+    "build": "NEXT_DISABLE_GOOGLE_FONTS=1 next build",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "vercel-build": "next build"
+    "vercel-build": "NEXT_DISABLE_GOOGLE_FONTS=1 next build"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.4.0",

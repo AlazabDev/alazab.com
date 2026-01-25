@@ -8,35 +8,12 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/contexts/language-context"
 import { AdminSidebar } from "@/components/admin-sidebar"
 import { AdminToggleButton } from "@/components/admin-toggle-button"
-import { Montserrat, Poppins, Cairo } from "next/font/google"
 import { AnimatePresence, motion } from "framer-motion"
 import { usePathname } from "next/navigation"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { SmartChatbot } from "@/components/smart-chatbot"
 
 import "@/app/globals.css"
-
-// Initialize the fonts with display swap for better performance
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-montserrat",
-  display: "swap",
-})
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
-  display: "swap",
-})
-
-const cairo = Cairo({
-  subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-cairo",
-  display: "swap",
-})
 
 export default function ClientLayout({
   children,
@@ -47,8 +24,8 @@ export default function ClientLayout({
   const [isAdminSidebarOpen, setIsAdminSidebarOpen] = useState(false)
 
   return (
-    <html lang="ar" className={`${montserrat.variable} ${poppins.variable} ${cairo.variable}`} suppressHydrationWarning>
-      <body className={`${cairo.className} antialiased`}>
+    <html lang="ar" suppressHydrationWarning>
+      <body className="antialiased">
         <LanguageProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
             <div className="flex min-h-screen flex-col">
