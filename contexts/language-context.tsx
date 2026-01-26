@@ -22,6 +22,7 @@ const translations = {
     "nav.projects": "مشاريعنا",
     "nav.gallery": "معرض الأعمال", // Added gallery translation
     "nav.about": "من نحن",
+    "nav.clients": "عملاؤنا",
     "nav.contact": "اتصل بنا",
     "nav.getQuote": "احصل على عرض سعر",
 
@@ -34,6 +35,10 @@ const translations = {
     "nav.services.brand": "الهوية التجارية",
     "nav.services.maintenance": "الصيانة والتجديدات",
     "nav.services.supplies": "التوريدات العامة",
+    "nav.services.architecture": "التصميم المعماري",
+    "nav.services.interior": "التصميم الداخلي",
+    "nav.services.management": "إدارة المشاريع",
+    "nav.services.maintenanceCore": "الصيانة والتشغيل",
 
     // Hero section
     "hero.badge": "شركة العزب للإنشاءات",
@@ -75,6 +80,12 @@ const translations = {
     "services.consulting.desc": "احصل على مشورة الخبراء لمشاريع البناء الخاصة بك مع استشاريينا ذوي الخبرة",
     "services.interior": "التصميم الداخلي",
     "services.interior.desc": "خدمات التصميم الداخلي تجلب الأناقة والوظائف لأي مساحة، مصممة حسب تفضيلاتك",
+    "services.architecture": "التصميم المعماري",
+    "services.architecture.desc": "تصميم معماري متكامل يوازن بين الجمال والوظيفة ومتطلبات التنفيذ",
+    "services.management": "إدارة المشاريع",
+    "services.management.desc": "إدارة شاملة للوقت والميزانية والجودة لضمان تسليم المشروع بكفاءة",
+    "services.maintenance": "الصيانة وإدارة المرافق",
+    "services.maintenance.desc": "خطط صيانة وتشغيل استباقية لضمان استدامة الأصول والمعايير",
     "services.viewAll": "عرض جميع الخدمات",
 
     // CTA section
@@ -318,6 +329,7 @@ const translations = {
     "nav.projects": "Projects",
     "nav.gallery": "Gallery", // Added gallery translation
     "nav.about": "About Us",
+    "nav.clients": "Clients",
     "nav.contact": "Contact",
     "nav.getQuote": "Get a Quote",
 
@@ -330,6 +342,10 @@ const translations = {
     "nav.services.brand": "Brand Identity",
     "nav.services.maintenance": "Maintenance & Renovations",
     "nav.services.supplies": "General Supplies",
+    "nav.services.architecture": "Architectural Design",
+    "nav.services.interior": "Interior Design",
+    "nav.services.management": "Project Management",
+    "nav.services.maintenanceCore": "Maintenance & Facilities",
 
     // Hero section
     "hero.badge": "Al-Azab Construction",
@@ -375,6 +391,12 @@ const translations = {
     "services.interior": "Interior Design",
     "services.interior.desc":
       "Interior design services bring elegance and functionality to any space, tailored to your preferences",
+    "services.architecture": "Architectural Design",
+    "services.architecture.desc": "Integrated architectural design balancing aesthetics, function, and execution needs",
+    "services.management": "Project Management",
+    "services.management.desc": "Comprehensive time, budget, and quality management for efficient delivery",
+    "services.maintenance": "Maintenance & Facilities",
+    "services.maintenance.desc": "Preventive maintenance and operations plans that sustain asset performance",
     "services.viewAll": "View All Services",
 
     // CTA section

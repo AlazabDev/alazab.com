@@ -1,151 +1,135 @@
-import Image from "next/image"
-import { Mail, MapPin, Phone, Clock, ArrowRight } from "lucide-react"
+"use client"
+
+import { Mail, MapPin, Phone, Clock } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-
-export const metadata = {
-  title: "Contact Us | BuildMaster Construction",
-  description:
-    "Get in touch with BuildMaster Construction for inquiries, quotes, or to discuss your construction project needs.",
-}
+import { PageHero } from "@/components/sections/page-hero"
+import { SectionHeader } from "@/components/sections/section-header"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function ContactPage() {
-  return (
-    <div className="flex min-h-screen flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[400px] w-full overflow-hidden">
-        <div className="absolute inset-0 bg-black/60 z-10" />
-        <Image src="/images/contact-hero.png" alt="Contact us" fill className="object-cover" priority />
-        <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Contact Us</h1>
-          <p className="text-xl text-white/90 max-w-2xl">
-            Get in touch with our team to discuss your project needs or request a quote.
-          </p>
-        </div>
-      </section>
+  const { language } = useLanguage()
+  const isRTL = language === "ar"
 
-      {/* Contact Information */}
-      <section className="py-20 bg-white">
+  return (
+    <div className={`flex min-h-screen flex-col ${isRTL ? "rtl" : "ltr"}`}>
+      <PageHero
+        title={language === "ar" ? "تواصل معنا" : "Contact Us"}
+        subtitle={
+          language === "ar"
+            ? "فريق العزب جاهز للاستماع لمتطلباتك وتقديم أفضل الحلول التنفيذية." 
+            : "Alazab team is ready to listen to your requirements and deliver the best execution solutions."
+        }
+        badge={language === "ar" ? "استشارة مجانية" : "Free Consultation"}
+        image="/images/contact-hero.png"
+      />
+
+      <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-16 max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-[1.1fr_1fr] gap-12">
             <div>
-              <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-4">
-                Get In Touch
-              </div>
-              <h2 className="text-4xl font-bold mb-6">We'd Love to Hear From You</h2>
-              <p className="text-gray-700 mb-10 text-lg">
-                Whether you have a question about our services, want to request a quote, or are ready to start your
-                project, we're here to help.
-              </p>
-              <div className="space-y-8">
-                <div className="flex items-start">
-                  <div className="bg-amber-100 p-3 rounded-full mr-4">
-                    <MapPin className="h-6 w-6 text-amber-600" />
+              <SectionHeader
+                align="start"
+                eyebrow={language === "ar" ? "بيانات الشركة" : "Company Details"}
+                title={language === "ar" ? "نرحب بتواصلكم" : "We Would Love to Hear From You"}
+                description={
+                  language === "ar"
+                    ? "سواء كنت تبحث عن شريك تنفيذ أو استشارة هندسية، نحن هنا لخدمتك." 
+                    : "Whether you need an execution partner or engineering consultation, we are here to help."
+                }
+              />
+
+              <div className="mt-8 space-y-6 text-sm sm:text-base text-[var(--color-dark)] dark:text-gray-300">
+                {CONTACT_ITEMS.map((item) => (
+                  <div key={item.key} className="flex items-start gap-4">
+                    <div className="h-12 w-12 rounded-full bg-[color:rgba(245,191,35,0.2)] flex items-center justify-center">
+                      <item.icon className="h-5 w-5 text-[var(--color-primary)]" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-[var(--color-deep)] dark:text-white">
+                        {language === "ar" ? item.labelAr : item.labelEn}
+                      </p>
+                      <p>{language === "ar" ? item.valueAr : item.valueEn}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Our Location</h3>
-                    <p className="text-gray-700">123 BuildMaster Ave, Construction City, BC 12345</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <div className="bg-amber-100 p-3 rounded-full mr-4">
-                    <Phone className="h-6 w-6 text-amber-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Phone Number</h3>
-                    <p className="text-gray-700">(123) 456-7890</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <div className="bg-amber-100 p-3 rounded-full mr-4">
-                    <Mail className="h-6 w-6 text-amber-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Email Address</h3>
-                    <p className="text-gray-700">info@buildmaster.com</p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <div className="bg-amber-100 p-3 rounded-full mr-4">
-                    <Clock className="h-6 w-6 text-amber-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Working Hours</h3>
-                    <p className="text-gray-700">Monday - Friday: 8:00 AM - 5:00 PM</p>
-                    <p className="text-gray-700">Saturday: 9:00 AM - 2:00 PM</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
-            <div>
-              <div id="quote-form" className="scroll-mt-24">
-                <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Request a Free Quote</h3>
-                <p className="text-gray-700 dark:text-gray-300 mb-6">
-                  Fill out this form to get a detailed, no-obligation quote for your construction project. Our team will
-                  analyze your requirements and provide a comprehensive estimate.
+
+            <div id="quote-form" className="scroll-mt-24">
+              <div className="rounded-2xl border border-[color:rgba(245,191,35,0.2)] bg-white dark:bg-gray-800 p-6 sm:p-8 shadow-sm">
+                <h3 className="text-xl sm:text-2xl font-bold text-[var(--color-deep)] dark:text-white mb-2">
+                  {language === "ar" ? "طلب عرض سعر" : "Request a Quote"}
+                </h3>
+                <p className="text-sm text-[var(--color-dark)] dark:text-gray-300 mb-6">
+                  {language === "ar"
+                    ? "أرسل تفاصيل مشروعك وسنتواصل معك خلال 24 ساعة عمل." 
+                    : "Send your project details and we will get back to you within 24 business hours."}
                 </p>
-                <form className="bg-gray-50 dark:bg-gray-800 p-10 rounded-2xl shadow-sm">
-                  <h3 className="text-2xl font-bold mb-6">Send Us a Message</h3>
-                  <div className="grid md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                        Your Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        placeholder="John Doe"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        placeholder="john@example.com"
-                      />
-                    </div>
-                  </div>
-                  <div className="mb-6">
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number
+                <form className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-deep)] dark:text-white mb-2" htmlFor="name">
+                      {language === "ar" ? "الاسم الكامل" : "Full name"}
                     </label>
                     <input
-                      type="tel"
-                      id="phone"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      placeholder="(123) 456-7890"
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                      Subject
-                    </label>
-                    <input
+                      id="name"
                       type="text"
-                      id="subject"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      placeholder="Project Inquiry"
+                      required
+                      className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                     />
                   </div>
-                  <div className="mb-6">
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                      Your Message
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-[var(--color-deep)] dark:text-white mb-2" htmlFor="email">
+                        {language === "ar" ? "البريد الإلكتروني" : "Email"}
+                      </label>
+                      <input
+                        id="email"
+                        type="email"
+                        required
+                        className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-[var(--color-deep)] dark:text-white mb-2" htmlFor="phone">
+                        {language === "ar" ? "رقم الهاتف" : "Phone"}
+                      </label>
+                      <input
+                        id="phone"
+                        type="tel"
+                        required
+                        className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-deep)] dark:text-white mb-2" htmlFor="service">
+                      {language === "ar" ? "نوع الخدمة" : "Service type"}
+                    </label>
+                    <select
+                      id="service"
+                      className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                    >
+                      {(language === "ar" ? SERVICE_OPTIONS_AR : SERVICE_OPTIONS_EN).map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-deep)] dark:text-white mb-2" htmlFor="message">
+                      {language === "ar" ? "تفاصيل المشروع" : "Project details"}
                     </label>
                     <textarea
                       id="message"
                       rows={4}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      placeholder="Tell us about your project..."
-                    ></textarea>
+                      required
+                      className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                    />
                   </div>
-                  <Button className="w-full bg-amber-500 hover:bg-amber-600 text-black font-medium py-3">
-                    Send Message
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-alt)] text-[var(--color-deep)] font-semibold">
+                    {language === "ar" ? "إرسال الطلب" : "Submit Request"}
                   </Button>
                 </form>
               </div>
@@ -154,39 +138,15 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Map Section */}
-      <section className="py-10 bg-gray-50">
+      <section className="py-10 bg-[color:rgba(245,191,35,0.08)]">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="bg-gray-300 h-[400px] rounded-2xl overflow-hidden relative">
-              {/* This would be replaced with an actual map component in production */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <p className="text-gray-600 text-lg font-medium">Interactive Map Would Be Displayed Here</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16 max-w-3xl mx-auto">
-            <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-4">
-              FAQ
-            </div>
-            <h2 className="text-4xl font-bold mb-6">Frequently Asked Questions</h2>
-            <p className="text-gray-700 text-lg">Find answers to common questions about our services and process.</p>
-          </div>
-          <div className="max-w-4xl mx-auto">
-            <div className="space-y-6">
-              {faqs.map((faq, index) => (
-                <div key={index} className="bg-gray-50 p-6 rounded-xl">
-                  <h3 className="text-xl font-bold mb-3">{faq.question}</h3>
-                  <p className="text-gray-700">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
+          <div className="rounded-2xl overflow-hidden border border-[color:rgba(245,191,35,0.2)]">
+            <iframe
+              title="Alazab location"
+              src="https://www.google.com/maps?q=Maadi%20Cairo%20Egypt&output=embed"
+              className="w-full h-[360px]"
+              loading="lazy"
+            />
           </div>
         </div>
       </section>
@@ -194,31 +154,51 @@ export default function ContactPage() {
   )
 }
 
-// Sample data
-const faqs = [
+const CONTACT_ITEMS = [
   {
-    question: "What types of projects do you handle?",
-    answer:
-      "We handle a wide range of construction projects including residential homes, commercial buildings, industrial facilities, renovations, and architectural design services. No project is too big or too small for our team.",
+    key: "location",
+    icon: MapPin,
+    labelAr: "الموقع",
+    labelEn: "Location",
+    valueAr: "شارع المعادي 500/8، القاهرة، مصر",
+    valueEn: "8/500 Maadi Street, Cairo, Egypt",
   },
   {
-    question: "How do I get a quote for my project?",
-    answer:
-      "You can request a quote by filling out our contact form, calling our office, or sending us an email. We'll schedule a consultation to discuss your project needs and provide a detailed estimate.",
+    key: "phone",
+    icon: Phone,
+    labelAr: "الهاتف",
+    labelEn: "Phone",
+    valueAr: "+20 100 400 6620",
+    valueEn: "+20 100 400 6620",
   },
   {
-    question: "How long does a typical construction project take?",
-    answer:
-      "Project timelines vary depending on the scope and complexity. A small renovation might take a few weeks, while a large commercial building could take several months. During our initial consultation, we'll provide an estimated timeline for your specific project.",
+    key: "email",
+    icon: Mail,
+    labelAr: "البريد الإلكتروني",
+    labelEn: "Email",
+    valueAr: "info@al-azab.co",
+    valueEn: "info@al-azab.co",
   },
   {
-    question: "Do you handle permits and approvals?",
-    answer:
-      "Yes, we handle all necessary permits and regulatory approvals as part of our comprehensive service. Our team is familiar with local building codes and regulations to ensure a smooth approval process.",
+    key: "hours",
+    icon: Clock,
+    labelAr: "ساعات العمل",
+    labelEn: "Working hours",
+    valueAr: "السبت - الخميس: 9 صباحاً - 6 مساءً",
+    valueEn: "Saturday - Thursday: 9:00 AM - 6:00 PM",
   },
-  {
-    question: "What sets BuildMaster apart from other construction companies?",
-    answer:
-      "BuildMaster stands out for our commitment to quality, transparent communication, innovative solutions, and on-time delivery. We combine traditional craftsmanship with modern technologies to deliver exceptional results that exceed client expectations.",
-  },
+]
+
+const SERVICE_OPTIONS_AR = [
+  "التصميم المعماري",
+  "التصميم الداخلي",
+  "إدارة المشاريع",
+  "الصيانة وإدارة المرافق",
+]
+
+const SERVICE_OPTIONS_EN = [
+  "Architectural Design",
+  "Interior Design",
+  "Project Management",
+  "Maintenance & Facilities",
 ]

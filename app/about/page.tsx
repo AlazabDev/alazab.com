@@ -1,358 +1,276 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, CheckCircle, Award, Clock, Target, Eye, Lightbulb, Compass, Wrench } from "lucide-react"
+import { Award, Target, Eye, ShieldCheck } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-
-export const metadata = {
-  title: "About Us | BuildMaster Construction",
-  description:
-    "Learn about BuildMaster Construction's history, values, and our expert team dedicated to excellence in construction.",
-}
+import { PageHero } from "@/components/sections/page-hero"
+import { SectionHeader } from "@/components/sections/section-header"
+import { CtaBanner } from "@/components/sections/cta-banner"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function AboutPage() {
+  const { language } = useLanguage()
+  const isRTL = language === "ar"
+
   return (
-    <div className="flex min-h-screen flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[400px] w-full overflow-hidden">
-        <div className="absolute inset-0 bg-black/60 z-10" />
-        <Image src="/images/about-team.png" alt="Construction team" fill className="object-cover" priority />
-        <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">About BuildMaster</h1>
-          <p className="text-xl text-white/90 max-w-2xl">
-            Building excellence through innovation, quality craftsmanship, and unwavering commitment to our clients.
-          </p>
-        </div>
-      </section>
+    <div className={`flex min-h-screen flex-col ${isRTL ? "rtl" : "ltr"}`}>
+      <PageHero
+        title={language === "ar" ? "من نحن" : "About Alazab"}
+        subtitle={
+          language === "ar"
+            ? "شركة مقاولات وإدارة تنفيذ متخصصة في التصميم المعماري والتشطيبات وإدارة المشاريع منذ أكثر من 15 عاماً." 
+            : "A construction and execution management company specializing in architectural design, finishing, and project delivery for over 15 years."
+        }
+        badge={language === "ar" ? "شركة العزب للإنشاءات" : "Alazab Construction Company"}
+        image="/images/about-team.png"
+      />
 
-      {/* Mission & Vision Section */}
-      <section className="py-20 bg-white dark:bg-gray-900">
+      <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16 max-w-3xl mx-auto">
-            <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300 rounded-full text-sm font-medium mb-4">
-              Our Purpose
-            </div>
-            <h2 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">Mission & Vision</h2>
-            <p className="text-gray-700 dark:text-gray-300 text-lg">
-              Guided by our core principles, we strive to transform the construction industry and create lasting value
-              for our clients.
-            </p>
-          </div>
+          <SectionHeader
+            eyebrow={language === "ar" ? "تعريف الشركة" : "Company Overview"}
+            title={language === "ar" ? "نصنع فرقاً في الجودة والتنفيذ" : "Delivering Quality Through Execution"}
+            description={
+              language === "ar"
+                ? "نقدم حلولاً متكاملة من الفكرة وحتى التسليم، مع التزام صارم بالجودة والجداول الزمنية ومعايير السلامة." 
+                : "We deliver end-to-end solutions from concept to handover with strict adherence to quality, schedules, and safety standards."
+            }
+          />
 
-          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-            <div className="bg-gray-50 dark:bg-gray-800 p-10 rounded-2xl shadow-md">
-              <div className="flex items-center mb-6">
-                <div className="bg-amber-100 dark:bg-amber-900 w-14 h-14 rounded-full flex items-center justify-center mr-4">
-                  <Target className="h-7 w-7 text-amber-600 dark:text-amber-400" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Our Mission</h3>
-              </div>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
-                To deliver exceptional construction services that exceed client expectations through innovation,
-                integrity, and craftsmanship. We are committed to:
+          <div className="mt-12 grid lg:grid-cols-2 gap-10 items-center">
+            <div className="space-y-6 text-sm sm:text-base text-[var(--color-dark)] dark:text-gray-300">
+              <p>
+                {language === "ar"
+                  ? "تركز شركة العزب على تنفيذ المشاريع المعمارية والتجارية والسكنية بأعلى مستويات الاحتراف، مع فريق هندسي يتابع التفاصيل من التصميم وحتى التشغيل." 
+                  : "Alazab focuses on delivering architectural, commercial, and residential projects with a professional engineering team overseeing every detail from design to operation."}
               </p>
-              <ul className="space-y-4">
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-amber-500 mr-3 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700 dark:text-gray-300">
-                    Creating safe, sustainable, and functional spaces that enhance the quality of life for those who use
-                    them
-                  </p>
-                </li>
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-amber-500 mr-3 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700 dark:text-gray-300">
-                    Fostering a culture of excellence, continuous improvement, and professional growth among our team
-                    members
-                  </p>
-                </li>
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-amber-500 mr-3 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700 dark:text-gray-300">
-                    Building lasting relationships with clients, partners, and communities through transparent
-                    communication and ethical practices
-                  </p>
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-gray-50 dark:bg-gray-800 p-10 rounded-2xl shadow-md">
-              <div className="flex items-center mb-6">
-                <div className="bg-amber-100 dark:bg-amber-900 w-14 h-14 rounded-full flex items-center justify-center mr-4">
-                  <Eye className="h-7 w-7 text-amber-600 dark:text-amber-400" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Our Vision</h3>
-              </div>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
-                To be the most trusted and innovative construction company, recognized for:
+              <p>
+                {language === "ar"
+                  ? "نمزج بين التخطيط الدقيق، إدارة المخاطر، واختيار الخامات بعناية لضمان تسليم مشاريع تدوم وتلبي تطلعات العملاء." 
+                  : "We blend meticulous planning, risk management, and curated material selection to ensure projects are durable and aligned with client expectations."}
               </p>
-              <ul className="space-y-4">
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-amber-500 mr-3 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700 dark:text-gray-300">
-                    Setting new standards of excellence in construction quality, safety, and client satisfaction
-                  </p>
-                </li>
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-amber-500 mr-3 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700 dark:text-gray-300">
-                    Pioneering sustainable building practices that minimize environmental impact while maximizing
-                    efficiency and durability
-                  </p>
-                </li>
-                <li className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-amber-500 mr-3 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700 dark:text-gray-300">
-                    Creating positive change in the communities where we work through responsible business practices and
-                    meaningful engagement
-                  </p>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-16 text-center">
-            <div className="bg-amber-50 dark:bg-amber-900/30 p-8 rounded-2xl max-w-3xl mx-auto">
-              <div className="bg-amber-100 dark:bg-amber-900 w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lightbulb className="h-7 w-7 text-amber-600 dark:text-amber-400" />
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Our Approach</h3>
-              <p className="text-gray-700 dark:text-gray-300 text-lg mb-6">
-                We believe that successful construction is built on a foundation of collaboration, innovation, and
-                attention to detail. By combining traditional craftsmanship with cutting-edge technology, we deliver
-                projects that stand the test of time.
-              </p>
-              <Link href="/contact">
-                <Button className="bg-amber-500 hover:bg-amber-600 text-black font-semibold">
-                  Partner With Us
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Our Story Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
-            <div>
-              <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300 rounded-full text-sm font-medium mb-4">
-                Our Story
-              </div>
-              <h2 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">Building a Legacy of Excellence</h2>
-              <p className="text-gray-700 dark:text-gray-300 mb-6 text-lg">
-                Founded in 2000, BuildMaster began as a small family-owned construction company with a vision to
-                transform the industry through innovation and quality craftsmanship.
-              </p>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
-                Over the past two decades, we've grown into a leading construction firm, completing over 500 projects
-                across residential, commercial, and industrial sectors. Our success is built on our commitment to
-                excellence, integrity, and client satisfaction.
-              </p>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
-                Today, BuildMaster continues to push the boundaries of construction, embracing new technologies and
-                sustainable practices to deliver exceptional results for our clients.
-              </p>
-              <Link href="/contact">
-                <Button className="bg-amber-500 hover:bg-amber-600 text-black font-semibold">
-                  Get in Touch
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-            <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-xl">
-              <Image src="/images/about-story.png" alt="Company history" fill className="object-cover" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Values Section */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16 max-w-3xl mx-auto">
-            <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300 rounded-full text-sm font-medium mb-4">
-              Our Values
-            </div>
-            <h2 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">What Drives Us</h2>
-            <p className="text-gray-700 dark:text-gray-300 text-lg">
-              Our core values guide everything we do, from how we interact with clients to how we approach each project.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow text-center">
-              <div className="bg-amber-100 dark:bg-amber-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Award className="h-8 w-8 text-amber-600 dark:text-amber-400" />
-              </div>
-              <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Excellence</h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                We strive for excellence in every aspect of our work, from planning to execution and beyond.
-              </p>
-            </div>
-            <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow text-center">
-              <div className="bg-amber-100 dark:bg-amber-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Wrench className="h-8 w-8 text-amber-600 dark:text-amber-400" />
-              </div>
-              <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Integrity</h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                We conduct our business with honesty, transparency, and ethical practices at all times.
-              </p>
-            </div>
-            <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow text-center">
-              <div className="bg-amber-100 dark:bg-amber-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Compass className="h-8 w-8 text-amber-600 dark:text-amber-400" />
-              </div>
-              <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Innovation</h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                We embrace new technologies and methods to deliver innovative solutions for our clients.
-              </p>
-            </div>
-            <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow text-center">
-              <div className="bg-amber-100 dark:bg-amber-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Clock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
-              </div>
-              <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Reliability</h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                We deliver on our promises, meeting deadlines and exceeding expectations consistently.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16 max-w-3xl mx-auto">
-            <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300 rounded-full text-sm font-medium mb-4">
-              Our Team
-            </div>
-            <h2 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">Meet Our Leadership</h2>
-            <p className="text-gray-700 dark:text-gray-300 text-lg">
-              Our experienced leadership team brings decades of industry expertise to every project.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
-            {teamMembers.map((member, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
-              >
-                <div className="relative h-80 overflow-hidden">
-                  <Image src={member.image || "/placeholder.svg"} alt={member.name} fill className="object-cover" />
-                </div>
-                <div className="p-8 text-center">
-                  <h3 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">{member.name}</h3>
-                  <p className="text-amber-600 dark:text-amber-400 mb-4">{member.position}</p>
-                  <p className="text-gray-700 dark:text-gray-300 mb-6">{member.bio}</p>
-                  <div className="flex justify-center space-x-4">
-                    {member.social.map((social, idx) => (
-                      <Link
-                        key={idx}
-                        href={social.url}
-                        className="text-gray-500 dark:text-gray-400 hover:text-amber-500 dark:hover:text-amber-400 transition-colors"
-                      >
-                        <social.icon className="h-5 w-5" />
-                      </Link>
-                    ))}
+              <div className="grid sm:grid-cols-2 gap-4">
+                {STAT_ITEMS.map((item) => (
+                  <div key={item.key} className="rounded-xl border border-[color:rgba(245,191,35,0.2)] p-4">
+                    <p className="text-2xl font-bold text-[var(--color-primary)]">
+                      {language === "ar" ? item.valueAr : item.valueEn}
+                    </p>
+                    <p className="text-xs sm:text-sm text-[var(--color-dark)] dark:text-gray-300">
+                      {language === "ar" ? item.labelAr : item.labelEn}
+                    </p>
                   </div>
+                ))}
+              </div>
+            </div>
+            <div className="relative h-[420px] rounded-2xl overflow-hidden shadow-lg">
+              <Image src="/images/about-story.png" alt="Alazab construction leadership" fill className="object-cover" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-[color:rgba(245,191,35,0.08)]">
+        <div className="container mx-auto px-4">
+          <SectionHeader
+            eyebrow={language === "ar" ? "الرؤية والرسالة" : "Vision & Mission"}
+            title={language === "ar" ? "نقود التحول في قطاع الإنشاءات" : "Leading Transformation in Construction"}
+            description={
+              language === "ar"
+                ? "رؤيتنا ورسالتنا مستندة إلى الابتكار والجودة والشراكة طويلة الأمد." 
+                : "Our vision and mission are rooted in innovation, quality, and long-term partnerships."
+            }
+          />
+          <div className="mt-12 grid md:grid-cols-2 gap-8">
+            {MISSION_VISION.map((item) => (
+              <div
+                key={item.key}
+                className="rounded-2xl bg-white dark:bg-gray-800 p-6 sm:p-8 shadow-sm border border-[color:rgba(245,191,35,0.2)]"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-12 w-12 rounded-xl bg-[color:rgba(245,191,35,0.2)] flex items-center justify-center">
+                    <item.icon className="h-6 w-6 text-[var(--color-primary)]" />
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold text-[var(--color-deep)] dark:text-white">
+                    {language === "ar" ? item.titleAr : item.titleEn}
+                  </h3>
                 </div>
+                <p className="text-sm sm:text-base text-[var(--color-dark)] dark:text-gray-300">
+                  {language === "ar" ? item.descriptionAr : item.descriptionEn}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-amber-500 dark:bg-amber-600">
+      <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center max-w-5xl mx-auto">
-            <div className="p-6">
-              <div className="text-4xl font-bold text-white mb-2">500+</div>
-              <p className="text-black dark:text-gray-100 font-medium">Projects Completed</p>
-            </div>
-            <div className="p-6">
-              <div className="text-4xl font-bold text-white mb-2">25+</div>
-              <p className="text-black dark:text-gray-100 font-medium">Years Experience</p>
-            </div>
-            <div className="p-6">
-              <div className="text-4xl font-bold text-white mb-2">150+</div>
-              <p className="text-black dark:text-gray-100 font-medium">Expert Team Members</p>
-            </div>
-            <div className="p-6">
-              <div className="text-4xl font-bold text-white mb-2">98%</div>
-              <p className="text-black dark:text-gray-100 font-medium">Client Satisfaction</p>
-            </div>
+          <SectionHeader
+            eyebrow={language === "ar" ? "الإدارة التنفيذية" : "Leadership"}
+            title={language === "ar" ? "فريق يقود بدقة" : "Leadership with Precision"}
+            description={
+              language === "ar"
+                ? "فريق متخصص يجمع بين الخبرة الميدانية والإدارة الحديثة لضمان نجاح المشروع." 
+                : "A specialized team combining field expertise and modern management to ensure project success."
+            }
+          />
+          <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {LEADERSHIP.map((member) => (
+              <div key={member.nameEn} className="rounded-2xl border border-gray-200 dark:border-gray-700 p-6 text-center">
+                <div className="relative h-56 w-full rounded-xl overflow-hidden mb-4">
+                  <Image src={member.image} alt={member.nameEn} fill className="object-cover" />
+                </div>
+                <h3 className="text-lg font-bold text-[var(--color-deep)] dark:text-white">
+                  {language === "ar" ? member.nameAr : member.nameEn}
+                </h3>
+                <p className="text-sm text-[var(--color-primary)] font-semibold mt-1">
+                  {language === "ar" ? member.roleAr : member.roleEn}
+                </p>
+                <p className="text-xs sm:text-sm text-[var(--color-dark)] dark:text-gray-300 mt-3">
+                  {language === "ar" ? member.bioAr : member.bioEn}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gray-900 dark:bg-black text-white">
+      <section className="py-16 bg-[var(--color-deep)] text-white">
         <div className="container mx-auto px-4 text-center max-w-4xl">
-          <h2 className="text-4xl font-bold mb-6">Ready to Work With Us?</h2>
-          <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-10">
-            Contact us today to discuss your project needs and discover how BuildMaster can bring your vision to life.
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+            {language === "ar" ? "جاهزون لبناء مشروعك القادم" : "Ready to Build Your Next Project"}
+          </h2>
+          <p className="text-sm sm:text-base text-white/80 mb-8">
+            {language === "ar"
+              ? "تواصل معنا للحصول على خطة تنفيذ واضحة وميزانية دقيقة وجدول زمني قابل للقياس." 
+              : "Contact us for a clear execution plan, accurate budgeting, and measurable timelines."}
           </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/contact">
-              <Button size="lg" className="bg-amber-500 hover:bg-amber-600 text-black font-semibold px-8">
-                Contact Us
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href="/projects">
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-white border-white hover:bg-white/10 font-semibold px-8"
-              >
-                View Our Projects
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
+          <Link href="/contact">
+            <Button className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-alt)] text-[var(--color-deep)] font-semibold px-6">
+              {language === "ar" ? "تواصل الآن" : "Get in touch"}
+            </Button>
+          </Link>
         </div>
       </section>
+
+      <CtaBanner
+        title={language === "ar" ? "نصنع الجودة مع شركائنا" : "Building Quality with Our Partners"}
+        description={
+          language === "ar"
+            ? "نعمل مع شبكة واسعة من الموردين والاستشاريين لضمان أفضل الحلول لكل مشروع." 
+            : "We work with a wide network of suppliers and consultants to deliver the best solutions for each project."
+        }
+        primaryLabel={language === "ar" ? "شاهد خدماتنا" : "View Services"}
+        primaryHref="/services"
+        secondaryLabel={language === "ar" ? "مشاريعنا" : "Our Projects"}
+        secondaryHref="/projects"
+      />
     </div>
   )
 }
 
-// Sample data
-import { Linkedin, Twitter, Facebook } from "lucide-react"
+const STAT_ITEMS = [
+  {
+    key: "experience",
+    valueAr: "15+ سنة",
+    valueEn: "15+ Years",
+    labelAr: "خبرة في إدارة وتنفيذ المشاريع",
+    labelEn: "Experience in project delivery",
+  },
+  {
+    key: "projects",
+    valueAr: "210+ مشروع",
+    valueEn: "210+ Projects",
+    labelAr: "تم تسليمها بنجاح",
+    labelEn: "Delivered successfully",
+  },
+  {
+    key: "team",
+    valueAr: "60+ مهندس",
+    valueEn: "60+ Engineers",
+    labelAr: "فريق هندسي متخصص",
+    labelEn: "Dedicated engineering team",
+  },
+  {
+    key: "partners",
+    valueAr: "45+ شريك",
+    valueEn: "45+ Partners",
+    labelAr: "موردون واستشاريون",
+    labelEn: "Suppliers and consultants",
+  },
+]
 
-const teamMembers = [
+const MISSION_VISION = [
   {
-    name: "Michael Reynolds",
-    position: "CEO & Founder",
-    bio: "With over 30 years in construction, Michael founded BuildMaster with a vision to transform the industry through innovation and quality.",
-    image: "/images/team-1.png",
-    social: [
-      { icon: Linkedin, url: "#" },
-      { icon: Twitter, url: "#" },
-      { icon: Facebook, url: "#" },
-    ],
+    key: "mission",
+    icon: Target,
+    titleAr: "رسالتنا",
+    titleEn: "Our Mission",
+    descriptionAr:
+      "تنفيذ مشاريع معمارية متكاملة تعزز القيمة الاستثمارية لعملائنا من خلال الجودة، السلامة، والالتزام بالتوقيتات.",
+    descriptionEn:
+      "Deliver integrated architectural projects that enhance client investment value through quality, safety, and on-time execution.",
   },
   {
-    name: "Sarah Johnson",
-    position: "Chief Operations Officer",
-    bio: "Sarah oversees all operations, ensuring projects are delivered on time, within budget, and to the highest standards of quality.",
-    image: "/images/team-2.png",
-    social: [
-      { icon: Linkedin, url: "#" },
-      { icon: Twitter, url: "#" },
-    ],
+    key: "vision",
+    icon: Eye,
+    titleAr: "رؤيتنا",
+    titleEn: "Our Vision",
+    descriptionAr:
+      "أن نكون الشريك الأول في إدارة وتنفيذ المشاريع المعمارية في مصر والمنطقة عبر حلول مبتكرة ومستدامة.",
+    descriptionEn:
+      "To be the leading partner in architectural project delivery across Egypt and the region through innovative, sustainable solutions.",
   },
   {
-    name: "David Chen",
-    position: "Lead Architect",
-    bio: "David brings creative vision and technical expertise to every project, specializing in sustainable and innovative design solutions.",
-    image: "/images/team-3.png",
-    social: [
-      { icon: Linkedin, url: "#" },
-      { icon: Facebook, url: "#" },
-    ],
+    key: "quality",
+    icon: Award,
+    titleAr: "معيار الجودة",
+    titleEn: "Quality Standard",
+    descriptionAr:
+      "نعتمد معايير تدقيق جودة صارمة ونوثق كل مرحلة لضمان أفضل النتائج لعملائنا.",
+    descriptionEn:
+      "We apply strict quality auditing standards and document every phase to guarantee the best results for clients.",
+  },
+  {
+    key: "compliance",
+    icon: ShieldCheck,
+    titleAr: "السلامة والامتثال",
+    titleEn: "Safety & Compliance",
+    descriptionAr:
+      "نطبق خطط سلامة ميدانية وإجراءات امتثال تضمن بيئة عمل آمنة ومستدامة.",
+    descriptionEn:
+      "We enforce site safety plans and compliance procedures to ensure a safe and sustainable work environment.",
+  },
+]
+
+const LEADERSHIP = [
+  {
+    nameAr: "م. محمد العزب",
+    nameEn: "Mohamed Alazab",
+    roleAr: "الرئيس التنفيذي",
+    roleEn: "Chief Executive Officer",
+    bioAr: "يشرف على استراتيجية الشركة وتطوير الأعمال مع خبرة تزيد عن 20 عاماً في إدارة المشاريع الكبرى.",
+    bioEn: "Oversees company strategy and business development with 20+ years in major project delivery.",
+    image: "/team/mo-azab-ceo.png",
+  },
+  {
+    nameAr: "م. أحمد سالم",
+    nameEn: "Ahmed Salem",
+    roleAr: "مدير المشاريع",
+    roleEn: "Projects Director",
+    bioAr: "يقود فرق التنفيذ ويضمن الالتزام بالجداول الزمنية والجودة في جميع المواقع.",
+    bioEn: "Leads execution teams and ensures schedule and quality compliance across all sites.",
+    image: "/team/eng-ahmed.png",
+  },
+  {
+    nameAr: "م. فاطمة يوسف",
+    nameEn: "Fatma Youssef",
+    roleAr: "مديرة التصميم الداخلي",
+    roleEn: "Head of Interior Design",
+    bioAr: "تركز على تطوير مفاهيم تصميم تعكس هوية العميل وتحقق أعلى درجات الراحة.",
+    bioEn: "Develops design concepts that reflect client identity and deliver premium comfort.",
+    image: "/team/hr-fatma.jpg",
   },
 ]
