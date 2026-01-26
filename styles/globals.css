@@ -4,14 +4,25 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Brand / company colors (added) */
+  --yellow: #ffb900;
+  --black: #111;
+  --white: #fff;
+  --light-color: #666;
+  --light-bg: #eee;
+  --box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
+  /* I used --border-style to avoid clashing with the existing --border color variable in this file */
+  --border-style: .1rem solid rgba(0,0,0,.3);
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  /* Use company yellow as primary */
+  --primary: var(--yellow);
+  --primary-foreground: var(--black);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -31,8 +42,9 @@
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  /* make sidebar primary use brand yellow too */
+  --sidebar-primary: var(--yellow);
+  --sidebar-primary-foreground: var(--black);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
@@ -40,14 +52,24 @@
 }
 
 .dark {
+  /* keep brand variables available in dark mode too */
+  --yellow: #ffb900;
+  --black: #111;
+  --white: #fff;
+  --light-color: #666;
+  --light-bg: #eee;
+  --box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
+  --border-style: .1rem solid rgba(0,0,0,.3);
+
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.145 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.145 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  /* keep primary as brand yellow in dark too */
+  --primary: var(--yellow);
+  --primary-foreground: var(--black);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -66,8 +88,8 @@
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-primary: var(--yellow);
+  --sidebar-primary-foreground: var(--black);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
