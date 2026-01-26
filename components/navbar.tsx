@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -133,11 +133,11 @@ export function Navbar() {
                   className="relative"
                 >
                   <Image
-                    src="/images/design-mode/logaz.gif"
-                    alt="Al-Azab Construction Logo"
+                    src={mounted && theme === "dark" ? "https://al-azab.co/w.png" : "https://al-azab.co/b.png"}
+                    alt="Alazab Construction Company Logo"
                     width={96}
                     height={96}
-                    className="h-20 w-20 sm:h-22 sm:w-22 md:h-24 md:w-24 lg:h-28 lg:w-28 object-contain"
+                    className="h-14 w-14 sm:h-16 sm:w-16 md:h-18 md:w-18 lg:h-20 lg:w-20 object-contain"
                     priority
                   />
                 </motion.div>
@@ -156,15 +156,19 @@ export function Navbar() {
                   isHovered={hoveredItem === "home"}
                 />
 
-                <DropdownNavItem
+                <NavItem
+                  href="/about"
+                  label={t("nav.about")}
+                  isActive={pathname === "/about"}
+                  onHover={() => setHoveredItem("about")}
+                  onLeave={() => setHoveredItem(null)}
+                  isHovered={hoveredItem === "about"}
+                />
+
+                <NavItem
+                  href="/services"
                   label={t("nav.services")}
-                  items={[
-                    { href: "/services/luxury-finishing", label: t("nav.services.luxury") },
-                    { href: "/services/brand-identity", label: t("nav.services.brand") },
-                    { href: "/uberfix", label: language === "ar" ? "أوبر فيكس للصيانة" : "UberFix Maintenance" },
-                    { href: "/services/general-supplies", label: t("nav.services.supplies") },
-                  ]}
-                  pathname={pathname}
+                  isActive={pathname === "/services"}
                   onHover={() => setHoveredItem("services")}
                   onLeave={() => setHoveredItem(null)}
                   isHovered={hoveredItem === "services"}
@@ -180,21 +184,12 @@ export function Navbar() {
                 />
 
                 <NavItem
-                  href="/gallery"
-                  label={t("nav.gallery")}
-                  isActive={pathname === "/gallery"}
-                  onHover={() => setHoveredItem("gallery")}
+                  href="/clients"
+                  label={t("nav.clients")}
+                  isActive={pathname === "/clients"}
+                  onHover={() => setHoveredItem("clients")}
                   onLeave={() => setHoveredItem(null)}
-                  isHovered={hoveredItem === "gallery"}
-                />
-
-                <NavItem
-                  href="/about"
-                  label={t("nav.about")}
-                  isActive={pathname === "/about"}
-                  onHover={() => setHoveredItem("about")}
-                  onLeave={() => setHoveredItem(null)}
-                  isHovered={hoveredItem === "about"}
+                  isHovered={hoveredItem === "clients"}
                 />
 
                 <NavItem
@@ -216,7 +211,7 @@ export function Navbar() {
 
               <Link href="/contact#quote-form">
                 <AnimatedButton
-                  className="bg-[#ffb900] hover:bg-[#e6a500] active:bg-[#cc8f00] text-blue-900 dark:text-blue-800 font-medium text-sm sm:text-base h-9 sm:h-10 transition-all duration-300 shadow-md hover:shadow-lg"
+                  className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-alt)] active:bg-[#d9a718] text-[var(--color-deep)] dark:text-[var(--color-deep)] font-medium text-sm sm:text-base h-9 sm:h-10 transition-all duration-300 shadow-md hover:shadow-lg"
                   hoverEffect="lift"
                   iconAnimation={true}
                 >
@@ -344,16 +339,16 @@ function NavItem({
     <li>
       <Link
         href={href}
-        className={`relative px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-sm sm:text-base font-medium transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+        className={`relative px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-sm sm:text-base font-medium transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 ${
           isActive
-            ? "text-amber-500 dark:text-amber-400"
-            : "text-foreground hover:text-amber-500 hover:bg-amber-50/50 dark:hover:bg-amber-900/10"
+            ? "text-[var(--color-primary)]"
+            : "text-foreground hover:text-[var(--color-primary)] hover:bg-[color:rgba(245,191,35,0.12)] dark:hover:bg-[color:rgba(245,191,35,0.08)]"
         }`}
         onMouseEnter={onHover}
         onMouseLeave={onLeave}
       >
         <motion.span
-          animate={isHovered && !isActive ? { y: -2, color: "#F59E0B" } : { y: 0 }}
+          animate={isHovered && !isActive ? { y: -2, color: "#f5bf23" } : { y: 0 }}
           transition={{ type: "spring", stiffness: 400, damping: 15 }}
           className="inline-block"
         >
@@ -361,128 +356,12 @@ function NavItem({
         </motion.span>
         {isActive && (
           <motion.div
-            className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-500"
+            className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--color-primary)]"
             layoutId="navbar-underline"
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           />
         )}
       </Link>
-    </li>
-  )
-}
-
-// Desktop Dropdown Nav Item
-function DropdownNavItem({
-  label,
-  items,
-  pathname,
-  onHover,
-  onLeave,
-  isHovered,
-}: {
-  label: string
-  items: { href: string; label: string }[]
-  pathname: string
-  onHover: () => void
-  onLeave: () => void
-  isHovered: boolean
-}) {
-  const isActive = items.some((item) => item.href === pathname)
-  const [isOpen, setIsOpen] = useState(false)
-  const dropdownRef = useRef<HTMLLIElement>(null)
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
-
-  // Handle keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      setIsOpen(!isOpen)
-      e.preventDefault()
-    } else if (e.key === "Escape" && isOpen) {
-      setIsOpen(false)
-    }
-  }
-
-  return (
-    <li
-      className="relative"
-      ref={dropdownRef}
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
-    >
-      <button
-        className={`relative px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-sm sm:text-base font-medium transition-colors flex items-center ${
-          isActive
-            ? "text-amber-500"
-            : "text-foreground hover:text-amber-500 hover:bg-amber-50/50 dark:hover:bg-amber-900/10"
-        }`}
-        onMouseEnter={onHover}
-        onMouseLeave={onLeave}
-        onClick={() => setIsOpen(!isOpen)}
-        onKeyDown={handleKeyDown}
-        aria-expanded={isOpen}
-        aria-haspopup="true"
-        type="button"
-      >
-        <motion.span
-          animate={isHovered && !isActive ? { y: -2, color: "#F59E0B" } : { y: 0 }}
-          transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          className="inline-flex items-center gap-1"
-        >
-          {label}
-          <motion.div animate={isOpen ? { rotate: 180 } : { rotate: 0 }} transition={{ duration: 0.2 }}>
-            <ChevronDown className="h-4 w-4" />
-          </motion.div>
-        </motion.span>
-        {isActive && (
-          <motion.div
-            className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-500"
-            layoutId="navbar-underline"
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          />
-        )}
-      </button>
-
-      {isOpen && (
-        <div
-          className="absolute left-0 mt-1 w-48 sm:w-56 rounded-xl bg-white dark:bg-gray-800 shadow-lg p-1.5 sm:p-2 z-50"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="menu-button"
-        >
-          {items.map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, delay: index * 0.05 }}
-            >
-              <Link
-                href={item.href}
-                className={`block cursor-pointer text-sm sm:text-base py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg ${
-                  pathname === item.href
-                    ? "text-amber-500 bg-amber-50 dark:bg-amber-900/20"
-                    : "hover:text-amber-500 hover:bg-amber-50/50 dark:hover:bg-amber-900/10"
-                }`}
-                onClick={() => setIsOpen(false)}
-                role="menuitem"
-              >
-                {item.label}
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      )}
     </li>
   )
 }
