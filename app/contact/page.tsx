@@ -1,9 +1,11 @@
 "use client"
 
+
 import { useState } from "react"
 import type { FormEvent } from "react"
 import { Mail, MapPin, Phone, Clock } from "lucide-react"
 import emailjs from "@emailjs/browser"
+
 
 import { Button } from "@/components/ui/button"
 import { PageHero } from "@/components/sections/page-hero"
@@ -13,6 +15,7 @@ import { useLanguage } from "@/contexts/language-context"
 export default function ContactPage() {
   const { language } = useLanguage()
   const isRTL = language === "ar"
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formStatus, setFormStatus] = useState<{ type: "idle" | "success" | "error"; message?: string }>({
     type: "idle",
@@ -72,7 +75,8 @@ export default function ContactPage() {
     } finally {
       setIsSubmitting(false)
     }
-  }
+ }
+
 
   return (
     <div className={`flex min-h-screen flex-col ${isRTL ? "rtl" : "ltr"}`}>
@@ -129,15 +133,10 @@ export default function ContactPage() {
                     ? "أرسل تفاصيل مشروعك وسنتواصل معك خلال 24 ساعة عمل." 
                     : "Send your project details and we will get back to you within 24 business hours."}
                 </p>
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    name="company"
-                    tabIndex={-1}
-                    autoComplete="off"
-                    className="hidden"
-                    aria-hidden="true"
-                  />
+
+                  
+                <form className="space-y-4">
+
                   <div>
                     <label className="block text-sm font-medium text-[var(--color-deep)] dark:text-white mb-2" htmlFor="name">
                       {language === "ar" ? "الاسم الكامل" : "Full name"}
@@ -145,6 +144,7 @@ export default function ContactPage() {
                     <input
                       id="name"
                       name="name"
+
                       type="text"
                       required
                       className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
@@ -169,7 +169,9 @@ export default function ContactPage() {
                       </label>
                       <input
                         id="phone"
+
                         name="phone"
+
                         type="tel"
                         required
                         className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
@@ -182,7 +184,9 @@ export default function ContactPage() {
                     </label>
                     <select
                       id="service"
+
                       name="service"
+
                       className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                     >
                       {(language === "ar" ? SERVICE_OPTIONS_AR : SERVICE_OPTIONS_EN).map((option) => (
@@ -204,6 +208,7 @@ export default function ContactPage() {
                       className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                     />
                   </div>
+
                   <Button
                     className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-alt)] text-[var(--color-deep)] font-semibold"
                     type="submit"
@@ -216,6 +221,10 @@ export default function ContactPage() {
                       : language === "ar"
                         ? "إرسال الطلب"
                         : "Submit Request"}
+
+                  <Button className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-alt)] text-[var(--color-deep)] font-semibold">
+                    {language === "ar" ? "إرسال الطلب" : "Submit Request"}
+
                   </Button>
                   {formStatus.type !== "idle" ? (
                     <p
@@ -238,7 +247,10 @@ export default function ContactPage() {
           <div className="rounded-2xl overflow-hidden border border-[color:rgba(245,191,35,0.2)]">
             <iframe
               title="Alazab location"
+
               src={mapSrc}
+              src="https://www.google.com/maps?q=Maadi%20Cairo%20Egypt&output=embed"
+
               className="w-full h-[360px]"
               loading="lazy"
             />

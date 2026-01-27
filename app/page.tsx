@@ -7,7 +7,10 @@ export const metadata = {
     title: "شركة العزب للمقاولات | Alazab Construction Company",
     description: "خدمات التصميم والتنفيذ وإدارة المشاريع من شركة العزب.",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://al-azab.com",
-    images: ["/og-alazab.svg"],
+
+
+    images: ["/logo.png"],
+
     type: "website",
   },
 }

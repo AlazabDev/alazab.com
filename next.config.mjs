@@ -21,11 +21,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "al-azab.co",
       },
+
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
         pathname: "/dn4ne1ep1/**",
       },
+
+
     ],
   },
   compress: true,

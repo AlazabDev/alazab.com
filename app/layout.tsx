@@ -33,7 +33,10 @@ export const metadata = {
     description: "خدمات التصميم المعماري وإدارة المشاريع والصيانة.",
     images: [
       {
-        url: "/og-alazab.svg",
+
+
+        url: "/logo.png",
+
         width: 1200,
         height: 630,
         alt: "شركة العزب للمقاولات",
@@ -44,7 +47,9 @@ export const metadata = {
     card: "summary_large_image",
     title: "شركة العزب للمقاولات",
     description: "خدمات التصميم المعماري وإدارة المشاريع والصيانة.",
-    images: ["/og-alazab.svg"],
+
+    images: ["/logo.png"],
+
   },
   generator: "v0.app",
 }

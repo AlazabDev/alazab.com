@@ -7,7 +7,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "خدمات العزب | Alazab Construction Company",
     description: "حلول متكاملة في التصميم والتنفيذ وإدارة المشاريع.",
-    images: ["/og-alazab.svg"],
+
+
+    images: ["/logo.png"],
+
   },
 }
 

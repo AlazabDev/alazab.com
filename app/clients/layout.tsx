@@ -6,7 +6,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "عملاؤنا | Alazab Construction Company",
     description: "تعرف على شركاء النجاح وثقة عملاء العزب.",
-    images: ["/og-alazab.svg"],
+
+
+    images: ["/logo.png"],
+
   },
 }
 
