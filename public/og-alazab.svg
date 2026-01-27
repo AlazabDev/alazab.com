@@ -1,0 +1,21 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#030332"/>
+      <stop offset="1" stop-color="#0c0c0c"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="600" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f5bf23"/>
+      <stop offset="1" stop-color="#ffb900"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="80" y="90" width="260" height="260" rx="130" fill="url(#accent)"/>
+  <text x="210" y="255" text-anchor="middle" font-family="'Cairo', Arial, sans-serif" font-size="96" font-weight="700" fill="#030332">AZ</text>
+  <text x="380" y="200" font-family="'Cairo', Arial, sans-serif" font-size="54" font-weight="700" fill="#ffffff">Alazab Construction Company</text>
+  <text x="380" y="260" font-family="'Cairo', Arial, sans-serif" font-size="36" font-weight="500" fill="#d1d2d3">Architectural Design • Project Management • Maintenance</text>
+  <text x="380" y="330" font-family="'Cairo', Arial, sans-serif" font-size="30" font-weight="500" fill="#b2b2b3">شركة العزب للمقاولات وإدارة التنفيذ</text>
+  <text x="380" y="380" font-family="'Cairo', Arial, sans-serif" font-size="24" font-weight="500" fill="#b2b2b3">تصميم معماري | إدارة مشاريع | صيانة وتشغيل</text>
+  <rect x="380" y="420" width="300" height="4" fill="url(#accent)"/>
+  <text x="380" y="470" font-family="'Cairo', Arial, sans-serif" font-size="22" font-weight="500" fill="#d1d2d3">www.al-azab.co</text>
+</svg>

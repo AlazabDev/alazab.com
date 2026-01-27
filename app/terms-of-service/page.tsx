@@ -7,67 +7,89 @@ export default function TermsOfServicePage() {
 
   const content = {
     ar: {
-      title: 'شروط الخدمة',
-      lastUpdated: 'آخر تحديث:',
-      introduction: 'هذه شروط الخدمة ("الشروط") تحكم استخدامك لموقع وخدمات شركة العزب للإنشاءات. باستخدام خدماتنا، فإنك توافق على هذه الشروط.',
+      title: "شروط الخدمة",
+      lastUpdated: "آخر تحديث:",
+      introduction:
+        "تنظم هذه الشروط استخدامك لموقع وخدمات شركة العزب للمقاولات وإدارة التنفيذ. باستخدامك للموقع، فإنك توافق على الالتزام بها.",
       sections: {
         acceptance: {
-          title: '1. قبول الشروط',
-          content: 'بالوصول إلى موقعنا واستخدام خدماتنا، فإنك توافق على الالتزام بهذه الشروط.'
+          title: "1. قبول الشروط",
+          content:
+            "يُعد استمرارك في استخدام الموقع والخدمات موافقة صريحة على هذه الشروط وأي تحديثات لاحقة لها.",
         },
         usage: {
-          title: '2. نطاق الاستخدام',
-          content: 'تقر بأن استخدامك للموقع يجب أن يكون قانوني وليس منتهكاً لحقوق الآخرين.'
+          title: "2. استخدام الموقع",
+          content:
+            "يجب أن يكون استخدامك قانونياً وألا ينتهك حقوق الملكية الفكرية أو الأنظمة المعمول بها.",
+        },
+        services: {
+          title: "3. نطاق الخدمات",
+          content:
+            "الموقع يقدم معلومات عن خدمات التصميم المعماري، إدارة المشاريع، والصيانة. أي اتفاقيات تنفيذ تخضع لعقود مستقلة.",
         },
         liability: {
-          title: '3. تحديد المسؤولية',
-          content: 'نحن لا نتحمل مسؤولية عن أي أضرار غير مباشرة أو خسائر ناجمة عن استخدام خدماتنا.'
+          title: "4. حدود المسؤولية",
+          content:
+            "لا تتحمل الشركة مسؤولية أي أضرار غير مباشرة أو خاصة ناتجة عن استخدام الموقع أو الاعتماد على المعلومات المنشورة فيه.",
         },
         intellectual: {
-          title: '4. الملكية الفكرية',
-          content: 'جميع المحتويات والملكية الفكرية على الموقع محمية وملك للشركة.'
+          title: "5. الملكية الفكرية",
+          content:
+            "جميع المحتويات والنصوص والتصاميم والشعارات محمية وملك للشركة، ولا يجوز استخدامها دون إذن كتابي.",
         },
         changes: {
-          title: '5. تعديل الشروط',
-          content: 'نحتفظ بالحق في تعديل هذه الشروط في أي وقت.'
+          title: "6. التعديلات",
+          content:
+            "تحتفظ الشركة بحق تعديل هذه الشروط في أي وقت، ويتم نشر النسخة المحدثة على الموقع.",
         },
         contact: {
-          title: '6. اتصل بنا',
-          content: 'لأي استفسار حول شروط الخدمة، يرجى التواصل معنا.'
-        }
-      }
+          title: "7. التواصل",
+          content: "لأي استفسارات حول الشروط، يرجى مراسلتنا عبر info@al-azab.co.",
+        },
+      },
     },
     en: {
-      title: 'Terms of Service',
-      lastUpdated: 'Last Updated:',
-      introduction: 'These Terms of Service ("Terms") govern your use of the website and services of Al-Azab Construction Company. By using our services, you agree to these Terms.',
+      title: "Terms of Service",
+      lastUpdated: "Last Updated:",
+      introduction:
+        "These Terms govern your use of Alazab Construction Company’s website and services. By using the site, you agree to these Terms.",
       sections: {
         acceptance: {
-          title: '1. Acceptance of Terms',
-          content: 'By accessing our website and using our services, you agree to be bound by these Terms.'
+          title: "1. Acceptance of Terms",
+          content:
+            "Your continued use of the website constitutes acceptance of these Terms and any future updates.",
         },
         usage: {
-          title: '2. Scope of Use',
-          content: 'You acknowledge that your use of the website must be legal and not infringe on the rights of others.'
+          title: "2. Website Use",
+          content:
+            "You must use the website lawfully and not infringe intellectual property or applicable regulations.",
+        },
+        services: {
+          title: "3. Service Scope",
+          content:
+            "The website provides information about architectural design, project management, and maintenance. Execution agreements are governed by separate contracts.",
         },
         liability: {
-          title: '3. Limitation of Liability',
-          content: 'We are not responsible for any indirect damages or losses arising from the use of our services.'
+          title: "4. Limitation of Liability",
+          content:
+            "The Company is not liable for indirect or special damages arising from the use of the website or reliance on its content.",
         },
         intellectual: {
-          title: '4. Intellectual Property',
-          content: 'All content and intellectual property on the website is protected and owned by the Company.'
+          title: "5. Intellectual Property",
+          content:
+            "All content, text, designs, and logos are protected and owned by the Company and may not be used without written consent.",
         },
         changes: {
-          title: '5. Modification of Terms',
-          content: 'We reserve the right to modify these Terms at any time.'
+          title: "6. Updates",
+          content:
+            "We reserve the right to update these Terms at any time. The latest version will be published on the website.",
         },
         contact: {
-          title: '6. Contact Us',
-          content: 'For any questions about the Terms of Service, please contact us.'
-        }
-      }
-    }
+          title: "7. Contact",
+          content: "For questions about these Terms, contact us at info@al-azab.co.",
+        },
+      },
+    },
   }
 
   const texts = content[language]
