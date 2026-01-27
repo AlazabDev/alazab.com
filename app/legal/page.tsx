@@ -7,59 +7,79 @@ export default function LegalPage() {
 
   const content = {
     ar: {
-      title: 'الإشعار القانوني',
-      lastUpdated: 'آخر تحديث:',
-      introduction: 'هذا الإشعار القانوني يوضح معلومات المسؤولية القانونية والعلاقات بين المستخدمين والشركة.',
+      title: "الإشعار القانوني",
+      lastUpdated: "آخر تحديث:",
+      introduction:
+        "يوضح هذا الإشعار مسؤوليات الاستخدام وحدودها، ويحدد العلاقة القانونية بين الزائر وشركة العزب للمقاولات وإدارة التنفيذ.",
       sections: {
         disclaimer: {
-          title: '1. إخلاء المسؤولية',
-          content: 'يتم تقديم جميع المعلومات على هذا الموقع "كما هي"، وبدون أي ضمانات من أي نوع.'
+          title: "1. إخلاء المسؤولية",
+          content:
+            "يتم تقديم المحتوى لأغراض معلوماتية فقط، ولا يُعد التزاماً تعاقدياً أو عرضاً ملزماً.",
         },
         accuracy: {
-          title: '2. دقة المعلومات',
-          content: 'بينما نسعى لتقديم معلومات دقيقة، لا نتحمل مسؤولية عن الأخطاء أو الحذف.'
+          title: "2. دقة المعلومات",
+          content:
+            "نسعى لتحديث المعلومات باستمرار، إلا أننا لا نضمن خلوها من الأخطاء أو السهو.",
         },
         limitation: {
-          title: '3. تحديد المسؤولية',
-          content: 'لن تكون الشركة مسؤولة عن أي أضرار غير مباشرة أو عرضية.'
+          title: "3. حدود المسؤولية",
+          content:
+            "لا تتحمل الشركة أي مسؤولية عن أي خسائر مباشرة أو غير مباشرة ناتجة عن استخدام الموقع أو الاعتماد على محتواه.",
         },
         external: {
-          title: '4. الروابط الخارجية',
-          content: 'لا نتحمل مسؤولية عن محتوى المواقع الخارجية المرتبطة بموقعنا.'
+          title: "4. الروابط الخارجية",
+          content:
+            "قد يحتوي الموقع على روابط خارجية لراحة المستخدم، ولا نتحمل مسؤولية محتواها أو سياساتها.",
+        },
+        intellectual: {
+          title: "5. حقوق الملكية",
+          content:
+            "جميع المواد والعلامات التجارية والشعارات مملوكة للشركة ومحميّة بموجب القوانين ذات الصلة.",
         },
         governing: {
-          title: '5. القانون الحاكم',
-          content: 'تحكم هذا الإشعار القوانين المحلية ذات الصلة.'
-        }
-      }
+          title: "6. القانون الحاكم",
+          content: "يخضع هذا الإشعار للقوانين والأنظمة المعمول بها داخل جمهورية مصر العربية.",
+        },
+      },
     },
     en: {
-      title: 'Legal Notice',
-      lastUpdated: 'Last Updated:',
-      introduction: 'This legal notice clarifies legal liability information and the relationship between users and the Company.',
+      title: "Legal Notice",
+      lastUpdated: "Last Updated:",
+      introduction:
+        "This notice outlines usage responsibilities and defines the legal relationship between visitors and Alazab Construction Company.",
       sections: {
         disclaimer: {
-          title: '1. Disclaimer',
-          content: 'All information on this website is provided "as is" without any warranties of any kind.'
+          title: "1. Disclaimer",
+          content:
+            "Content is provided for informational purposes only and does not constitute a binding offer or contract.",
         },
         accuracy: {
-          title: '2. Accuracy of Information',
-          content: 'While we strive to provide accurate information, we are not responsible for errors or omissions.'
+          title: "2. Accuracy of Information",
+          content:
+            "We strive to keep information up to date, but do not guarantee it is error-free or complete.",
         },
         limitation: {
-          title: '3. Limitation of Liability',
-          content: 'The Company shall not be responsible for any indirect or incidental damages.'
+          title: "3. Limitation of Liability",
+          content:
+            "The Company is not liable for direct or indirect losses resulting from use of the website or reliance on its content.",
         },
         external: {
-          title: '4. External Links',
-          content: 'We are not responsible for the content of external websites linked to our site.'
+          title: "4. External Links",
+          content:
+            "External links may be provided for convenience. We are not responsible for their content or policies.",
+        },
+        intellectual: {
+          title: "5. Intellectual Property",
+          content:
+            "All materials, trademarks, and logos are owned by the Company and protected under applicable laws.",
         },
         governing: {
-          title: '5. Governing Law',
-          content: 'This notice is governed by applicable local laws.'
-        }
-      }
-    }
+          title: "6. Governing Law",
+          content: "This notice is governed by applicable laws of the Arab Republic of Egypt.",
+        },
+      },
+    },
   }
 
   const texts = content[language]

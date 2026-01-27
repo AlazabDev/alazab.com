@@ -5,9 +5,9 @@ import { ArrowRight, CheckCircle, Home, Hammer, Ruler } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export const metadata = {
-  title: "Residential Construction | BuildMaster Construction",
+  title: "Residential Construction | Alazab Construction",
   description:
-    "Explore BuildMaster's residential construction services including custom homes, renovations, and additions.",
+    "Discover Alazab Construction's residential building services, from custom villas to full-scale renovations.",
 }
 
 export default function ResidentialServicePage() {
@@ -20,7 +20,7 @@ export default function ResidentialServicePage() {
         <div className="relative z-20 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Residential Construction</h1>
           <p className="text-xl text-white/90 max-w-2xl">
-            Building dream homes with quality craftsmanship and attention to detail.
+            Delivering premium homes with quality craftsmanship and precise execution.
           </p>
         </div>
       </section>
@@ -33,16 +33,15 @@ export default function ResidentialServicePage() {
               <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-4">
                 Residential Services
               </div>
-              <h2 className="text-4xl font-bold mb-6">Creating Spaces You'll Love to Call Home</h2>
+              <h2 className="text-4xl font-bold mb-6">Creating Homes Built to Last</h2>
               <p className="text-gray-700 mb-6 text-lg">
-                At BuildMaster, we understand that your home is more than just a building—it's where memories are made
-                and lives are lived. That's why we approach each residential project with care, precision, and a
-                commitment to excellence.
+                At Alazab Construction, we understand that your home is more than a structure—it is a place where life
+                happens. We approach every residential project with care, precision, and a commitment to excellence.
               </p>
               <p className="text-gray-700 mb-8">
                 Whether you're building a new custom home, renovating an existing space, or adding an extension, our
-                team of skilled professionals will work closely with you to bring your vision to life while ensuring the
-                highest standards of quality and craftsmanship.
+                team works closely with you to bring your vision to life while ensuring the highest standards of quality
+                and craftsmanship.
               </p>
               <Link href="/contact">
                 <Button className="bg-amber-500 hover:bg-amber-600 text-black">
@@ -65,10 +64,9 @@ export default function ResidentialServicePage() {
             <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-4">
               What We Offer
             </div>
-            <h2 className="text-4xl font-bold mb-6">Our Residential Services</h2>
+                <h2 className="text-4xl font-bold mb-6">Our Residential Services</h2>
             <p className="text-gray-700 text-lg">
-              We provide a comprehensive range of residential construction services to meet all your home building
-              needs.
+              We provide a comprehensive range of residential construction services to meet your home building needs.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
@@ -100,7 +98,7 @@ export default function ResidentialServicePage() {
             <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium mb-4">
               Our Process
             </div>
-            <h2 className="text-4xl font-bold mb-6">How We Build Your Dream Home</h2>
+            <h2 className="text-4xl font-bold mb-6">How We Deliver Your Home</h2>
             <p className="text-gray-700 text-lg">
               Our streamlined process ensures a smooth experience from initial consultation to project completion.
             </p>
@@ -242,7 +240,7 @@ export default function ResidentialServicePage() {
         <div className="container mx-auto px-4 text-center max-w-4xl">
           <h2 className="text-4xl font-bold mb-6">Ready to Build Your Dream Home?</h2>
           <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-10">
-            Contact us today for a free consultation and discover how BuildMaster can bring your residential vision to
+            Contact us today for a free consultation and discover how Alazab can bring your residential vision to
             life.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
@@ -355,7 +353,7 @@ const testimonials = [
     name: "Emily & David Thompson",
     project: "Custom Home Build",
     quote:
-      "BuildMaster turned our dream home into reality. Their attention to detail and commitment to quality exceeded our expectations. We couldn't be happier with our new home.",
+      "Alazab turned our dream home into reality. Their attention to detail and commitment to quality exceeded our expectations. We couldn't be happier with our new home.",
     avatar: "/images/testimonial-1.png",
   },
   {

@@ -11,8 +11,9 @@ export default function RootLayout({
 }
 
 export const metadata = {
-  title: "شركة العزب للبناء والتشطيبات | AL-AZAB Construction",
-  description: "شركة العزب متخصصة في البناء السكني والتجاري والتشطيبات الفاخرة والصيانة والهوية التجارية. نقدم حلول بناء احترافية بجودة عالية منذ عام 2000.",
+  title: "شركة العزب للمقاولات | Alazab Construction Company",
+  description:
+    "شركة العزب للمقاولات وإدارة التنفيذ تقدم حلول التصميم المعماري والتصميم الداخلي وإدارة المشاريع والصيانة وفق معايير عالية.",
   applicationName: "شركة العزب للبناء والتشطيبات",
   keywords: "بناء، تشطيبات، صيانة، عمارات، مصر، القاهرة، بناء سكني، تشطيبات فاخرة",
   authors: [{ name: "AL-AZAB Construction" }],
@@ -28,26 +29,22 @@ export const metadata = {
     type: "website",
     locale: "ar_EG",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://al-azab.co",
-    title: "شركة العزب للبناء والتشطيبات",
-    description: "متخصصون في البناء السكني والتشطيبات الفاخرة والصيانة",
+    title: "شركة العزب للمقاولات",
+    description: "خدمات التصميم المعماري وإدارة المشاريع والصيانة.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-alazab.svg",
         width: 1200,
         height: 630,
-        alt: "شركة العزب للبناء والتشطيبات",
+        alt: "شركة العزب للمقاولات",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "شركة العزب للبناء والتشطيبات",
-    description: "متخصصون في البناء السكني والتشطيبات الفاخرة",
-    images: ["/og-image.png"],
-  },
-  verification: {
-    google: "your-google-verification-code",
-    yandex: "your-yandex-verification-code",
+    title: "شركة العزب للمقاولات",
+    description: "خدمات التصميم المعماري وإدارة المشاريع والصيانة.",
+    images: ["/og-alazab.svg"],
   },
   generator: "v0.app",
 }
