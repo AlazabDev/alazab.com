@@ -8,8 +8,11 @@ import { useLanguage } from "@/contexts/language-context"
 import type { GalleryImage } from "@/lib/gallery-data"
 
 const CATEGORY_LABELS: Record<string, { nameEn: string; nameAr: string }> = {
-  gallery: { nameEn: "Gallery Collection", nameAr: "مجموعة الصور" },
-  projects: { nameEn: "Projects Portfolio", nameAr: "معرض المشاريع" },
+  "catalog-101": { nameEn: "Interior Design", nameAr: "تصميم داخلي" },
+  "catalog-102": { nameEn: "Furniture Units", nameAr: "وحدات أثاث" },
+  "catalog-103": { nameEn: "Commercial Shops", nameAr: "محلات تجارية" },
+  "catalog-104": { nameEn: "Lighting & Decor", nameAr: "الإضاءة والديكورات" },
+  "catalog-105": { nameEn: "Project Highlights", nameAr: "مشروعات متنوعة" },
 }
 
 const layoutOptions = [

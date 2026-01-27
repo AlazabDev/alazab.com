@@ -8,7 +8,6 @@ import {
   Eye,
   Lightbulb,
   HardHat,
-  Hammer,
   Compass,
   Target,
   Phone,
@@ -209,17 +208,17 @@ export default function HomePageClient() {
         </motion.div>
       </section>
 
-      {/* Application Purpose Section */}
+      {/* Company Overview Section */}
       <section className="py-8 sm:py-12 md:py-16 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="max-w-4xl mx-auto">
               <div className="inline-block px-4 py-2 bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-400 rounded-full text-xs sm:text-sm font-medium mb-4">
-                {language === "ar" ? "عن تطبيقنا" : "About Our Platform"}
+                {language === "ar" ? "نبذة مختصرة" : "Company Overview"}
               </div>
 
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-white">
-                {language === "ar" ? "منصتنا الشاملة للخدمات المعمارية والبنائية" : "Comprehensive Platform for Architectural & Construction Services"}
+                {language === "ar" ? "العزب للإنشاءات وإدارة التنفيذ" : "Alazab Construction & Execution Management"}
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
@@ -234,8 +233,8 @@ export default function HomePageClient() {
                       </h3>
                       <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                         {language === "ar"
-                          ? "تحويل صناعة البناء من خلال توفير حلول متكاملة تجمع بين الجودة والابتكار والاستدامة"
-                          : "Transform the construction industry by providing integrated solutions that combine quality, innovation, and sustainability"}
+                          ? "قيادة مشاريع إنشائية تحقق أعلى مستويات الجودة مع الالتزام بالسلامة والتسليم في الوقت المحدد"
+                          : "Leading construction projects that deliver top quality while maintaining safety and on-time delivery"}
                       </p>
                     </div>
                   </div>
@@ -250,8 +249,8 @@ export default function HomePageClient() {
                       </h3>
                       <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                         {language === "ar"
-                          ? "تقديم خدمات بناء وتشطيبات احترافية تتجاوز توقعات العملاء بأعلى معايير الجودة والأمان"
-                          : "Deliver professional construction and finishing services that exceed client expectations with the highest quality and safety standards"}
+                          ? "تقديم حلول متكاملة من التصميم وحتى التشغيل لرفع القيمة الاستثمارية للمشروع"
+                          : "Deliver integrated solutions from design to operation to increase project investment value"}
                       </p>
                     </div>
                   </div>
@@ -268,8 +267,8 @@ export default function HomePageClient() {
                       </h3>
                       <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                         {language === "ar"
-                          ? "الجودة، الاحترافية، الابتكار، الاستدامة، والالتزام بتوقعات عملائنا"
-                          : "Quality, professionalism, innovation, sustainability, and commitment to client satisfaction"}
+                          ? "الجودة، الشفافية، المسؤولية، والالتزام بمعايير التنفيذ"
+                          : "Quality, transparency, responsibility, and execution standards"}
                       </p>
                     </div>
                   </div>
@@ -284,8 +283,8 @@ export default function HomePageClient() {
                       </h3>
                       <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                         {language === "ar"
-                          ? "خبرة أكثر من عقد في البناء السكني والتجاري والتشطيبات الفاخرة والصيانة الدورية"
-                          : "Over a decade of experience in residential, commercial, luxury finishing, and maintenance services"}
+                          ? "خبرة تمتد لأكثر من 15 عاماً في التصميم المعماري وإدارة المشاريع والصيانة"
+                          : "Over 15 years of experience in architectural design, project management, and maintenance"}
                       </p>
                     </div>
                   </div>
@@ -417,14 +416,12 @@ export default function HomePageClient() {
           </FadeIn>
 
           {/* Enhanced Services Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
             {[
-              { icon: HardHat, key: "building" },
-              { icon: Hammer, key: "renovation" },
-              { icon: Compass, key: "design" },
-              { icon: Target, key: "materials" },
-              { icon: Lightbulb, key: "consulting" },
+              { icon: Compass, key: "architecture" },
               { icon: Eye, key: "interior" },
+              { icon: Target, key: "management" },
+              { icon: HardHat, key: "maintenance" },
             ].map((service, index) => (
               <HoverCard key={service.key}>
                 <motion.div
