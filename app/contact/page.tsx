@@ -4,6 +4,7 @@ import { useState } from "react"
 import type { FormEvent } from "react"
 import { Mail, MapPin, Phone, Clock } from "lucide-react"
 import emailjs from "@emailjs/browser"
+import { Mail, MapPin, Phone, Clock } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { PageHero } from "@/components/sections/page-hero"
@@ -136,6 +137,7 @@ export default function ContactPage() {
                     className="hidden"
                     aria-hidden="true"
                   />
+                <form className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-[var(--color-deep)] dark:text-white mb-2" htmlFor="name">
                       {language === "ar" ? "الاسم الكامل" : "Full name"}
@@ -214,6 +216,8 @@ export default function ContactPage() {
                       : language === "ar"
                         ? "إرسال الطلب"
                         : "Submit Request"}
+                  <Button className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-alt)] text-[var(--color-deep)] font-semibold">
+                    {language === "ar" ? "إرسال الطلب" : "Submit Request"}
                   </Button>
                   {formStatus.type !== "idle" ? (
                     <p
@@ -236,7 +240,7 @@ export default function ContactPage() {
           <div className="rounded-2xl overflow-hidden border border-[color:rgba(245,191,35,0.2)]">
             <iframe
               title="Alazab location"
-              src={mapSrc}
+              src="https://www.google.com/maps?q=Maadi%20Cairo%20Egypt&output=embed"
               className="w-full h-[360px]"
               loading="lazy"
             />
