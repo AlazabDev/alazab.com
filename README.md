@@ -21,51 +21,13 @@
 ## المواقع | Live Sites
 
 **الإنتاج | Production:**
-- [https://alazab-construction.vercel.app](https://alazab-construction.vercel.app)
+- [https://alazab.online](https://alazab.online)
 
 **التطوير | Development:**
-- [v0.app Project](https://v0.app/chat/projects/T6Qh4YqRqrI)
 
 ## هيكل المشروع | Project Structure
 
-\`\`\`
-alazab-construction/
-├── app/                          # Next.js App Router
-│   ├── page.tsx                 # الصفحة الرئيسية | Home
-│   ├── about/                   # نبذة عن العزب | About
-│   ├── services/                # الخدمات | Services
-│   ├── projects/                # المشاريع | Projects
-│   ├── gallery/                 # المعرض | Gallery
-│   ├── contact/                 # التواصل | Contact
-│   ├── admin/                   # لوحة التحكم | Admin
-│   ├── auth/                    # المصادقة | Authentication
-│   └── layout.tsx               # Layout الرئيسي
-├── components/                   # مكونات React
-│   ├── navbar.tsx               # شريط التنقل
-│   ├── footer.tsx               # التذييل
-│   ├── hero-section.tsx         # قسم البطل
-│   └── ... (أكثر من 80 مكون)
-├── public/                       # الملفات الثابتة
-│   ├── images/                  # صور الخدمات والفريق (60+ صورة)
-│   ├── gallery/                 # معرض التصاميم (60+ صورة)
-│   ├── projects/                # صور المشاريع (80+ صورة)
-│   └── ... (200+ صورة إجمالي)
-├── contexts/                    # React Contexts
-│   ├── language-context.tsx     # نظام اللغات (AR/EN)
-│   └── theme-context.tsx        # نظام المواضيع (Light/Dark)
-├── lib/                         # Utilities والدوال المساعدة
-│   ├── supabase/               # Supabase Integration
-│   └── utils.ts                # Utility Functions
-├── docs/                        # التوثيق الشامل
-│   ├── PROJECT_STRUCTURE.md     # هيكل المشروع
-│   ├── DESIGN_SYSTEM.md         # نظام التصميم
-│   ├── IMAGE_CATALOG.md         # فهرس الصور
-│   ├── RESPONSIVE_DESIGN.md     # دليل التوافقية
-│   └── DEVELOPMENT_GUIDE.md     # دليل التطوير
-├── styles/                      # ملفات CSS
-├── package.json                 # المتطلبات
-└── tailwind.config.ts          # تكوين Tailwind
-\`\`\`
+
 
 ## الميزات | Features
 
