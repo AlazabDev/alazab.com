@@ -87,6 +87,8 @@
 }
 
 @theme inline {
+  --font-sans: var(--font-cairo, 'Cairo'), 'Arial', sans-serif;
+  --font-mono: var(--font-montserrat, 'Montserrat'), monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

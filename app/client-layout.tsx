@@ -14,8 +14,6 @@ import { usePathname } from "next/navigation"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { SmartChatbot } from "@/components/smart-chatbot"
 
-import "@/app/globals.css"
-
 // Initialize the fonts with display swap for better performance
 const montserrat = Montserrat({
   subsets: ["latin"],

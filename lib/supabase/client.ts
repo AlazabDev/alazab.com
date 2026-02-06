@@ -1,3 +1,5 @@
+import { createBrowserClient } from "@supabase/ssr"
+
 export const isSupabaseConfigured =
   typeof process.env.NEXT_PUBLIC_SUPABASE_URL === "string" &&
   process.env.NEXT_PUBLIC_SUPABASE_URL.length > 0 &&
@@ -9,6 +11,10 @@ const dummyClient = {
   auth: {
     getUser: () => Promise.resolve({ data: { user: null }, error: null }),
     getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+    signOut: () => Promise.resolve({ error: null }),
+    signInWithPassword: () => Promise.resolve({ data: { user: null, session: null }, error: { message: "Supabase not configured" } }),
+    signUp: () => Promise.resolve({ data: { user: null, session: null }, error: { message: "Supabase not configured" } }),
+    onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
   },
   from: () => ({
     select: () => Promise.resolve({ data: [], error: null }),
@@ -26,16 +32,15 @@ const dummyClient = {
       return this
     },
   }),
-}
+} as any
 
 export function createClient() {
-  // Return dummy client immediately if not configured - never import Supabase
   if (!isSupabaseConfigured) {
     return dummyClient
   }
 
-  // Only import Supabase when actually configured
-  const { createClient: createSupabaseClient } = require("@supabase/supabase-js")
-
-  return createSupabaseClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  return createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  )
 }

@@ -51,21 +51,31 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [expandedSections, setExpandedSections] = useState<string[]>(["public"])
-  const supabase = createClient()
 
   useEffect(() => {
     const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      setUser(user)
-      setLoading(false)
+      try {
+        const supabase = createClient()
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+        setUser(user)
+      } catch {
+        setUser(null)
+      } finally {
+        setLoading(false)
+      }
     }
     getUser()
   }, [])
 
   const handleLogout = async () => {
-    await supabase.auth.signOut()
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut()
+    } catch {
+      // ignore errors
+    }
     setUser(null)
     onClose()
     window.location.href = "/"
@@ -304,7 +314,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
     {
       id: "finance",
       icon: DollarSign,
-      titleAr: "الإدارة المالية",
+      titleAr: "الإدارة الما��ية",
       titleEn: "Financial Management",
       href: "/admin/finance",
       color: "text-yellow-600",
