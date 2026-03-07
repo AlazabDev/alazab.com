@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -88,45 +88,6 @@ const Projects: React.FC = () => {
     });
   }, [activeCategory, searchTerm]);
 
-  // استخدام useCallback لتحسين الأداء
-  const handleScroll = useCallback(() => {
-    const elements = document.querySelectorAll('.project-card');
-    
-    elements.forEach((element, index) => {
-      const position = element.getBoundingClientRect();
-      
-      if (position.top < window.innerHeight - 100) {
-        setTimeout(() => {
-          element.classList.add('animated');
-        }, index * 100);
-      }
-    });
-  }, []);
-  
-  // تحسين useEffect
-  useEffect(() => {
-    // فحص أولي مع تأخير قصير
-    const initialTimeout = setTimeout(handleScroll, 300);
-    
-    // إضافة مستمع للتمرير مع throttling
-    let ticking = false;
-    const throttledScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    
-    window.addEventListener('scroll', throttledScroll, { passive: true });
-    
-    return () => {
-      clearTimeout(initialTimeout);
-      window.removeEventListener('scroll', throttledScroll);
-    };
-  }, [handleScroll]);
 
   return (
     <section id="projects" className="section bg-white">
@@ -238,7 +199,7 @@ const Projects: React.FC = () => {
                 {filteredProjects.map((project) => (
                   <article 
                     key={project.id} 
-                    className="project-card group relative overflow-hidden rounded-xl shadow-md opacity-0 translate-y-8 transition-all duration-500 hover:shadow-xl"
+                    className="project-card group relative overflow-hidden rounded-xl shadow-md transition-all duration-500 hover:shadow-xl"
                     role="listitem"
                   >
                     <Link 
