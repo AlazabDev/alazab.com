@@ -7,7 +7,7 @@ const FloatingWhatsAppButton: React.FC = () => {
     <Link
       to="/whatsapp-setup"
       className="fixed bottom-6 left-6 z-40 group"
-      aria-label="إعداد واتساب للأعمال"
+      aria-label="تواصل معنا عبر واتساب"
     >
       <div className="relative flex items-center justify-center w-14 h-14 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
         <svg className="h-7 w-7" viewBox="0 0 24 24" fill="currentColor">
@@ -15,7 +15,7 @@ const FloatingWhatsAppButton: React.FC = () => {
         </svg>
         {/* Tooltip */}
         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-foreground text-background text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-          إعداد واتساب للأعمال
+          تواصل معنا عبر واتساب
         </span>
         {/* Pulse animation */}
         <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-25" />
