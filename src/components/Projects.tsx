@@ -88,45 +88,6 @@ const Projects: React.FC = () => {
     });
   }, [activeCategory, searchTerm]);
 
-  // استخدام useCallback لتحسين الأداء
-  const handleScroll = useCallback(() => {
-    const elements = document.querySelectorAll('.project-card');
-    
-    elements.forEach((element, index) => {
-      const position = element.getBoundingClientRect();
-      
-      if (position.top < window.innerHeight - 100) {
-        setTimeout(() => {
-          element.classList.add('animated');
-        }, index * 100);
-      }
-    });
-  }, []);
-  
-  // تحسين useEffect
-  useEffect(() => {
-    // فحص أولي مع تأخير قصير
-    const initialTimeout = setTimeout(handleScroll, 300);
-    
-    // إضافة مستمع للتمرير مع throttling
-    let ticking = false;
-    const throttledScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    
-    window.addEventListener('scroll', throttledScroll, { passive: true });
-    
-    return () => {
-      clearTimeout(initialTimeout);
-      window.removeEventListener('scroll', throttledScroll);
-    };
-  }, [handleScroll]);
 
   return (
     <section id="projects" className="section bg-white">
