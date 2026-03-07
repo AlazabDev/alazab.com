@@ -3,53 +3,64 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Truck, Hammer, Palette, Home } from "lucide-react";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const premiumServices = [
   {
     id: "general-supplies",
     icon: Truck,
-    title: "توريدات عامة",
-    description: "حلول إمداد متكاملة لدعم جميع احتياجات مشروعك",
+    titleAr: "توريدات عامة",
+    titleEn: "Laban Alasfour 🚚",
+    descriptionAr: "حلول إمداد متكاملة لدعم جميع احتياجات مشروعك",
+    descriptionEn: "We offer full supply solutions for all your project needs, from start to finish.",
     color: "bg-blue-50 text-blue-600",
     route: "/services/general-supplies"
   },
   {
     id: "maintenance-renovation",
     icon: Hammer,
-    title: "الصيانة والتجديدات",
-    description: "حلول شاملة للحفاظ على مساندتك وتجديدها",
+    titleAr: "الصيانة والتجديدات",
+    titleEn: "UberFix 🛠️",
+    descriptionAr: "حلول شاملة للحفاظ على مساندتك وتجديدها",
+    descriptionEn: "Professionally managed maintenance solutions for shops and residential units",
     color: "bg-orange-50 text-orange-600",
     route: "/services/maintenance-renovation"
   },
   {
     id: "brand-identity",
     icon: Palette,
-    title: "هوية العلامة التجارية",
-    description: "إنشاء منشآت مؤسسية تعكس هويتك التجارية",
+    titleAr: "هوية العلامة التجارية",
+    titleEn: "Brand Identity 🏢",
+    descriptionAr: "إنشاء منشآت مؤسسية تعكس هويتك التجارية",
+    descriptionEn: "We create spaces that reflect your brand image and make a lasting impression.",
     color: "bg-purple-50 text-purple-600",
     route: "/services/brand-identity"
   },
   {
     id: "luxury-cleaning",
     icon: Home,
-    title: "تنظيف فاخر",
-    description: "حلول تنظيف عالية الجودة لتحويل مساحتك إلى بيئة فريدة",
+    titleAr: "تنظيف فاخر",
+    titleEn: "Luxury Finishing 🏠",
+    descriptionAr: "حلول تنظيف عالية الجودة لتحويل مساحتك إلى بيئة فريدة",
+    descriptionEn: "High-end finishing solutions that turn your spaces into elegant masterpieces.",
     color: "bg-green-50 text-green-600",
     route: "/services/luxury-cleaning"
   },
 ];
 
 const PremiumServices: React.FC = () => {
+  const { t, isRTL } = useLanguage();
+
   return (
-    <section className="py-16 bg-gradient-to-b from-gray-50 to-white" dir="rtl">
+    <section className="py-16 bg-gradient-to-b from-gray-50 to-white" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            خدماتنا المتميزة
+            {t('خدماتنا المتميزة', 'Our Premium Services')}
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            اكتشف خدماتنا المصممة خصيصاً لتلبية احتياجاتك
+            {t('اكتشف خدماتنا المصممة خصيصاً لتلبية احتياجاتك', 'Discover our services designed specifically to meet your needs')}
           </p>
         </div>
 
@@ -64,19 +75,19 @@ const PremiumServices: React.FC = () => {
                     <IconComponent className="w-8 h-8" />
                   </div>
                   <CardTitle className="text-xl font-bold text-gray-900 mb-2">
-                    {service.title}
+                    {t(service.titleAr, service.titleEn)}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
                   <CardDescription className="text-gray-600 mb-6 leading-relaxed">
-                    {service.description}
+                    {t(service.descriptionAr, service.descriptionEn)}
                   </CardDescription>
                   <Button 
                     asChild
                     className="w-full bg-black hover:bg-gray-800 text-white rounded-full transition-all duration-200"
                   >
                     <Link to={service.route}>
-                      جدا أكثر
+                      {t('اعرف أكثر', 'Learn More')}
                     </Link>
                   </Button>
                 </CardContent>

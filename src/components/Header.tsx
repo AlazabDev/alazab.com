@@ -72,7 +72,18 @@ const Header: React.FC = () => {
           </nav>
 
           {/* CTA Buttons and Sidebar Toggle */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* Language Toggle */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
+              className="flex items-center gap-1 text-xs font-semibold"
+              aria-label="Switch language"
+            >
+              <Globe className="h-4 w-4" />
+              {language === 'ar' ? 'EN' : 'عربي'}
+            </Button>
             {/* ERP Link - Hidden on Mobile */}
             <a
               href="https://erp.alazab.com/apps"

@@ -126,6 +126,7 @@ function App() {
       </Routes>
       <Toaster />
     </BrowserRouter>
+    </LanguageProvider>
   );
 }
 
