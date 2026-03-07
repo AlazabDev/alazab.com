@@ -199,7 +199,7 @@ const Projects: React.FC = () => {
                 {filteredProjects.map((project) => (
                   <article 
                     key={project.id} 
-                    className="project-card group relative overflow-hidden rounded-xl shadow-md opacity-0 translate-y-8 transition-all duration-500 hover:shadow-xl"
+                    className="project-card group relative overflow-hidden rounded-xl shadow-md transition-all duration-500 hover:shadow-xl"
                     role="listitem"
                   >
                     <Link 
