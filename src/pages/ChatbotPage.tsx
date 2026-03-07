@@ -109,9 +109,13 @@ const ChatbotPage: React.FC = () => {
     setMessages([]);
   };
 
-  // Simple markdown rendering
+  // Escape HTML to prevent XSS, then apply markdown formatting
+  const escapeHtml = (s: string) =>
+    s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
+
   const renderMarkdown = (text: string) => {
-    return text
+    const safe = escapeHtml(text);
+    return safe
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
       .replace(/^### (.*$)/gm, '<h3 class="text-lg font-bold mt-3 mb-1">$1</h3>')

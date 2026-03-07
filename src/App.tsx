@@ -21,6 +21,7 @@ import ProfilePage from "./pages/ProfilePage";
 import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import AdminRoute from "./components/auth/AdminRoute";
 import { Toaster } from "./components/ui/toaster";
 import "./App.css";
 
@@ -53,14 +54,18 @@ function App() {
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/maintenance-request" element={<MaintenanceRequest />} />
         <Route path="/maintenance-tracking" element={<MaintenanceTracking />} />
-        <Route path="/maintenance-list" element={<MaintenanceList />} />
+        <Route path="/maintenance-list" element={
+          <ProtectedRoute>
+            <MaintenanceList />
+          </ProtectedRoute>
+        } />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/chatbot" element={<ChatbotPage />} />
         <Route path="/chatbot-training" element={
-          <ProtectedRoute>
+          <AdminRoute>
             <ChatbotTrainingPage />
-          </ProtectedRoute>
+          </AdminRoute>
         } />
         <Route path="/project-management" element={
           <ProtectedRoute>
@@ -82,9 +87,9 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/admin-dashboard" element={
-          <ProtectedRoute>
+          <AdminRoute>
             <AdminDashboard />
-          </ProtectedRoute>
+          </AdminRoute>
         } />
         <Route path="/profile" element={
           <ProtectedRoute>
