@@ -44,6 +44,8 @@ import RefundPolicyPage from "./pages/legal/RefundPolicyPage";
 import AcceptableUsePolicyPage from "./pages/legal/AcceptableUsePolicyPage";
 import DisclaimerPage from "./pages/legal/DisclaimerPage";
 import SecurityDisclosurePage from "./pages/legal/SecurityDisclosurePage";
+import WhatsAppSetupPage from "./pages/WhatsAppSetupPage";
+import FloatingWhatsAppButton from "./components/shared/FloatingWhatsAppButton";
 
 function App() {
   return (
@@ -122,6 +124,7 @@ function App() {
         <Route path="/acceptable-use" element={<AcceptableUsePolicyPage />} />
         <Route path="/disclaimer" element={<DisclaimerPage />} />
         <Route path="/security" element={<SecurityDisclosurePage />} />
+        <Route path="/whatsapp-setup" element={<WhatsAppSetupPage />} />
         <Route path="/maintenance-reports" element={
           <ProtectedRoute>
             <MaintenanceReports />
@@ -129,6 +132,7 @@ function App() {
         } />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <FloatingWhatsAppButton />
       <Toaster />
     </BrowserRouter>
     </LanguageProvider>
