@@ -23,15 +23,16 @@ const Header: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
   const isMobile = useIsMobile();
+  const { language, setLanguage, t } = useLanguage();
 
   const navigationItems = [
-    { name: 'الرئيسية', href: '/' },
-    { name: 'خدماتنا', href: '/services' },
-    { name: 'مشاريعنا', href: '/projects' },
-    { name: 'معرض الأعمال', href: '/portfolio' },
-    { name: 'من نحن', href: '/about' },
-    { name: 'الشات بوت', href: '/chatbot' },
-    { name: 'اتصل بنا', href: '/contact' },
+    { name: t('الرئيسية', 'Home'), href: '/' },
+    { name: t('خدماتنا', 'Services'), href: '/services' },
+    { name: t('مشاريعنا', 'Projects'), href: '/projects' },
+    { name: t('معرض الأعمال', 'Portfolio'), href: '/portfolio' },
+    { name: t('من نحن', 'About'), href: '/about' },
+    { name: t('الشات بوت', 'Chatbot'), href: '/chatbot' },
+    { name: t('اتصل بنا', 'Contact'), href: '/contact' },
   ];
 
   const isActive = (href: string) => {
