@@ -1,4 +1,5 @@
 import React from 'react';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import MaintenanceRequest from "./pages/MaintenanceRequest";
