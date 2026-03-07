@@ -100,6 +100,15 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+        <Route path="/cookie-policy" element={<CookiePolicyPage />} />
+        <Route path="/data-deletion" element={<DataDeletionPage />} />
+        <Route path="/legal-contact" element={<LegalContactPage />} />
+        <Route path="/refund-policy" element={<RefundPolicyPage />} />
+        <Route path="/acceptable-use" element={<AcceptableUsePolicyPage />} />
+        <Route path="/disclaimer" element={<DisclaimerPage />} />
+        <Route path="/security" element={<SecurityDisclosurePage />} />
         <Route path="/maintenance-reports" element={
           <ProtectedRoute>
             <MaintenanceReports />
