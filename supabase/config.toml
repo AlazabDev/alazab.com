@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.parse-training-file]
 verify_jwt = false
+
+[functions.whatsapp-token-exchange]
+verify_jwt = false

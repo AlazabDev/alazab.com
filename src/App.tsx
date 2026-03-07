@@ -132,6 +132,7 @@ function App() {
         } />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <FloatingWhatsAppButton />
       <Toaster />
     </BrowserRouter>
     </LanguageProvider>
