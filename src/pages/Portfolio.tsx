@@ -2,23 +2,12 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Grid, 
-  LayoutGrid, 
-  Search, 
-  X, 
-  ZoomIn, 
-  ChevronLeft, 
-  ChevronRight,
-  Filter,
-  Download,
-  Share2,
-  Heart
+  Grid, LayoutGrid, Search, X, ZoomIn, ChevronLeft, ChevronRight,
+  Filter, Heart, Image, Box, Layers
 } from 'lucide-react';
 import { 
-  allPortfolioImages, 
-  portfolioCategories, 
-  getImagesByCategory,
-  searchImages,
+  allPortfolioImages, portfolioCategories, getImagesByCategory,
+  searchImages, getCategoriesWithImages, folderStats,
   PortfolioImage 
 } from '@/data/portfolioData';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
@@ -26,489 +15,406 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ProjectViewer3D from '@/components/project/ProjectViewer3D';
+
+const CLOUDINARY_CLOUD = 'dn4ne1ep1';
 
 const Portfolio: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedImage, setSelectedImage] = useState<PortfolioImage | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'masonry'>('masonry');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
+  const [visibleCount, setVisibleCount] = useState(30);
+  const [activeTab, setActiveTab] = useState('images');
 
-  // Filter images based on category and search
+  // 3D Models - sample URLs (can be managed via admin)
+  const [models3D] = useState([
+    { id: '3d-1', title: 'نموذج مشروع المنصورة', embedUrl: '' },
+    { id: '3d-2', title: 'نموذج مشروع أبو عوف', embedUrl: '' },
+  ]);
+
   const filteredImages = useMemo(() => {
     let images = selectedCategory === 'all' 
       ? allPortfolioImages 
       : getImagesByCategory(selectedCategory);
-    
     if (searchQuery) {
-      const searchResults = searchImages(searchQuery);
-      images = images.filter(img => searchResults.some(r => r.id === img.id));
+      const results = searchImages(searchQuery);
+      images = images.filter(img => results.some(r => r.id === img.id));
     }
-    
     return images;
   }, [selectedCategory, searchQuery]);
 
-  // Pagination for performance
-  const [visibleCount, setVisibleCount] = useState(24);
   const visibleImages = useMemo(() => 
     filteredImages.slice(0, visibleCount), 
     [filteredImages, visibleCount]
   );
 
   const loadMore = useCallback(() => {
-    setVisibleCount(prev => Math.min(prev + 24, filteredImages.length));
+    setVisibleCount(prev => Math.min(prev + 30, filteredImages.length));
   }, [filteredImages.length]);
 
-  // Lightbox navigation
   const currentImageIndex = selectedImage 
-    ? filteredImages.findIndex(img => img.id === selectedImage.id) 
-    : -1;
+    ? filteredImages.findIndex(img => img.id === selectedImage.id) : -1;
 
   const navigateImage = (direction: 'prev' | 'next') => {
     if (currentImageIndex === -1) return;
-    
     const newIndex = direction === 'prev' 
       ? (currentImageIndex - 1 + filteredImages.length) % filteredImages.length
       : (currentImageIndex + 1) % filteredImages.length;
-    
     setSelectedImage(filteredImages[newIndex]);
   };
 
-  // Toggle favorite
   const toggleFavorite = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setFavorites(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
+      const s = new Set(prev);
+      s.has(id) ? s.delete(id) : s.add(id);
+      return s;
     });
   };
 
-  // Handle image load
   const handleImageLoad = (id: string) => {
     setLoadedImages(prev => new Set(prev).add(id));
   };
 
-  // Keyboard navigation
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!selectedImage) return;
-      
       if (e.key === 'ArrowLeft') navigateImage('next');
       if (e.key === 'ArrowRight') navigateImage('prev');
       if (e.key === 'Escape') setSelectedImage(null);
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedImage, currentImageIndex]);
 
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.4 }
-    }
-  };
-
-  // Get active categories (with images)
-  const activeCategories = portfolioCategories.filter(cat => cat.count > 0 || cat.id === 'all');
+  const activeCategories = getCategoriesWithImages();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white" dir="rtl">
+    <div className="min-h-screen bg-background" dir="rtl">
       <Header />
       
-      {/* Hero Section */}
-      <section className="pt-24 pb-20 bg-gradient-to-br from-construction-primary via-construction-dark to-black text-white text-center relative overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
+      {/* Hero */}
+      <section className="pt-24 pb-16 bg-gradient-to-br from-construction-primary via-construction-dark to-construction-primary text-white relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(251,191,36,0.15)_0%,transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.05)_0%,transparent_50%)]" />
         </div>
         
-        {/* Floating Elements */}
-        <motion.div 
-          className="absolute top-20 left-10 w-32 h-32 bg-construction-accent/20 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3]
-          }}
-          transition={{ duration: 4, repeat: Infinity }}
-        />
-        <motion.div 
-          className="absolute bottom-10 right-20 w-48 h-48 bg-white/10 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.3, 1],
-            opacity: [0.2, 0.4, 0.2]
-          }}
-          transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-        />
-        
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Badge className="mb-4 bg-construction-accent/20 text-construction-accent border-construction-accent/30">
-              +{allPortfolioImages.length} مشروع
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <Badge className="mb-4 bg-construction-accent/20 text-construction-accent border-construction-accent/30 text-sm">
+              +{folderStats.total} عمل
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-construction-accent to-white bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">
               معرض الأعمال
             </h1>
-            <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-              استكشف مجموعتنا الواسعة من المشاريع المتميزة في البناء والتصميم الداخلي والصيانة
+            <p className="text-lg md:text-xl text-white/70 max-w-2xl leading-relaxed">
+              مجموعة شاملة من أعمالنا في البناء والتصميم الداخلي والمدافئ الفاخرة
             </p>
           </motion.div>
           
-          {/* Stats */}
+          {/* Folder Stats */}
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 max-w-4xl mx-auto"
+            className="grid grid-cols-3 md:grid-cols-4 gap-4 mt-10 max-w-3xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
           >
             {[
-              { label: 'إجمالي الصور', value: allPortfolioImages.length },
-              { label: 'مشاريع تجارية', value: portfolioCategories.find(c => c.id === 'commercial')?.count || 0 },
-              { label: 'تصميم داخلي', value: portfolioCategories.find(c => c.id === 'interior')?.count || 0 },
-              { label: 'فئات متنوعة', value: activeCategories.length - 1 },
-            ].map((stat, i) => (
-              <div key={i} className="text-center p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
-                <div className="text-3xl md:text-4xl font-bold text-construction-accent mb-1">
-                  {stat.value}+
-                </div>
-                <div className="text-sm text-white/60">{stat.label}</div>
+              { label: 'المشاريع', value: folderStats.projects, icon: '🏗️' },
+              { label: 'التصاميم والأثاث', value: folderStats.img, icon: '🎨' },
+              { label: 'المدافئ', value: folderStats['coll-hote'], icon: '🔥' },
+              { label: 'الإجمالي', value: folderStats.total, icon: '📊' },
+            ].map((s, i) => (
+              <div key={i} className="text-center p-3 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+                <div className="text-2xl mb-1">{s.icon}</div>
+                <div className="text-2xl font-bold text-construction-accent">{s.value}</div>
+                <div className="text-xs text-white/50">{s.label}</div>
               </div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Filters & Controls */}
-      <section className="sticky top-16 md:top-20 z-40 bg-white/95 backdrop-blur-md shadow-lg border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col gap-4">
-            {/* Top Row: Search & View Controls */}
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-              {/* Search */}
-              <div className="relative w-full md:w-96">
-                <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <Input
-                  type="text"
-                  placeholder="بحث في المعرض..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pr-12 pl-10 py-6 text-lg rounded-xl border-2 border-gray-200 focus:border-construction-accent transition-colors"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                  >
-                    <X className="w-4 h-4 text-gray-400" />
-                  </button>
-                )}
-              </div>
-
-              {/* View Controls */}
-              <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-500">
-                  {filteredImages.length} صورة
-                </span>
-                <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
-                  <Button
-                    variant={viewMode === 'masonry' ? 'default' : 'ghost'}
-                    size="sm"
-                    onClick={() => setViewMode('masonry')}
-                    className="rounded-md"
-                  >
-                    <LayoutGrid className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                    size="sm"
-                    onClick={() => setViewMode('grid')}
-                    className="rounded-md"
-                  >
-                    <Grid className="w-4 h-4" />
-                  </Button>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowFilters(!showFilters)}
-                  className={showFilters ? 'bg-construction-accent text-white border-construction-accent' : ''}
-                >
-                  <Filter className="w-4 h-4 ml-2" />
-                  فلترة
-                </Button>
-              </div>
-            </div>
-
-            {/* Category Filter - Collapsible */}
-            <AnimatePresence>
-              {showFilters && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden"
-                >
-                  <ScrollArea className="w-full">
-                    <div className="flex gap-2 pb-2">
-                      {activeCategories.map((cat) => (
-                        <Button
-                          key={cat.id}
-                          variant={selectedCategory === cat.id ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => {
-                            setSelectedCategory(cat.id);
-                            setVisibleCount(24);
-                          }}
-                          className={`whitespace-nowrap rounded-full transition-all ${
-                            selectedCategory === cat.id 
-                              ? 'bg-construction-accent hover:bg-construction-accent/90 shadow-lg' 
-                              : 'hover:border-construction-accent hover:text-construction-accent'
-                          }`}
-                        >
-                          <span className="ml-2">{cat.icon}</span>
-                          {cat.nameAr}
-                          <Badge variant="secondary" className="mr-2 text-xs">
-                            {cat.count}
-                          </Badge>
-                        </Button>
-                      ))}
-                    </div>
-                  </ScrollArea>
-                </motion.div>
-              )}
-            </AnimatePresence>
+      {/* Main Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <div className="sticky top-16 md:top-20 z-40 bg-background/95 backdrop-blur-md shadow-sm border-b">
+          <div className="container mx-auto px-4">
+            <TabsList className="w-full justify-start gap-2 bg-transparent h-14 p-0">
+              <TabsTrigger 
+                value="images" 
+                className="data-[state=active]:bg-construction-accent data-[state=active]:text-construction-primary gap-2 text-base px-6 rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-construction-accent"
+              >
+                <Image className="w-5 h-5" />
+                معرض الصور
+                <Badge variant="secondary" className="mr-1 text-xs">{folderStats.total}</Badge>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="3d"
+                className="data-[state=active]:bg-construction-accent data-[state=active]:text-construction-primary gap-2 text-base px-6 rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-construction-accent"
+              >
+                <Box className="w-5 h-5" />
+                العرض ثلاثي الأبعاد
+              </TabsTrigger>
+            </TabsList>
           </div>
         </div>
-      </section>
 
-      {/* Gallery Grid */}
-      <section className="container mx-auto px-4 py-12">
-        {filteredImages.length === 0 ? (
-          <motion.div 
-            className="text-center py-20"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <div className="text-6xl mb-4">🔍</div>
-            <p className="text-gray-500 text-xl mb-4">لا توجد نتائج مطابقة للبحث</p>
-            <Button 
-              onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
-              variant="outline"
-            >
-              إعادة تعيين الفلاتر
-            </Button>
-          </motion.div>
-        ) : (
-          <>
-            <motion.div 
-              className={
-                viewMode === 'grid' 
-                  ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4'
-                  : 'columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 gap-4'
-              }
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              {visibleImages.map((image) => (
-                <motion.div
-                  key={image.id}
-                  variants={itemVariants}
-                  layout
-                  className={`
-                    group relative overflow-hidden rounded-xl bg-gray-100 
-                    cursor-pointer transform transition-all duration-300
-                    hover:shadow-2xl hover:z-10
-                    ${viewMode === 'masonry' ? 'mb-4 break-inside-avoid' : ''}
-                  `}
-                  onClick={() => setSelectedImage(image)}
-                >
-                  <div className={viewMode === 'grid' ? 'aspect-square' : ''}>
-                    {/* Skeleton Loader */}
-                    {!loadedImages.has(image.id) && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse" />
-                    )}
-                    <img
-                      src={image.src}
-                      alt={image.title}
-                      loading="lazy"
-                      onLoad={() => handleImageLoad(image.id)}
-                      className={`
-                        w-full object-cover transition-all duration-500 
-                        group-hover:scale-110 group-hover:brightness-90
-                        ${viewMode === 'grid' ? 'h-full' : 'h-auto'}
-                        ${loadedImages.has(image.id) ? 'opacity-100' : 'opacity-0'}
-                      `}
+        {/* ===== IMAGES TAB ===== */}
+        <TabsContent value="images" className="mt-0">
+          {/* Filters */}
+          <div className="sticky top-[7.5rem] md:top-[8.5rem] z-30 bg-background/95 backdrop-blur-md border-b">
+            <div className="container mx-auto px-4 py-3">
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
+                  <div className="relative w-full md:w-80">
+                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      placeholder="بحث في المعرض..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pr-10 pl-8 py-5 rounded-lg"
                     />
-                  </div>
-                  
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4">
-                    <h3 className="text-white font-bold text-sm line-clamp-1">{image.title}</h3>
-                    {image.tags && (
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {image.tags.slice(0, 2).map((tag, i) => (
-                          <span key={i} className="text-xs bg-white/20 text-white px-2 py-0.5 rounded-full">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {/* Actions */}
-                    <div className="absolute top-3 left-3 flex gap-2">
-                      <button
-                        onClick={(e) => toggleFavorite(image.id, e)}
-                        className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-                          favorites.has(image.id) 
-                            ? 'bg-red-500 text-white' 
-                            : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
-                        }`}
-                      >
-                        <Heart className={`w-4 h-4 ${favorites.has(image.id) ? 'fill-current' : ''}`} />
+                    {searchQuery && (
+                      <button onClick={() => setSearchQuery('')} className="absolute left-3 top-1/2 -translate-y-1/2">
+                        <X className="w-4 h-4 text-muted-foreground" />
                       </button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">{filteredImages.length} صورة</span>
+                    <div className="flex gap-1 bg-muted p-1 rounded-md">
+                      <Button variant={viewMode === 'masonry' ? 'default' : 'ghost'} size="icon" className="h-8 w-8" onClick={() => setViewMode('masonry')}>
+                        <LayoutGrid className="w-4 h-4" />
+                      </Button>
+                      <Button variant={viewMode === 'grid' ? 'default' : 'ghost'} size="icon" className="h-8 w-8" onClick={() => setViewMode('grid')}>
+                        <Grid className="w-4 h-4" />
+                      </Button>
                     </div>
-                    
-                    <div className="absolute top-3 right-3">
-                      <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                        <ZoomIn className="w-4 h-4 text-white" />
+                    <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)}
+                      className={showFilters ? 'bg-construction-accent text-construction-primary border-construction-accent' : ''}>
+                      <Filter className="w-4 h-4 ml-1" />
+                      تصفية
+                    </Button>
+                  </div>
+                </div>
+
+                <AnimatePresence>
+                  {showFilters && (
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                      <ScrollArea className="w-full">
+                        <div className="flex gap-2 pb-2 flex-wrap">
+                          {activeCategories.map(cat => (
+                            <Button key={cat.id}
+                              variant={selectedCategory === cat.id ? 'default' : 'outline'}
+                              size="sm"
+                              onClick={() => { setSelectedCategory(cat.id); setVisibleCount(30); }}
+                              className={`whitespace-nowrap rounded-full text-xs ${
+                                selectedCategory === cat.id 
+                                  ? 'bg-construction-accent hover:bg-construction-accent/90 text-construction-primary' 
+                                  : ''
+                              }`}
+                            >
+                              <span className="ml-1">{cat.icon}</span>
+                              {cat.nameAr}
+                              <Badge variant="secondary" className="mr-1 text-[10px] px-1.5">{cat.count}</Badge>
+                            </Button>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </div>
+
+          {/* Gallery Grid */}
+          <section className="container mx-auto px-4 py-8">
+            {filteredImages.length === 0 ? (
+              <div className="text-center py-20">
+                <div className="text-6xl mb-4">🔍</div>
+                <p className="text-muted-foreground text-xl mb-4">لا توجد نتائج</p>
+                <Button onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }} variant="outline">
+                  إعادة تعيين
+                </Button>
+              </div>
+            ) : (
+              <>
+                <motion.div
+                  className={viewMode === 'grid'
+                    ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3'
+                    : 'columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3'
+                  }
+                  initial="hidden"
+                  animate="visible"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.03 } } }}
+                >
+                  {visibleImages.map(image => (
+                    <motion.div
+                      key={image.id}
+                      variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1 } }}
+                      className={`group relative overflow-hidden rounded-lg bg-muted cursor-pointer hover:shadow-xl transition-shadow duration-300 ${viewMode === 'masonry' ? 'mb-3 break-inside-avoid' : ''}`}
+                      onClick={() => setSelectedImage(image)}
+                    >
+                      <div className={viewMode === 'grid' ? 'aspect-square' : ''}>
+                        {!loadedImages.has(image.id) && (
+                          <div className="absolute inset-0 bg-muted animate-pulse" />
+                        )}
+                        <img
+                          src={image.src}
+                          alt={image.title}
+                          loading="lazy"
+                          onLoad={() => handleImageLoad(image.id)}
+                          className={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${
+                            viewMode === 'grid' ? 'h-full' : 'h-auto'
+                          } ${loadedImages.has(image.id) ? 'opacity-100' : 'opacity-0'}`}
+                        />
                       </div>
+                      
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
+                        <h3 className="text-white font-semibold text-sm line-clamp-1">{image.title}</h3>
+                        {image.tags && (
+                          <div className="flex gap-1 mt-1">
+                            {image.tags.slice(0, 2).map((tag, i) => (
+                              <span key={i} className="text-[10px] bg-white/20 text-white px-1.5 py-0.5 rounded-full">{tag}</span>
+                            ))}
+                          </div>
+                        )}
+                        <div className="absolute top-2 left-2">
+                          <button onClick={(e) => toggleFavorite(image.id, e)}
+                            className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
+                              favorites.has(image.id) ? 'bg-red-500 text-white' : 'bg-black/30 backdrop-blur-sm text-white hover:bg-black/50'
+                            }`}>
+                            <Heart className={`w-3.5 h-3.5 ${favorites.has(image.id) ? 'fill-current' : ''}`} />
+                          </button>
+                        </div>
+                        <div className="absolute top-2 right-2">
+                          <div className="w-7 h-7 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center">
+                            <ZoomIn className="w-3.5 h-3.5 text-white" />
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+
+                {visibleCount < filteredImages.length && (
+                  <div className="text-center mt-10">
+                    <Button size="lg" onClick={loadMore}
+                      className="bg-construction-accent hover:bg-construction-accent/90 text-construction-primary px-10 py-5 text-base rounded-xl">
+                      تحميل المزيد ({filteredImages.length - visibleCount} متبقي)
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
+          </section>
+        </TabsContent>
+
+        {/* ===== 3D TAB ===== */}
+        <TabsContent value="3d" className="mt-0">
+          <section className="container mx-auto px-4 py-12">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 bg-construction-accent/10 text-construction-accent px-4 py-2 rounded-full mb-4">
+                <Box className="w-5 h-5" />
+                <span className="font-semibold">العرض التفاعلي ثلاثي الأبعاد</span>
+              </div>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                استعرض مشاريعنا بتقنية العرض ثلاثي الأبعاد التفاعلي - قم بالتدوير والتكبير لاستكشاف كل التفاصيل
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {models3D.map(model => (
+                <motion.div key={model.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-2xl overflow-hidden border bg-card shadow-sm"
+                >
+                  <div className="p-4 border-b bg-muted/50">
+                    <div className="flex items-center gap-2">
+                      <Layers className="w-5 h-5 text-construction-accent" />
+                      <h3 className="font-bold text-lg">{model.title}</h3>
                     </div>
+                  </div>
+                  <div className="p-4">
+                    <ProjectViewer3D embedUrl={model.embedUrl} />
                   </div>
                 </motion.div>
               ))}
-            </motion.div>
+            </div>
 
-            {/* Load More Button */}
-            {visibleCount < filteredImages.length && (
+            {models3D.every(m => !m.embedUrl) && (
               <motion.div 
-                className="text-center mt-12"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
+                className="text-center mt-8 p-8 border-2 border-dashed rounded-2xl bg-muted/30"
               >
-                <Button
-                  size="lg"
-                  onClick={loadMore}
-                  className="bg-construction-accent hover:bg-construction-accent/90 text-white px-12 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
-                >
-                  تحميل المزيد ({filteredImages.length - visibleCount} متبقي)
-                </Button>
+                <Box className="w-16 h-16 mx-auto text-muted-foreground/40 mb-4" />
+                <h3 className="text-xl font-bold text-foreground mb-2">قريباً - نماذج ثلاثية الأبعاد</h3>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  سيتم إضافة نماذج تفاعلية ثلاثية الأبعاد لمشاريعنا قريباً. يمكنك إضافة روابط النماذج من لوحة التحكم.
+                </p>
               </motion.div>
             )}
-          </>
-        )}
-      </section>
+          </section>
+        </TabsContent>
+      </Tabs>
 
-      {/* Lightbox Dialog */}
+      {/* Lightbox */}
       <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
         <DialogContent className="max-w-7xl w-[98vw] h-[95vh] p-0 bg-black/98 border-none">
           <div className="relative w-full h-full flex items-center justify-center">
-            {/* Close Button */}
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 z-50 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors backdrop-blur-sm"
-            >
-              <X className="w-6 h-6 text-white" />
+            <button onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center backdrop-blur-sm">
+              <X className="w-5 h-5 text-white" />
             </button>
 
-            {/* Navigation Arrows */}
-            <button
-              onClick={() => navigateImage('next')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all backdrop-blur-sm hover:scale-110"
-            >
-              <ChevronRight className="w-8 h-8 text-white" />
+            <button onClick={() => navigateImage('next')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center backdrop-blur-sm">
+              <ChevronRight className="w-6 h-6 text-white" />
             </button>
-            <button
-              onClick={() => navigateImage('prev')}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all backdrop-blur-sm hover:scale-110"
-            >
-              <ChevronLeft className="w-8 h-8 text-white" />
+            <button onClick={() => navigateImage('prev')}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center backdrop-blur-sm">
+              <ChevronLeft className="w-6 h-6 text-white" />
             </button>
 
-            {/* Image */}
             <AnimatePresence mode="wait">
               {selectedImage && (
-                <motion.div 
-                  key={selectedImage.id}
-                  className="relative max-w-full max-h-full p-8"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <img
-                    src={selectedImage.src}
-                    alt={selectedImage.title}
-                    className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
-                  />
-                  
-                  {/* Caption */}
-                  <motion.div 
-                    className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 to-transparent rounded-b-lg"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
+                <motion.div key={selectedImage.id} className="relative max-w-full max-h-full p-6"
+                  initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.15 }}>
+                  <img src={selectedImage.src} alt={selectedImage.title}
+                    className="max-w-full max-h-[82vh] object-contain rounded-lg" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/80 to-transparent rounded-b-lg">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="text-white font-bold text-2xl text-right">{selectedImage.title}</h3>
-                        {selectedImage.description && (
-                          <p className="text-white/70 text-right mt-1">{selectedImage.description}</p>
-                        )}
+                        <h3 className="text-white font-bold text-xl text-right">{selectedImage.title}</h3>
                         {selectedImage.tags && (
-                          <div className="flex flex-wrap gap-2 mt-3">
+                          <div className="flex gap-2 mt-2">
                             {selectedImage.tags.map((tag, i) => (
-                              <Badge key={i} variant="secondary" className="bg-white/20 text-white border-none">
-                                {tag}
-                              </Badge>
+                              <Badge key={i} variant="secondary" className="bg-white/20 text-white border-none text-xs">{tag}</Badge>
                             ))}
                           </div>
                         )}
                       </div>
-                      <div className="flex gap-3">
-                        <button
-                          onClick={(e) => toggleFavorite(selectedImage.id, e)}
-                          className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
-                            favorites.has(selectedImage.id) 
-                              ? 'bg-red-500 text-white' 
-                              : 'bg-white/20 text-white hover:bg-white/30'
-                          }`}
-                        >
-                          <Heart className={`w-6 h-6 ${favorites.has(selectedImage.id) ? 'fill-current' : ''}`} />
-                        </button>
-                      </div>
+                      <button onClick={(e) => toggleFavorite(selectedImage.id, e)}
+                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                          favorites.has(selectedImage.id) ? 'bg-red-500 text-white' : 'bg-white/20 text-white'
+                        }`}>
+                        <Heart className={`w-5 h-5 ${favorites.has(selectedImage.id) ? 'fill-current' : ''}`} />
+                      </button>
                     </div>
-                    <p className="text-white/50 text-sm text-right mt-3">
-                      {currentImageIndex + 1} / {filteredImages.length}
-                    </p>
-                  </motion.div>
+                    <p className="text-white/40 text-sm text-right mt-2">{currentImageIndex + 1} / {filteredImages.length}</p>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -516,30 +422,22 @@ const Portfolio: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-construction-primary via-construction-dark to-black text-white text-center relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(255,255,255,0.2)_0%,_transparent_50%)]" />
-        </div>
-        
+      {/* CTA */}
+      <section className="py-16 bg-gradient-to-br from-construction-primary via-construction-dark to-construction-primary text-white text-center relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">هل أعجبك ما رأيت؟</h2>
-            <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-              تواصل معنا الآن للحصول على استشارة مجانية وتصميم مخصص يناسب احتياجاتك
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">هل أعجبك ما رأيت؟</h2>
+            <p className="text-lg text-white/70 mb-8 max-w-xl mx-auto">
+              تواصل معنا للحصول على استشارة مجانية وتصميم مخصص
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to="/contact">
-                <Button size="lg" className="bg-construction-accent hover:bg-construction-accent/90 text-white px-10 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all">
+                <Button size="lg" className="bg-construction-accent hover:bg-construction-accent/90 text-construction-primary px-8 py-5 text-base rounded-xl">
                   تواصل معنا
                 </Button>
               </Link>
               <Link to="/services">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 px-10 py-6 text-lg rounded-xl">
+                <Button size="lg" variant="outline" className="border-2 border-white/30 text-white hover:bg-white/10 px-8 py-5 text-base rounded-xl">
                   خدماتنا
                 </Button>
               </Link>

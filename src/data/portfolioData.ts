@@ -1,4 +1,4 @@
-// Portfolio Gallery Data - All project images organized by categories
+// Portfolio Gallery Data - Auto-generated from asset directories using Vite glob imports
 
 export interface PortfolioImage {
   id: string;
@@ -7,218 +7,170 @@ export interface PortfolioImage {
   category: string;
   description?: string;
   tags?: string[];
+  folder: 'projects' | 'img' | 'coll-hote';
 }
 
 export interface PortfolioCategory {
   id: string;
   name: string;
   nameAr: string;
-  description: string;
   icon: string;
   count: number;
 }
 
-// Helper function to generate image entries from file patterns
-const generateImagesFromFolder = (
-  folder: string,
-  prefix: string,
-  category: string,
-  titleAr: string,
-  files: string[]
-): PortfolioImage[] => {
-  return files.map((file, index) => ({
-    id: `${prefix}-${index + 1}`,
-    src: `${folder}/${file}`,
-    title: `${titleAr} ${index + 1}`,
-    category,
-    description: titleAr,
-  }));
+// ===== Vite glob imports for all assets =====
+const projectFiles = import.meta.glob<string>('/src/assets/projects/*.{jpg,jpeg,png,webp}', { eager: true, import: 'default' });
+const imgFiles = import.meta.glob<string>('/src/assets/img/*.{jpg,jpeg,png,webp}', { eager: true, import: 'default' });
+const collHoteFiles = import.meta.glob<string>('/src/assets/coll-hote/*.{jpg,jpeg,png,webp}', { eager: true, import: 'default' });
+
+// ===== Helper: extract filename from path =====
+const getFilename = (path: string) => path.split('/').pop() || '';
+
+// ===== Category detection from filename =====
+const detectCategory = (filename: string, folder: string): { category: string; titleAr: string; tags: string[] } => {
+  const lower = filename.toLowerCase();
+  
+  if (folder === 'coll-hote') {
+    if (lower.includes('ethanol') || lower.includes('fla')) return { category: 'fireplace-ethanol', titleAr: 'مدفأة إيثانول', tags: ['مدفأة', 'إيثانول'] };
+    if (lower.includes('water') || lower.includes('cool_flame') || lower.includes('vapour')) return { category: 'fireplace-water', titleAr: 'مدفأة بخار ماء', tags: ['مدفأة', 'بخار'] };
+    if (lower.includes('gas') || lower.includes('galio')) return { category: 'fireplace-gas', titleAr: 'مدفأة غاز', tags: ['مدفأة', 'غاز'] };
+    if (lower.includes('electric') || lower.includes('astro')) return { category: 'fireplace-electric', titleAr: 'مدفأة كهربائية', tags: ['مدفأة', 'كهربائية'] };
+    if (lower.includes('rock')) return { category: 'fireplace-rock', titleAr: 'مدفأة صخرية', tags: ['مدفأة', 'صخر'] };
+    return { category: 'fireplace', titleAr: 'مدفأة', tags: ['مدفأة'] };
+  }
+  
+  if (folder === 'img') {
+    if (lower.includes('interior-design') || lower.includes('interior_design')) return { category: 'interior', titleAr: 'تصميم داخلي', tags: ['تصميم داخلي'] };
+    if (lower.includes('metal') || lower.includes('aluminum')) return { category: 'industrial', titleAr: 'أعمال معدنية', tags: ['معدني', 'ألمنيوم'] };
+    if (lower.includes('ml-')) return { category: 'modern', titleAr: 'تصميم عصري', tags: ['عصري'] };
+    if (lower.includes('kitchen') || lower.includes('cucine') || lower.includes('pantry')) return { category: 'kitchen', titleAr: 'مطبخ', tags: ['مطبخ', 'تصميم'] };
+    if (lower.includes('bedroom') || lower.includes('bed') || lower.includes('wardrobe') || lower.includes('dresser')) return { category: 'bedroom', titleAr: 'غرفة نوم', tags: ['غرفة نوم'] };
+    if (lower.includes('living') || lower.includes('sofa') || lower.includes('armchair')) return { category: 'living', titleAr: 'غرفة معيشة', tags: ['غرفة معيشة'] };
+    if (lower.includes('bookcase') || lower.includes('bookshelf') || lower.includes('desk') || lower.includes('office')) return { category: 'office', titleAr: 'مكتب', tags: ['مكتب', 'مكتبة'] };
+    if (lower.includes('bathroom') || lower.includes('basin')) return { category: 'bathroom', titleAr: 'حمام', tags: ['حمام'] };
+    if (lower.includes('dining') || lower.includes('table') || lower.includes('chair') || lower.includes('stool')) return { category: 'dining', titleAr: 'غرفة طعام', tags: ['طعام', 'أثاث'] };
+    if (lower.includes('walk-in') || lower.includes('closet')) return { category: 'wardrobe', titleAr: 'غرفة ملابس', tags: ['ملابس', 'خزانة'] };
+    if (lower.includes('rug') || lower.includes('lamp') || lower.includes('mirror') || lower.includes('console')) return { category: 'decor', titleAr: 'ديكور', tags: ['ديكور', 'إكسسوارات'] };
+    if (lower.includes('idex') || lower.includes('k162') || lower.includes('k163') || lower.includes('kenyon') || lower.includes('larice') || lower.includes('lm-') || lower.includes('lu84') || lower.includes('jacklyne') || lower.includes('io')) return { category: 'furniture', titleAr: 'أثاث', tags: ['أثاث', 'تصميم'] };
+    if (lower.includes('jpg_')) return { category: 'furniture', titleAr: 'أثاث', tags: ['أثاث'] };
+    return { category: 'furniture', titleAr: 'أثاث وتصميم', tags: ['أثاث'] };
+  }
+  
+  // projects folder
+  if (lower.includes('abuauf')) return { category: 'commercial', titleAr: 'مشروع أبو عوف', tags: ['تجاري', 'تصميم داخلي'] };
+  if (lower.includes('mansourh')) return { category: 'residential', titleAr: 'مشروع المنصورة', tags: ['سكني', 'تشطيبات'] };
+  if (lower.includes('maintenance')) return { category: 'maintenance', titleAr: 'أعمال صيانة', tags: ['صيانة', 'ترميم'] };
+  if (lower.includes('construction')) return { category: 'construction', titleAr: 'أعمال بناء', tags: ['بناء'] };
+  if (lower.includes('design')) return { category: 'interior', titleAr: 'تصميم داخلي', tags: ['تصميم'] };
+  if (lower.includes('remodeling')) return { category: 'renovation', titleAr: 'تجديد', tags: ['تجديد'] };
+  if (lower.includes('repairs')) return { category: 'maintenance', titleAr: 'إصلاحات', tags: ['إصلاح'] };
+  if (lower.includes('gallery')) return { category: 'featured', titleAr: 'معرض الأعمال', tags: ['مميز'] };
+  if (lower.includes('slide')) return { category: 'featured', titleAr: 'عرض المشروع', tags: ['مميز'] };
+  if (lower.includes('architecture')) return { category: 'architecture', titleAr: 'تصميم معماري', tags: ['معماري'] };
+  if (lower.includes('engineering')) return { category: 'engineering', titleAr: 'هندسة', tags: ['هندسة'] };
+  if (lower.includes('cover') || lower.includes('mumbai')) return { category: 'international', titleAr: 'مشروع دولي', tags: ['دولي'] };
+  if (lower.includes('cucine') || lower.includes('valcucine') || lower.includes('chamonix')) return { category: 'kitchen', titleAr: 'مطبخ فاخر', tags: ['مطبخ', 'فاخر'] };
+  return { category: 'projects', titleAr: 'مشروع', tags: ['مشروع'] };
 };
 
-// Projects folder images
-const projectsImages: PortfolioImage[] = [
-  // Abuauf Project Series
-  ...Array.from({ length: 49 }, (_, i) => {
-    const num = i + 1;
-    const filename = num === 5 ? null : `abuauf_${num}.jpg`;
-    return filename ? {
-      id: `abuauf-${num}`,
-      src: `/src/assets/projects/${filename}`,
-      title: `مشروع أبو عوف ${num}`,
-      category: 'commercial',
-      description: 'مشروع تجاري متميز',
-      tags: ['تجاري', 'تصميم داخلي']
-    } : null;
-  }).filter(Boolean) as PortfolioImage[],
-  
-  // Mansourah Project Series
-  ...Array.from({ length: 36 }, (_, i) => ({
-    id: `mansourah-${i + 1}`,
-    src: `/src/assets/projects/mansourh-4-${String(i + 1).padStart(3, '0')}.jpeg`,
-    title: `مشروع المنصورة ${i + 1}`,
-    category: 'residential',
-    description: 'مشروع سكني فاخر',
-    tags: ['سكني', 'تشطيبات']
-  })),
-  
-  // Maintenance Projects
-  ...Array.from({ length: 14 }, (_, i) => ({
-    id: `maintenance-${i + 33}`,
-    src: `/src/assets/projects/maintenance${i + 33}.jpg`,
-    title: `أعمال صيانة ${i + 1}`,
-    category: 'maintenance',
-    description: 'أعمال صيانة وترميم',
-    tags: ['صيانة', 'ترميم']
-  })),
-  
-  // Gallery Images
-  ...Array.from({ length: 6 }, (_, i) => ({
-    id: `gallery-${i + 1}`,
-    src: `/src/assets/projects/gallery-${i + 1}.jpg`,
-    title: `معرض الأعمال ${i + 1}`,
-    category: 'interior',
-    description: 'تصميم داخلي',
-    tags: ['تصميم داخلي']
-  })),
-  
-  // Slides
-  { id: 'slide-1', src: '/src/assets/projects/slide-1.jpg', title: 'عرض المشروع 1', category: 'featured', description: 'مشروع مميز', tags: ['مميز'] },
-  { id: 'slide-2', src: '/src/assets/projects/slide-2.jpg', title: 'عرض المشروع 2', category: 'featured', description: 'مشروع مميز', tags: ['مميز'] },
-  { id: 'slide-3', src: '/src/assets/projects/slide-3.jpg', title: 'عرض المشروع 3', category: 'featured', description: 'مشروع مميز', tags: ['مميز'] },
-  
-  // Construction
-  { id: 'construction-1', src: '/src/assets/projects/construction-1.jpg', title: 'بناء 1', category: 'construction', description: 'أعمال بناء', tags: ['بناء'] },
-  { id: 'construction-2', src: '/src/assets/projects/construction-2.jpg', title: 'بناء 2', category: 'construction', description: 'أعمال بناء', tags: ['بناء'] },
-  { id: 'construction-3', src: '/src/assets/projects/construction-3.jpg', title: 'بناء 3', category: 'construction', description: 'أعمال بناء', tags: ['بناء'] },
-  
-  // Design
-  { id: 'design-1', src: '/src/assets/projects/design-1.jpg', title: 'تصميم 1', category: 'interior', description: 'تصميم داخلي', tags: ['تصميم'] },
-  { id: 'design-2', src: '/src/assets/projects/design-2.jpg', title: 'تصميم 2', category: 'interior', description: 'تصميم داخلي', tags: ['تصميم'] },
-  { id: 'design-3', src: '/src/assets/projects/design-3.jpg', title: 'تصميم 3', category: 'interior', description: 'تصميم داخلي', tags: ['تصميم'] },
-  
-  // Remodeling
-  { id: 'remodeling-1', src: '/src/assets/projects/remodeling-1.jpg', title: 'تجديد 1', category: 'renovation', description: 'أعمال تجديد', tags: ['تجديد'] },
-  { id: 'remodeling-2', src: '/src/assets/projects/remodeling-2.jpg', title: 'تجديد 2', category: 'renovation', description: 'أعمال تجديد', tags: ['تجديد'] },
-  { id: 'remodeling-3', src: '/src/assets/projects/remodeling-3.jpg', title: 'تجديد 3', category: 'renovation', description: 'أعمال تجديد', tags: ['تجديد'] },
-  
-  // Repairs
-  { id: 'repairs-1', src: '/src/assets/projects/repairs-1.jpg', title: 'إصلاحات 1', category: 'maintenance', description: 'أعمال إصلاح', tags: ['إصلاح'] },
-  { id: 'repairs-2', src: '/src/assets/projects/repairs-2.jpg', title: 'إصلاحات 2', category: 'maintenance', description: 'أعمال إصلاح', tags: ['إصلاح'] },
-  { id: 'repairs-3', src: '/src/assets/projects/repairs-3.jpg', title: 'إصلاحات 3', category: 'maintenance', description: 'أعمال إصلاح', tags: ['إصلاح'] },
-  
-  // Special Projects
-  { id: 'cover-1', src: '/src/assets/projects/COVER1.jpg', title: 'غلاف المشروع', category: 'featured', description: 'مشروع مميز', tags: ['مميز'] },
-  { id: 'mumbai', src: '/src/assets/projects/Cover_Mumbai-1.jpg', title: 'مشروع مومباي', category: 'international', description: 'مشروع دولي', tags: ['دولي'] },
-  { id: 'gros', src: '/src/assets/projects/Gros-800x1000.jpg', title: 'مشروع جروس', category: 'commercial', description: 'مشروع تجاري', tags: ['تجاري'] },
-  { id: 'architecture', src: '/src/assets/projects/Architecture.jpg', title: 'تصميم معماري', category: 'architecture', description: 'أعمال معمارية', tags: ['معماري'] },
-  { id: 'engineering', src: '/src/assets/projects/Engineering.jpg', title: 'هندسة', category: 'engineering', description: 'أعمال هندسية', tags: ['هندسة'] },
-  { id: 'interior-design', src: '/src/assets/projects/Interior-Design.jpg', title: 'تصميم داخلي', category: 'interior', description: 'تصميم داخلي فاخر', tags: ['تصميم داخلي'] },
-  { id: 'scaled-1', src: '/src/assets/projects/1-scaled.jpg', title: 'مشروع متميز 1', category: 'featured', description: 'مشروع مميز', tags: ['مميز'] },
-  { id: 'scaled-999', src: '/src/assets/projects/999-scaled.jpg', title: 'مشروع متميز 2', category: 'featured', description: 'مشروع مميز', tags: ['مميز'] },
-  { id: 'about-18', src: '/src/assets/projects/about-18.webp', title: 'من أعمالنا', category: 'interior', description: 'تصميم داخلي', tags: ['تصميم داخلي'] },
-  { id: 'project-222', src: '/src/assets/projects/222.jpg', title: 'مشروع 222', category: 'residential', description: 'مشروع سكني', tags: ['سكني'] },
-];
+// ===== Build images from glob results =====
+const buildImages = (
+  files: Record<string, string>,
+  folder: 'projects' | 'img' | 'coll-hote'
+): PortfolioImage[] => {
+  return Object.entries(files).map(([path, src], index) => {
+    const filename = getFilename(path);
+    const { category, titleAr, tags } = detectCategory(filename, folder);
+    
+    return {
+      id: `${folder}-${index}`,
+      src,
+      title: `${titleAr} ${index + 1}`,
+      category,
+      description: titleAr,
+      tags,
+      folder,
+    };
+  });
+};
 
-// Interior Design images from img folder
-const interiorDesignImages: PortfolioImage[] = Array.from({ length: 44 }, (_, i) => {
-  const num = i + 42;
-  return {
-    id: `interior-design-${num}`,
-    src: `/src/assets/img/Interior-design0${num}.jpg`,
-    title: `تصميم داخلي ${i + 1}`,
-    category: 'interior',
-    description: 'تصميم داخلي فاخر',
-    tags: ['تصميم داخلي', 'فاخر']
-  };
-});
+// ===== All images =====
+const projectImages = buildImages(projectFiles, 'projects');
+const interiorImages = buildImages(imgFiles, 'img');
+const fireplaceImages = buildImages(collHoteFiles, 'coll-hote');
 
-// Metal/Industrial images
-const metalImages: PortfolioImage[] = [
-  { id: 'metal-1057', src: '/src/assets/img/metal_aluminum_01057.jpg', title: 'أعمال معدنية 1', category: 'industrial', description: 'أعمال ألمنيوم', tags: ['معدني', 'ألمنيوم'] },
-  { id: 'metal-1058', src: '/src/assets/img/metal_01058.jpg', title: 'أعمال معدنية 2', category: 'industrial', description: 'أعمال معدنية', tags: ['معدني'] },
-  { id: 'metal-1059', src: '/src/assets/img/metal_01059.jpg', title: 'أعمال معدنية 3', category: 'industrial', description: 'أعمال معدنية', tags: ['معدني'] },
-  { id: 'metal-1060', src: '/src/assets/img/metal_01060.jpg', title: 'أعمال معدنية 4', category: 'industrial', description: 'أعمال معدنية', tags: ['معدني'] },
-  { id: 'metal-1061', src: '/src/assets/img/metal_01061.jpg', title: 'أعمال معدنية 5', category: 'industrial', description: 'أعمال معدنية', tags: ['معدني'] },
-  { id: 'metal-1062', src: '/src/assets/img/metal_01062.jpg', title: 'أعمال معدنية 6', category: 'industrial', description: 'أعمال معدنية', tags: ['معدني'] },
-];
-
-// ML Series images
-const mlImages: PortfolioImage[] = [
-  { id: 'ml-3335', src: '/src/assets/img/ml-01_03335.jpg', title: 'تصميم عصري 1', category: 'modern', description: 'تصميم عصري', tags: ['عصري'] },
-  { id: 'ml-3336', src: '/src/assets/img/ml-01_white_03336.jpg', title: 'تصميم أبيض', category: 'modern', description: 'تصميم عصري أبيض', tags: ['عصري', 'أبيض'] },
-  { id: 'ml-3337', src: '/src/assets/img/ml-01_gray_03337.jpg', title: 'تصميم رمادي', category: 'modern', description: 'تصميم عصري رمادي', tags: ['عصري', 'رمادي'] },
-  { id: 'ml-3339', src: '/src/assets/img/ml-01_03339.jpg', title: 'تصميم عصري 2', category: 'modern', description: 'تصميم عصري', tags: ['عصري'] },
-  { id: 'ml-3340', src: '/src/assets/img/ml-01_03340.jpg', title: 'تصميم عصري 3', category: 'modern', description: 'تصميم عصري', tags: ['عصري'] },
-  { id: 'ml-3341', src: '/src/assets/img/ml-01_03341.jpg', title: 'تصميم عصري 4', category: 'modern', description: 'تصميم عصري', tags: ['عصري'] },
-  { id: 'ml-3342', src: '/src/assets/img/ml-01_03342.jpg', title: 'تصميم عصري 5', category: 'modern', description: 'تصميم عصري', tags: ['عصري'] },
-  { id: 'ml-3343', src: '/src/assets/img/ml-01_03343.jpg', title: 'تصميم عصري 6', category: 'modern', description: 'تصميم عصري', tags: ['عصري'] },
-];
-
-// Fireplaces from coll-hote folder (selected high-quality images)
-const fireplaceImages: PortfolioImage[] = [
-  { id: 'fp-pillar', src: '/src/assets/coll-hote/Pillar_2-1-scaled-160x0-c-default.jpg', title: 'مدفأة عمودية', category: 'fireplace', description: 'مدفأة فاخرة', tags: ['مدفأة', 'فاخر'] },
-  { id: 'fp-cloudy', src: '/src/assets/coll-hote/Planika_Cloudy_1-scaled-160x0-c-default.jpg', title: 'مدفأة سحابية', category: 'fireplace', description: 'تصميم سحابي', tags: ['مدفأة'] },
-  { id: 'fp-square', src: '/src/assets/coll-hote/Planika_Square_High-scaled-160x0-c-default.jpg', title: 'مدفأة مربعة', category: 'fireplace', description: 'تصميم مربع', tags: ['مدفأة'] },
-  { id: 'fp-retro', src: '/src/assets/coll-hote/Retro_1000-web-e1725873272655-160x0-c-default.jpg', title: 'مدفأة ريترو', category: 'fireplace', description: 'تصميم كلاسيكي', tags: ['مدفأة', 'كلاسيك'] },
-  { id: 'fp-ufo', src: '/src/assets/coll-hote/UFO_FLA4_Freestanding-scaled-160x0-c-default.jpg', title: 'مدفأة UFO', category: 'fireplace', description: 'تصميم مستقبلي', tags: ['مدفأة', 'عصري'] },
-  { id: 'fp-vertical', src: '/src/assets/coll-hote/Vertical_Cool_Flame_500-1-scaled-160x0-c-default.jpg', title: 'مدفأة عمودية', category: 'fireplace', description: 'لهب بارد', tags: ['مدفأة'] },
-  { id: 'fp-zoia-daze', src: '/src/assets/coll-hote/Zoia_Daze-1-160x0-c-default.jpg', title: 'Zoia Daze', category: 'fireplace', description: 'تصميم Zoia', tags: ['مدفأة'] },
-  { id: 'fp-zoia-kreta', src: '/src/assets/coll-hote/Zoia_Kreta-160x0-c-default.jpg', title: 'Zoia Kreta', category: 'fireplace', description: 'تصميم Zoia', tags: ['مدفأة'] },
-];
-
-// Categories
-export const portfolioCategories: PortfolioCategory[] = [
-  { id: 'all', name: 'All', nameAr: 'الكل', description: 'جميع الأعمال', icon: '🏗️', count: 0 },
-  { id: 'featured', name: 'Featured', nameAr: 'مميز', description: 'المشاريع المميزة', icon: '⭐', count: 0 },
-  { id: 'commercial', name: 'Commercial', nameAr: 'تجاري', description: 'المشاريع التجارية', icon: '🏢', count: 0 },
-  { id: 'residential', name: 'Residential', nameAr: 'سكني', description: 'المشاريع السكنية', icon: '🏠', count: 0 },
-  { id: 'interior', name: 'Interior Design', nameAr: 'تصميم داخلي', description: 'التصميم الداخلي', icon: '🎨', count: 0 },
-  { id: 'construction', name: 'Construction', nameAr: 'بناء', description: 'أعمال البناء', icon: '🔨', count: 0 },
-  { id: 'renovation', name: 'Renovation', nameAr: 'تجديد', description: 'أعمال التجديد', icon: '🔧', count: 0 },
-  { id: 'maintenance', name: 'Maintenance', nameAr: 'صيانة', description: 'أعمال الصيانة', icon: '🛠️', count: 0 },
-  { id: 'architecture', name: 'Architecture', nameAr: 'معماري', description: 'التصميم المعماري', icon: '📐', count: 0 },
-  { id: 'engineering', name: 'Engineering', nameAr: 'هندسة', description: 'الأعمال الهندسية', icon: '⚙️', count: 0 },
-  { id: 'modern', name: 'Modern', nameAr: 'عصري', description: 'التصاميم العصرية', icon: '✨', count: 0 },
-  { id: 'industrial', name: 'Industrial', nameAr: 'صناعي', description: 'الأعمال الصناعية', icon: '🏭', count: 0 },
-  { id: 'fireplace', name: 'Fireplaces', nameAr: 'مدافئ', description: 'تصاميم المدافئ', icon: '🔥', count: 0 },
-  { id: 'international', name: 'International', nameAr: 'دولي', description: 'المشاريع الدولية', icon: '🌍', count: 0 },
-];
-
-// All portfolio images combined
 export const allPortfolioImages: PortfolioImage[] = [
-  ...projectsImages,
-  ...interiorDesignImages,
-  ...metalImages,
-  ...mlImages,
+  ...projectImages,
+  ...interiorImages,
   ...fireplaceImages,
 ];
 
-// Update category counts
+// ===== Categories =====
+export const portfolioCategories: PortfolioCategory[] = [
+  { id: 'all', name: 'All', nameAr: 'الكل', icon: '🏗️', count: allPortfolioImages.length },
+  { id: 'featured', name: 'Featured', nameAr: 'مميز', icon: '⭐', count: 0 },
+  { id: 'commercial', name: 'Commercial', nameAr: 'تجاري', icon: '🏢', count: 0 },
+  { id: 'residential', name: 'Residential', nameAr: 'سكني', icon: '🏠', count: 0 },
+  { id: 'interior', name: 'Interior', nameAr: 'تصميم داخلي', icon: '🎨', count: 0 },
+  { id: 'construction', name: 'Construction', nameAr: 'بناء', icon: '🔨', count: 0 },
+  { id: 'renovation', name: 'Renovation', nameAr: 'تجديد', icon: '🔧', count: 0 },
+  { id: 'maintenance', name: 'Maintenance', nameAr: 'صيانة', icon: '🛠️', count: 0 },
+  { id: 'architecture', name: 'Architecture', nameAr: 'معماري', icon: '📐', count: 0 },
+  { id: 'engineering', name: 'Engineering', nameAr: 'هندسة', icon: '⚙️', count: 0 },
+  { id: 'kitchen', name: 'Kitchen', nameAr: 'مطابخ', icon: '🍳', count: 0 },
+  { id: 'bedroom', name: 'Bedroom', nameAr: 'غرف نوم', icon: '🛏️', count: 0 },
+  { id: 'living', name: 'Living Room', nameAr: 'غرف معيشة', icon: '🛋️', count: 0 },
+  { id: 'dining', name: 'Dining', nameAr: 'غرف طعام', icon: '🍽️', count: 0 },
+  { id: 'bathroom', name: 'Bathroom', nameAr: 'حمامات', icon: '🚿', count: 0 },
+  { id: 'office', name: 'Office', nameAr: 'مكاتب', icon: '💼', count: 0 },
+  { id: 'wardrobe', name: 'Wardrobe', nameAr: 'غرف ملابس', icon: '👔', count: 0 },
+  { id: 'decor', name: 'Decor', nameAr: 'ديكور', icon: '✨', count: 0 },
+  { id: 'furniture', name: 'Furniture', nameAr: 'أثاث', icon: '🪑', count: 0 },
+  { id: 'modern', name: 'Modern', nameAr: 'عصري', icon: '💎', count: 0 },
+  { id: 'industrial', name: 'Industrial', nameAr: 'صناعي', icon: '🏭', count: 0 },
+  { id: 'fireplace', name: 'Fireplaces', nameAr: 'مدافئ', icon: '🔥', count: 0 },
+  { id: 'fireplace-ethanol', name: 'Ethanol', nameAr: 'مدافئ إيثانول', icon: '🔥', count: 0 },
+  { id: 'fireplace-water', name: 'Water Vapor', nameAr: 'مدافئ بخار', icon: '💧', count: 0 },
+  { id: 'fireplace-gas', name: 'Gas', nameAr: 'مدافئ غاز', icon: '🔵', count: 0 },
+  { id: 'fireplace-electric', name: 'Electric', nameAr: 'مدافئ كهربائية', icon: '⚡', count: 0 },
+  { id: 'fireplace-rock', name: 'Rock', nameAr: 'مدافئ صخرية', icon: '🪨', count: 0 },
+  { id: 'international', name: 'International', nameAr: 'دولي', icon: '🌍', count: 0 },
+  { id: 'projects', name: 'Projects', nameAr: 'مشاريع', icon: '📁', count: 0 },
+];
+
+// Update counts
 portfolioCategories.forEach(cat => {
-  if (cat.id === 'all') {
-    cat.count = allPortfolioImages.length;
-  } else {
-    cat.count = allPortfolioImages.filter(img => img.category === cat.id).length;
-  }
+  if (cat.id === 'all') return;
+  cat.count = allPortfolioImages.filter(img => img.category === cat.id).length;
 });
 
-// Export helper functions
-export const getAllPortfolioImages = (): PortfolioImage[] => allPortfolioImages;
-
+// ===== Exports =====
 export const getImagesByCategory = (categoryId: string): PortfolioImage[] => {
   if (categoryId === 'all') return allPortfolioImages;
   return allPortfolioImages.filter(img => img.category === categoryId);
 };
 
+export const getImagesByFolder = (folder: string): PortfolioImage[] => {
+  return allPortfolioImages.filter(img => img.folder === folder);
+};
+
 export const searchImages = (query: string): PortfolioImage[] => {
-  const lowerQuery = query.toLowerCase();
-  return allPortfolioImages.filter(img => 
-    img.title.toLowerCase().includes(lowerQuery) ||
-    img.description?.toLowerCase().includes(lowerQuery) ||
-    img.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
+  const q = query.toLowerCase();
+  return allPortfolioImages.filter(img =>
+    img.title.toLowerCase().includes(q) ||
+    img.description?.toLowerCase().includes(q) ||
+    img.tags?.some(t => t.toLowerCase().includes(q))
   );
 };
 
 export const getCategoriesWithImages = (): PortfolioCategory[] => {
   return portfolioCategories.filter(cat => cat.count > 0 || cat.id === 'all');
+};
+
+// Folder stats
+export const folderStats = {
+  projects: projectImages.length,
+  img: interiorImages.length,
+  'coll-hote': fireplaceImages.length,
+  total: allPortfolioImages.length,
 };
