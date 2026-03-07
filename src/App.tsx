@@ -55,6 +55,11 @@ function App() {
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/chatbot" element={<ChatbotPage />} />
+        <Route path="/chatbot-training" element={
+          <ProtectedRoute>
+            <ChatbotTrainingPage />
+          </ProtectedRoute>
+        } />
         <Route path="/project-management" element={
           <ProtectedRoute>
             <ProjectManagement />

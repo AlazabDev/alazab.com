@@ -1,1 +1,7 @@
 project_id = "zrrffsjbfkphridqyais"
+
+[functions.chatbot]
+verify_jwt = false
+
+[functions.parse-training-file]
+verify_jwt = false
