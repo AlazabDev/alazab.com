@@ -27,6 +27,7 @@ import ProjectsShowcase from "./pages/ProjectsShowcase";
 import MaintenanceRequestDetails from "./pages/MaintenanceRequestDetails";
 import MaintenanceReports from "./pages/MaintenanceReports";
 import ProjectStoryPage from "./pages/ProjectStoryPage";
+import ChatbotTrainingPage from "./pages/ChatbotTrainingPage";
 import GeneralSuppliesPage from "./pages/services/GeneralSuppliesPage";
 import MaintenanceRenovationPage from "./pages/services/MaintenanceRenovationPage";
 import BrandIdentityPage from "./pages/services/BrandIdentityPage";
@@ -54,6 +55,11 @@ function App() {
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/chatbot" element={<ChatbotPage />} />
+        <Route path="/chatbot-training" element={
+          <ProtectedRoute>
+            <ChatbotTrainingPage />
+          </ProtectedRoute>
+        } />
         <Route path="/project-management" element={
           <ProtectedRoute>
             <ProjectManagement />
