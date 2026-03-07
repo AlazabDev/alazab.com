@@ -147,21 +147,21 @@ const Portfolio: React.FC = () => {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="sticky top-16 md:top-20 z-40 bg-background/95 backdrop-blur-md shadow-sm border-b">
           <div className="container mx-auto px-4">
-            <TabsList className="w-full justify-start gap-2 bg-transparent h-14 p-0">
+            <TabsList className="w-full justify-start gap-2 bg-transparent h-12 md:h-14 p-0">
               <TabsTrigger 
                 value="images" 
-                className="data-[state=active]:bg-construction-accent data-[state=active]:text-construction-primary gap-2 text-base px-6 rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-construction-accent"
+                className="data-[state=active]:bg-construction-accent data-[state=active]:text-construction-primary gap-1.5 text-sm md:text-base px-3 md:px-6 rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-construction-accent min-h-[44px]"
               >
-                <Image className="w-5 h-5" />
-                معرض الصور
-                <Badge variant="secondary" className="mr-1 text-xs">{folderStats.total}</Badge>
+                <Image className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="hidden sm:inline">معرض</span> الصور
+                <Badge variant="secondary" className="mr-1 text-[10px] md:text-xs px-1.5">{folderStats.total}</Badge>
               </TabsTrigger>
               <TabsTrigger 
                 value="3d"
-                className="data-[state=active]:bg-construction-accent data-[state=active]:text-construction-primary gap-2 text-base px-6 rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-construction-accent"
+                className="data-[state=active]:bg-construction-accent data-[state=active]:text-construction-primary gap-1.5 text-sm md:text-base px-3 md:px-6 rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-construction-accent min-h-[44px]"
               >
-                <Box className="w-5 h-5" />
-                العرض ثلاثي الأبعاد
+                <Box className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="hidden sm:inline">العرض</span> 3D
               </TabsTrigger>
             </TabsList>
           </div>
