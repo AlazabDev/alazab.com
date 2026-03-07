@@ -46,6 +46,7 @@ import SecurityDisclosurePage from "./pages/legal/SecurityDisclosurePage";
 
 function App() {
   return (
+    <LanguageProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Index />} />
