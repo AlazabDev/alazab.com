@@ -45,7 +45,7 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <div className="fixed md:relative">
+          <div className="flex-shrink-0">
             <Logo variant="full" showText={true} className="hidden md:flex" />
             <Logo variant="icon" showText={false} className="md:hidden" />
           </div>
@@ -68,26 +68,6 @@ const Header: React.FC = () => {
               </Link>
             ))}
           </nav>
-
-          {/* Mobile Marquee Navigation */}
-          <div className="md:hidden absolute left-4 right-20 top-1/2 transform -translate-y-1/2 overflow-hidden">
-            <div className="flex animate-marquee whitespace-nowrap">
-              {[...navigationItems, ...navigationItems].map((item, index) => (
-                <Link
-                  key={`${item.name}-${index}`}
-                  to={item.href}
-                  className={`inline-block mx-6 text-sm font-medium transition-colors hover:text-construction-accent ${
-                    isActive(item.href) 
-                      ? 'text-construction-accent' 
-                      : 'text-gray-700'
-                  }`}
-                >
-                  {item.name === 'الشات بوت' && <MessageSquare className="w-3 h-3 inline ml-1" aria-hidden="true" />}
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </div>
 
           {/* CTA Buttons and Sidebar Toggle */}
           <div className="flex items-center gap-4">
