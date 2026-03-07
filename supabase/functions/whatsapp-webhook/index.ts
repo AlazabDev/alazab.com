@@ -6,18 +6,16 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Webhook verify token - set this in your Meta App dashboard
 const VERIFY_TOKEN = 'alazab_whatsapp_verify_2024';
 
 serve(async (req) => {
-  // Handle CORS
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   const url = new URL(req.url);
 
-  // GET = Webhook verification (Meta sends this to verify the endpoint)
+  // GET = Webhook verification
   if (req.method === 'GET') {
     const mode = url.searchParams.get('hub.mode');
     const token = url.searchParams.get('hub.verify_token');
@@ -37,7 +35,10 @@ serve(async (req) => {
       const body = await req.json();
       console.log('Webhook event received:', JSON.stringify(body));
 
-      // Process WhatsApp messages
+      const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+      const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+      const supabase = createClient(supabaseUrl, serviceRoleKey);
+
       if (body.object === 'whatsapp_business_account') {
         const entries = body.entry || [];
 
@@ -49,26 +50,58 @@ serve(async (req) => {
               const value = change.value;
               const messages = value.messages || [];
               const statuses = value.statuses || [];
+              const contacts = value.contacts || [];
 
-              // Handle incoming messages
+              // Handle incoming messages - store in DB
               for (const message of messages) {
-                console.log('Incoming message:', {
-                  from: message.from,
-                  type: message.type,
-                  timestamp: message.timestamp,
-                  text: message.text?.body,
+                const contactName = contacts.find((c: any) => c.wa_id === message.from)?.profile?.name;
+                
+                let content = '';
+                switch (message.type) {
+                  case 'text':
+                    content = message.text?.body || '';
+                    break;
+                  case 'image':
+                    content = message.image?.caption || '[صورة]';
+                    break;
+                  case 'document':
+                    content = message.document?.caption || '[مستند]';
+                    break;
+                  case 'audio':
+                    content = '[رسالة صوتية]';
+                    break;
+                  case 'video':
+                    content = message.video?.caption || '[فيديو]';
+                    break;
+                  case 'location':
+                    content = `[موقع: ${message.location?.latitude}, ${message.location?.longitude}]`;
+                    break;
+                  default:
+                    content = `[${message.type}]`;
+                }
+
+                await supabase.from('whatsapp_messages').insert({
+                  wa_message_id: message.id,
+                  phone_number: message.from,
+                  customer_name: contactName || null,
+                  direction: 'inbound',
+                  message_type: message.type,
+                  content: content,
+                  media_url: message.image?.url || message.document?.url || message.video?.url || null,
+                  status: 'received',
                 });
 
-                // TODO: Store message in database or forward to your app
+                console.log('Stored inbound message from:', message.from);
               }
 
-              // Handle message status updates
+              // Handle status updates
               for (const status of statuses) {
-                console.log('Status update:', {
-                  id: status.id,
-                  status: status.status,
-                  recipient: status.recipient_id,
-                });
+                if (status.id) {
+                  await supabase
+                    .from('whatsapp_messages')
+                    .update({ status: status.status, updated_at: new Date().toISOString() })
+                    .eq('wa_message_id', status.id);
+                }
               }
             }
           }
