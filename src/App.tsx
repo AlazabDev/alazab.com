@@ -63,9 +63,9 @@ function App() {
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/chatbot" element={<ChatbotPage />} />
         <Route path="/chatbot-training" element={
-          <ProtectedRoute>
+          <AdminRoute>
             <ChatbotTrainingPage />
-          </ProtectedRoute>
+          </AdminRoute>
         } />
         <Route path="/project-management" element={
           <ProtectedRoute>
