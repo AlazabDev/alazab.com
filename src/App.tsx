@@ -32,6 +32,15 @@ import MaintenanceRenovationPage from "./pages/services/MaintenanceRenovationPag
 import BrandIdentityPage from "./pages/services/BrandIdentityPage";
 import LuxuryCleaningPage from "./pages/services/LuxuryCleaningPage";
 import Portfolio from "./pages/Portfolio";
+import PrivacyPolicyPage from "./pages/legal/PrivacyPolicyPage";
+import TermsOfServicePage from "./pages/legal/TermsOfServicePage";
+import CookiePolicyPage from "./pages/legal/CookiePolicyPage";
+import DataDeletionPage from "./pages/legal/DataDeletionPage";
+import LegalContactPage from "./pages/legal/LegalContactPage";
+import RefundPolicyPage from "./pages/legal/RefundPolicyPage";
+import AcceptableUsePolicyPage from "./pages/legal/AcceptableUsePolicyPage";
+import DisclaimerPage from "./pages/legal/DisclaimerPage";
+import SecurityDisclosurePage from "./pages/legal/SecurityDisclosurePage";
 
 function App() {
   return (
