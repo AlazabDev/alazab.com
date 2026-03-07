@@ -32,6 +32,15 @@ import MaintenanceRenovationPage from "./pages/services/MaintenanceRenovationPag
 import BrandIdentityPage from "./pages/services/BrandIdentityPage";
 import LuxuryCleaningPage from "./pages/services/LuxuryCleaningPage";
 import Portfolio from "./pages/Portfolio";
+import PrivacyPolicyPage from "./pages/legal/PrivacyPolicyPage";
+import TermsOfServicePage from "./pages/legal/TermsOfServicePage";
+import CookiePolicyPage from "./pages/legal/CookiePolicyPage";
+import DataDeletionPage from "./pages/legal/DataDeletionPage";
+import LegalContactPage from "./pages/legal/LegalContactPage";
+import RefundPolicyPage from "./pages/legal/RefundPolicyPage";
+import AcceptableUsePolicyPage from "./pages/legal/AcceptableUsePolicyPage";
+import DisclaimerPage from "./pages/legal/DisclaimerPage";
+import SecurityDisclosurePage from "./pages/legal/SecurityDisclosurePage";
 
 function App() {
   return (
@@ -91,6 +100,15 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+        <Route path="/cookie-policy" element={<CookiePolicyPage />} />
+        <Route path="/data-deletion" element={<DataDeletionPage />} />
+        <Route path="/legal-contact" element={<LegalContactPage />} />
+        <Route path="/refund-policy" element={<RefundPolicyPage />} />
+        <Route path="/acceptable-use" element={<AcceptableUsePolicyPage />} />
+        <Route path="/disclaimer" element={<DisclaimerPage />} />
+        <Route path="/security" element={<SecurityDisclosurePage />} />
         <Route path="/maintenance-reports" element={
           <ProtectedRoute>
             <MaintenanceReports />

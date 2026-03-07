@@ -137,7 +137,29 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <hr className="border-white/10 my-10" />
+        {/* Legal Links */}
+        <div className="border-t border-white/10 pt-8 mt-10">
+          <h3 className="text-sm font-bold mb-4 text-white/80 text-center">الصفحات القانونية</h3>
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-400">
+            {[
+              { to: '/privacy-policy', label: 'سياسة الخصوصية' },
+              { to: '/terms-of-service', label: 'الشروط والأحكام' },
+              { to: '/cookie-policy', label: 'سياسة الكوكيز' },
+              { to: '/data-deletion', label: 'حذف البيانات' },
+              { to: '/refund-policy', label: 'الاسترداد والإلغاء' },
+              { to: '/acceptable-use', label: 'الاستخدام المقبول' },
+              { to: '/disclaimer', label: 'إخلاء المسؤولية' },
+              { to: '/security', label: 'الأمان' },
+              { to: '/legal-contact', label: 'الاتصال القانوني' },
+            ].map((link) => (
+              <Link key={link.to} to={link.to} className="hover:text-construction-accent transition-colors">
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <hr className="border-white/10 my-6" />
 
         {/* Copyright */}
         <div className="text-center text-gray-400 text-xs">
