@@ -54,7 +54,11 @@ function App() {
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/maintenance-request" element={<MaintenanceRequest />} />
         <Route path="/maintenance-tracking" element={<MaintenanceTracking />} />
-        <Route path="/maintenance-list" element={<MaintenanceList />} />
+        <Route path="/maintenance-list" element={
+          <ProtectedRoute>
+            <MaintenanceList />
+          </ProtectedRoute>
+        } />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/chatbot" element={<ChatbotPage />} />
