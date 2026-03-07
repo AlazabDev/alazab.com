@@ -1,275 +1,316 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { MessageSquare, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Send, MessageCircle, User, Phone, ArrowLeft, Loader2, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { z } from 'zod';
 
-const FACEBOOK_APP_ID = '889346333913449';
-const CONFIG_ID = '4251954398390867';
+const phoneSchema = z.string()
+  .min(10, 'رقم الهاتف قصير جداً')
+  .max(15, 'رقم الهاتف طويل جداً')
+  .regex(/^[\d\s\-\+\(\)]+$/, 'رقم هاتف غير صالح');
 
-declare global {
-  interface Window {
-    FB: any;
-    fbAsyncInit: () => void;
-  }
+const nameSchema = z.string()
+  .min(2, 'الاسم قصير جداً')
+  .max(100, 'الاسم طويل جداً')
+  .regex(/^[^\<\>\"\'\;]+$/, 'الاسم يحتوي على أحرف غير مسموحة');
+
+interface ChatMessage {
+  id: string;
+  content: string;
+  sender: 'user' | 'bot';
+  timestamp: Date;
+  status?: 'sending' | 'sent' | 'failed';
 }
 
 const WhatsAppSetupPage: React.FC = () => {
-  const [sdkLoaded, setSdkLoaded] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [setupComplete, setSetupComplete] = useState(false);
-  const [wabaData, setWabaData] = useState<{ phoneId?: string; wabaId?: string } | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [step, setStep] = useState<'intro' | 'chat'>('intro');
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [sending, setSending] = useState(false);
+  const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const navigate = useNavigate();
 
-  // Load Facebook SDK
   useEffect(() => {
-    if (document.getElementById('facebook-jssdk')) {
-      setSdkLoaded(true);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  // Poll for incoming messages
+  useEffect(() => {
+    if (step !== 'chat' || !customerPhone) return;
+
+    let cleanPhone = customerPhone.replace(/[\s\-\(\)]/g, '');
+    if (cleanPhone.startsWith('0')) cleanPhone = '20' + cleanPhone.substring(1);
+
+    const channel = supabase
+      .channel('whatsapp-replies')
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'whatsapp_messages',
+        filter: `phone_number=eq.${cleanPhone}`,
+      }, (payload: any) => {
+        const msg = payload.new;
+        if (msg.direction === 'inbound') {
+          setMessages(prev => [...prev, {
+            id: msg.id,
+            content: msg.content,
+            sender: 'bot',
+            timestamp: new Date(msg.created_at),
+          }]);
+        }
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [step, customerPhone]);
+
+  const handleStartChat = () => {
+    const nameResult = nameSchema.safeParse(customerName);
+    const phoneResult = phoneSchema.safeParse(customerPhone);
+    const newErrors: { name?: string; phone?: string } = {};
+
+    if (!nameResult.success) newErrors.name = nameResult.error.errors[0].message;
+    if (!phoneResult.success) newErrors.phone = phoneResult.error.errors[0].message;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
-    window.fbAsyncInit = () => {
-      window.FB.init({
-        appId: FACEBOOK_APP_ID,
-        autoLogAppEvents: true,
-        xfbml: true,
-        version: 'v21.0',
-      });
-      setSdkLoaded(true);
-    };
-
-    const script = document.createElement('script');
-    script.id = 'facebook-jssdk';
-    script.src = 'https://connect.facebook.net/en_US/sdk.js';
-    script.async = true;
-    script.defer = true;
-    script.crossOrigin = 'anonymous';
-    document.body.appendChild(script);
-
-    return () => {
-      // Cleanup not needed for SDK
-    };
-  }, []);
-
-  // Listen for session info from embedded signup
-  useEffect(() => {
-    const handler = (event: MessageEvent) => {
-      if (event.origin !== 'https://www.facebook.com' && event.origin !== 'https://web.facebook.com') return;
-
-      try {
-        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-        if (data.type === 'WA_EMBEDDED_SIGNUP') {
-          if (data.data?.phone_number_id && data.data?.waba_id) {
-            setWabaData({
-              phoneId: data.data.phone_number_id,
-              wabaId: data.data.waba_id,
-            });
-          }
-        }
-      } catch {
-        // Not a relevant message
-      }
-    };
-
-    window.addEventListener('message', handler);
-    return () => window.removeEventListener('message', handler);
-  }, []);
-
-  const handleFBLogin = () => {
-    if (!window.FB) {
-      setError('لم يتم تحميل Facebook SDK بعد. يرجى الانتظار.');
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    window.FB.login(
-      (response: any) => {
-        if (response.authResponse) {
-          const code = response.authResponse.code;
-          exchangeCodeForToken(code);
-        } else {
-          setLoading(false);
-          setError('تم إلغاء عملية تسجيل الدخول.');
-        }
-      },
-      {
-        config_id: CONFIG_ID,
-        response_type: 'code',
-        override_default_response_type: true,
-        extras: {
-          version: 'v3',
-          setup: {
-            business: {
-              id: null,
-              name: 'alazab.com',
-              email: 'admin@alazab.com',
-              phone: { code: 20, number: '1004006620' },
-              website: 'https://alazab.com/',
-              address: {
-                streetAddress1: '500',
-                city: 'cairo',
-                state: 'Cairo Governorate',
-                zipPostal: '11473',
-                country: 'EG',
-              },
-              timezone: 'UTC+02:00',
-            },
-            phone: {
-              displayName: 'Mohamed Azab',
-              category: 'GOVT',
-              description: 'Professionally managed maintenance solutions for shops and residential units',
-            },
-          },
-          featureType: 'whatsapp_business_app_onboarding',
-          features: [{ name: 'marketing_messages_lite' }, { name: 'app_only_install' }],
-        },
-      }
-    );
+    setErrors({});
+    setStep('chat');
+    setMessages([{
+      id: 'welcome',
+      content: `مرحباً ${customerName}! 👋\nأنا مساعد شركة العزب للمقاولات العامة. كيف يمكنني مساعدتك اليوم?\n\nيمكنك الاستفسار عن:\n• المشروعات والأعمال\n• خدمات الصيانة\n• طلب عرض سعر\n• أي استفسار آخر`,
+      sender: 'bot',
+      timestamp: new Date(),
+    }]);
+    setTimeout(() => inputRef.current?.focus(), 300);
   };
 
-  const exchangeCodeForToken = async (code: string) => {
+  const handleSendMessage = async () => {
+    const trimmed = inputMessage.trim();
+    if (!trimmed || sending) return;
+    if (trimmed.length > 1000) {
+      toast({ title: 'الرسالة طويلة جداً', description: 'الحد الأقصى 1000 حرف', variant: 'destructive' });
+      return;
+    }
+
+    const tempId = `msg-${Date.now()}`;
+    const newMsg: ChatMessage = {
+      id: tempId,
+      content: trimmed,
+      sender: 'user',
+      timestamp: new Date(),
+      status: 'sending',
+    };
+
+    setMessages(prev => [...prev, newMsg]);
+    setInputMessage('');
+    setSending(true);
+
     try {
-      const { data, error: fnError } = await supabase.functions.invoke('whatsapp-token-exchange', {
+      const { data, error } = await supabase.functions.invoke('send-whatsapp-message', {
         body: {
-          code,
-          phone_number_id: wabaData?.phoneId,
-          waba_id: wabaData?.wabaId,
+          phone: customerPhone,
+          message: `[${customerName}]: ${trimmed}`,
+          customer_name: customerName,
         },
       });
 
-      if (fnError) throw fnError;
+      if (error) throw error;
 
-      if (data?.success) {
-        setSetupComplete(true);
-        toast({
-          title: 'تم الإعداد بنجاح! ✅',
-          description: 'تم ربط حساب واتساب للأعمال بنجاح.',
-        });
-      } else {
-        throw new Error(data?.error || 'فشل في تبادل الرمز');
-      }
+      setMessages(prev => prev.map(m =>
+        m.id === tempId ? { ...m, status: 'sent' as const } : m
+      ));
     } catch (err: any) {
-      setError(err.message || 'حدث خطأ أثناء إعداد واتساب');
+      setMessages(prev => prev.map(m =>
+        m.id === tempId ? { ...m, status: 'failed' as const } : m
+      ));
       toast({
-        title: 'خطأ',
-        description: err.message || 'فشل في إتمام الإعداد',
+        title: 'فشل الإرسال',
+        description: err.message || 'حدث خطأ أثناء إرسال الرسالة',
         variant: 'destructive',
       });
     } finally {
-      setLoading(false);
+      setSending(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
     }
   };
 
   return (
-    <div className="min-h-screen bg-background" dir="rtl">
+    <div className="min-h-screen bg-background flex flex-col" dir="rtl">
       <Header />
-      <main className="container mx-auto px-4 pt-24 pb-16">
-        <div className="max-w-2xl mx-auto">
-          <Card className="border-2 border-green-200 shadow-xl">
-            <CardHeader className="text-center space-y-4">
-              <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                <MessageSquare className="h-8 w-8 text-green-600" />
-              </div>
-              <CardTitle className="text-2xl font-bold text-foreground">
-                إعداد واتساب للأعمال
-              </CardTitle>
-              <CardDescription className="text-base text-muted-foreground">
-                قم بربط حساب واتساب للأعمال الخاص بك لبدء إرسال واستقبال الرسائل مع عملائك
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-6">
-              {setupComplete ? (
-                <div className="text-center space-y-4 py-8">
-                  <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
-                  <h3 className="text-xl font-semibold text-foreground">تم الربط بنجاح!</h3>
-                  <p className="text-muted-foreground">
-                    تم ربط حساب واتساب للأعمال بنجاح. يمكنك الآن البدء في التواصل مع عملائك.
-                  </p>
-                  {wabaData && (
-                    <div className="bg-muted rounded-lg p-4 text-sm space-y-1">
-                      <p><strong>WABA ID:</strong> {wabaData.wabaId}</p>
-                      <p><strong>Phone ID:</strong> {wabaData.phoneId}</p>
-                    </div>
-                  )}
-                  <Button onClick={() => navigate('/')} className="mt-4">
-                    العودة للرئيسية
-                  </Button>
+      <main className="flex-1 container mx-auto px-4 pt-24 pb-8 flex items-center justify-center">
+        <div className="w-full max-w-lg">
+          {step === 'intro' ? (
+            /* ─── Intro Screen ─── */
+            <div className="bg-card rounded-2xl shadow-2xl overflow-hidden border border-border">
+              {/* Header */}
+              <div className="bg-[#075E54] p-6 text-white text-center">
+                <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MessageCircle className="h-10 w-10" />
                 </div>
-              ) : (
-                <>
-                  {/* Steps */}
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
-                      <span className="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
-                      <div>
-                        <h4 className="font-semibold text-foreground">تسجيل الدخول بفيسبوك</h4>
-                        <p className="text-sm text-muted-foreground">سجّل دخولك بحساب فيسبوك المرتبط بنشاطك التجاري</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
-                      <span className="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
-                      <div>
-                        <h4 className="font-semibold text-foreground">إعداد حساب واتساب</h4>
-                        <p className="text-sm text-muted-foreground">اتبع الخطوات لإعداد حساب واتساب للأعمال ورقم الهاتف</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
-                      <span className="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
-                      <div>
-                        <h4 className="font-semibold text-foreground">بدء الاستخدام</h4>
-                        <p className="text-sm text-muted-foreground">بعد الإعداد، يمكنك البدء في إرسال واستقبال الرسائل</p>
+                <h1 className="text-2xl font-bold">تواصل معنا عبر واتساب</h1>
+                <p className="text-white/80 mt-2 text-sm">
+                  شركة العزب للمقاولات العامة
+                </p>
+              </div>
+
+              {/* Form */}
+              <div className="p-6 space-y-5">
+                <p className="text-muted-foreground text-center text-sm">
+                  أدخل بياناتك لبدء محادثة مباشرة مع فريقنا
+                </p>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-foreground">الاسم الكامل</label>
+                  <div className="relative">
+                    <User className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      value={customerName}
+                      onChange={e => { setCustomerName(e.target.value); setErrors(p => ({ ...p, name: undefined })); }}
+                      placeholder="أدخل اسمك"
+                      className="pr-10"
+                      maxLength={100}
+                    />
+                  </div>
+                  {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-foreground">رقم الهاتف</label>
+                  <div className="relative">
+                    <Phone className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      value={customerPhone}
+                      onChange={e => { setCustomerPhone(e.target.value); setErrors(p => ({ ...p, phone: undefined })); }}
+                      placeholder="01xxxxxxxxx"
+                      className="pr-10"
+                      type="tel"
+                      dir="ltr"
+                      maxLength={15}
+                    />
+                  </div>
+                  {errors.phone && <p className="text-xs text-destructive">{errors.phone}</p>}
+                </div>
+
+                <Button
+                  onClick={handleStartChat}
+                  className="w-full h-12 text-lg font-bold bg-[#25D366] hover:bg-[#1DA851] text-white"
+                >
+                  <MessageCircle className="h-5 w-5 ml-2" />
+                  بدء المحادثة
+                </Button>
+
+                <p className="text-xs text-muted-foreground text-center">
+                  سيتم إرسال رسائلك مباشرة إلى فريق الدعم عبر واتساب للأعمال
+                </p>
+              </div>
+            </div>
+          ) : (
+            /* ─── Chat Screen ─── */
+            <div className="bg-card rounded-2xl shadow-2xl overflow-hidden border border-border flex flex-col h-[600px]">
+              {/* Chat Header */}
+              <div className="bg-[#075E54] p-4 text-white flex items-center gap-3">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setStep('intro')}
+                  className="text-white hover:bg-white/20 h-8 w-8"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                  <Bot className="h-5 w-5" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-sm">شركة العزب للمقاولات</h3>
+                  <p className="text-xs text-white/70">متصل الآن • يرد عادة خلال دقائق</p>
+                </div>
+              </div>
+
+              {/* Messages */}
+              <div
+                className="flex-1 overflow-y-auto p-4 space-y-3"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                }}
+              >
+                {messages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`flex ${msg.sender === 'user' ? 'justify-start' : 'justify-end'}`}
+                  >
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm whitespace-pre-wrap ${
+                        msg.sender === 'user'
+                          ? 'bg-[#DCF8C6] text-gray-900 rounded-tl-sm'
+                          : 'bg-white text-gray-900 rounded-tr-sm shadow-sm border border-gray-100'
+                      }`}
+                    >
+                      {msg.content}
+                      <div className={`flex items-center gap-1 mt-1 ${msg.sender === 'user' ? 'justify-start' : 'justify-end'}`}>
+                        <span className="text-[10px] text-gray-500">
+                          {msg.timestamp.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        {msg.sender === 'user' && msg.status === 'sending' && (
+                          <Loader2 className="h-3 w-3 animate-spin text-gray-400" />
+                        )}
+                        {msg.sender === 'user' && msg.status === 'sent' && (
+                          <span className="text-[10px] text-blue-500">✓✓</span>
+                        )}
+                        {msg.sender === 'user' && msg.status === 'failed' && (
+                          <span className="text-[10px] text-destructive">✗</span>
+                        )}
                       </div>
                     </div>
                   </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
 
-                  {error && (
-                    <div className="flex items-center gap-2 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">
-                      <AlertCircle className="h-4 w-4 flex-shrink-0" />
-                      <p>{error}</p>
-                    </div>
+              {/* Input */}
+              <div className="p-3 bg-muted/50 border-t border-border flex items-center gap-2">
+                <Input
+                  ref={inputRef}
+                  value={inputMessage}
+                  onChange={e => setInputMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="اكتب رسالتك..."
+                  className="flex-1 rounded-full bg-background border-0 focus-visible:ring-1"
+                  maxLength={1000}
+                  disabled={sending}
+                />
+                <Button
+                  onClick={handleSendMessage}
+                  disabled={!inputMessage.trim() || sending}
+                  size="icon"
+                  className="rounded-full bg-[#075E54] hover:bg-[#064E46] h-10 w-10 flex-shrink-0"
+                >
+                  {sending ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="h-4 w-4" />
                   )}
-
-                  <Button
-                    onClick={handleFBLogin}
-                    disabled={!sdkLoaded || loading}
-                    className="w-full h-12 text-lg font-bold bg-[#1877f2] hover:bg-[#166fe5] text-white"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="h-5 w-5 animate-spin ml-2" />
-                        جاري الإعداد...
-                      </>
-                    ) : !sdkLoaded ? (
-                      <>
-                        <Loader2 className="h-5 w-5 animate-spin ml-2" />
-                        جاري تحميل SDK...
-                      </>
-                    ) : (
-                      <>
-                        <svg className="h-5 w-5 ml-2" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                        </svg>
-                        تسجيل الدخول بفيسبوك
-                      </>
-                    )}
-                  </Button>
-
-                  <p className="text-xs text-muted-foreground text-center">
-                    بالنقر على الزر أعلاه، فإنك توافق على شروط استخدام واتساب للأعمال وسياسة الخصوصية الخاصة بـ Meta.
-                  </p>
-                </>
-              )}
-            </CardContent>
-          </Card>
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
       <Footer />

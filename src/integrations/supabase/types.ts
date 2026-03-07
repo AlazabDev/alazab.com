@@ -6694,6 +6694,48 @@ export type Database = {
         }
         Relationships: []
       }
+      whatsapp_messages: {
+        Row: {
+          content: string | null
+          created_at: string
+          customer_name: string | null
+          direction: string
+          id: string
+          media_url: string | null
+          message_type: string
+          phone_number: string
+          status: string | null
+          updated_at: string
+          wa_message_id: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          customer_name?: string | null
+          direction: string
+          id?: string
+          media_url?: string | null
+          message_type?: string
+          phone_number: string
+          status?: string | null
+          updated_at?: string
+          wa_message_id?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          customer_name?: string | null
+          direction?: string
+          id?: string
+          media_url?: string | null
+          message_type?: string
+          phone_number?: string
+          status?: string | null
+          updated_at?: string
+          wa_message_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       app_settings_admin_safe: {
