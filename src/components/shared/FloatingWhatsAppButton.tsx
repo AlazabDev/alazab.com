@@ -15,7 +15,7 @@ const FloatingWhatsAppButton: React.FC = () => {
         </svg>
         {/* Tooltip */}
         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-foreground text-background text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-          إعداد واتساب للأعمال
+          تواصل معنا عبر واتساب
         </span>
         {/* Pulse animation */}
         <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-25" />
