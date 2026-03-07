@@ -1,4 +1,5 @@
 import React from 'react';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import MaintenanceRequest from "./pages/MaintenanceRequest";
@@ -45,6 +46,7 @@ import SecurityDisclosurePage from "./pages/legal/SecurityDisclosurePage";
 
 function App() {
   return (
+    <LanguageProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Index />} />
@@ -124,6 +126,7 @@ function App() {
       </Routes>
       <Toaster />
     </BrowserRouter>
+    </LanguageProvider>
   );
 }
 

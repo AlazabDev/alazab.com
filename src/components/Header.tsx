@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, MessageSquare } from 'lucide-react';
+import { Menu, MessageSquare, Globe } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/shared/Logo";
 import {
@@ -22,15 +23,16 @@ const Header: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
   const isMobile = useIsMobile();
+  const { language, setLanguage, t } = useLanguage();
 
   const navigationItems = [
-    { name: 'الرئيسية', href: '/' },
-    { name: 'خدماتنا', href: '/services' },
-    { name: 'مشاريعنا', href: '/projects' },
-    { name: 'معرض الأعمال', href: '/portfolio' },
-    { name: 'من نحن', href: '/about' },
-    { name: 'الشات بوت', href: '/chatbot' },
-    { name: 'اتصل بنا', href: '/contact' },
+    { name: t('الرئيسية', 'Home'), href: '/' },
+    { name: t('خدماتنا', 'Services'), href: '/services' },
+    { name: t('مشاريعنا', 'Projects'), href: '/projects' },
+    { name: t('معرض الأعمال', 'Portfolio'), href: '/portfolio' },
+    { name: t('من نحن', 'About'), href: '/about' },
+    { name: t('الشات بوت', 'Chatbot'), href: '/chatbot' },
+    { name: t('اتصل بنا', 'Contact'), href: '/contact' },
   ];
 
   const isActive = (href: string) => {
@@ -70,7 +72,18 @@ const Header: React.FC = () => {
           </nav>
 
           {/* CTA Buttons and Sidebar Toggle */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* Language Toggle */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
+              className="flex items-center gap-1 text-xs font-semibold"
+              aria-label="Switch language"
+            >
+              <Globe className="h-4 w-4" />
+              {language === 'ar' ? 'EN' : 'عربي'}
+            </Button>
             {/* ERP Link - Hidden on Mobile */}
             <a
               href="https://erp.alazab.com/apps"
