@@ -170,8 +170,8 @@ const Portfolio: React.FC = () => {
         {/* ===== IMAGES TAB ===== */}
         <TabsContent value="images" className="mt-0">
           {/* Filters */}
-          <div className="sticky top-[7.5rem] md:top-[8.5rem] z-30 bg-background/95 backdrop-blur-md border-b">
-            <div className="container mx-auto px-4 py-3">
+          <div className="sticky top-[7rem] md:top-[8.5rem] z-30 bg-background/95 backdrop-blur-md border-b">
+            <div className="container mx-auto px-4 py-2 md:py-3">
               <div className="flex flex-col gap-3">
                 <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
                   <div className="relative w-full md:w-80">
