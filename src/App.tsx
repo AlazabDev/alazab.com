@@ -27,6 +27,7 @@ import ProjectsShowcase from "./pages/ProjectsShowcase";
 import MaintenanceRequestDetails from "./pages/MaintenanceRequestDetails";
 import MaintenanceReports from "./pages/MaintenanceReports";
 import ProjectStoryPage from "./pages/ProjectStoryPage";
+import ChatbotTrainingPage from "./pages/ChatbotTrainingPage";
 import GeneralSuppliesPage from "./pages/services/GeneralSuppliesPage";
 import MaintenanceRenovationPage from "./pages/services/MaintenanceRenovationPage";
 import BrandIdentityPage from "./pages/services/BrandIdentityPage";
