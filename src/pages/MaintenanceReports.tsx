@@ -62,8 +62,8 @@ const MaintenanceReports: React.FC = () => {
 
       // Calculate stats - using the actual enum values
       const total = requests?.length || 0;
-      const pending = requests?.filter(r => r.status === 'Open' || r.status === 'Waiting').length || 0;
-      const inProgress = requests?.filter(r => r.status === 'InProgress' || r.status === 'Assigned').length || 0;
+      const pending = requests?.filter(r => r.status === 'Open' || (r.status as string) === 'Waiting').length || 0;
+      const inProgress = requests?.filter(r => r.status === 'InProgress' || (r.status as string) === 'Assigned').length || 0;
       const completed = requests?.filter(r => r.status === 'Completed').length || 0;
 
       setStats({
