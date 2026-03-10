@@ -56,6 +56,39 @@ export type Database = {
         }
         Relationships: []
       }
+      chatbot_knowledge: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          file_name: string | null
+          id: string
+          is_active: boolean
+          source_type: string
+          title: string
+        }
+        Insert: {
+          category?: string
+          content: string
+          created_at?: string
+          file_name?: string | null
+          id?: string
+          is_active?: boolean
+          source_type?: string
+          title: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          file_name?: string | null
+          id?: string
+          is_active?: boolean
+          source_type?: string
+          title?: string
+        }
+        Relationships: []
+      }
       integrations: {
         Row: {
           config: Json | null
@@ -99,7 +132,9 @@ export type Database = {
         Row: {
           actual_cost: number | null
           branch_id: string | null
+          client_email: string | null
           client_name: string | null
+          client_phone: string | null
           company_id: string | null
           created_at: string
           description: string | null
@@ -116,7 +151,9 @@ export type Database = {
         Insert: {
           actual_cost?: number | null
           branch_id?: string | null
+          client_email?: string | null
           client_name?: string | null
+          client_phone?: string | null
           company_id?: string | null
           created_at?: string
           description?: string | null
@@ -133,7 +170,9 @@ export type Database = {
         Update: {
           actual_cost?: number | null
           branch_id?: string | null
+          client_email?: string | null
           client_name?: string | null
+          client_phone?: string | null
           company_id?: string | null
           created_at?: string
           description?: string | null
