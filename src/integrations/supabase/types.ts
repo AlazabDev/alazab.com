@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      branches: {
+        Row: {
+          company_id: string | null
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+        }
+        Relationships: []
+      }
       integrations: {
         Row: {
           config: Json | null
@@ -52,6 +94,68 @@ export type Database = {
           id?: number
         }
         Relationships: []
+      }
+      maintenance_requests: {
+        Row: {
+          actual_cost: number | null
+          branch_id: string | null
+          client_name: string | null
+          company_id: string | null
+          created_at: string
+          description: string | null
+          estimated_cost: number | null
+          id: string
+          location: string | null
+          priority: string | null
+          service_type: string | null
+          sla_due_date: string | null
+          status: Database["public"]["Enums"]["mr_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          actual_cost?: number | null
+          branch_id?: string | null
+          client_name?: string | null
+          company_id?: string | null
+          created_at?: string
+          description?: string | null
+          estimated_cost?: number | null
+          id?: string
+          location?: string | null
+          priority?: string | null
+          service_type?: string | null
+          sla_due_date?: string | null
+          status?: Database["public"]["Enums"]["mr_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          actual_cost?: number | null
+          branch_id?: string | null
+          client_name?: string | null
+          company_id?: string | null
+          created_at?: string
+          description?: string | null
+          estimated_cost?: number | null
+          id?: string
+          location?: string | null
+          priority?: string | null
+          service_type?: string | null
+          sla_due_date?: string | null
+          status?: Database["public"]["Enums"]["mr_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_requests_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       media_files: {
         Row: {
@@ -161,6 +265,24 @@ export type Database = {
           variables_count?: number | null
           wa_template_code?: string
           wa_template_name?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -310,10 +432,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      mr_status: "Open" | "InProgress" | "Completed" | "Cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -440,6 +562,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      mr_status: ["Open", "InProgress", "Completed", "Cancelled"],
+    },
   },
 } as const
