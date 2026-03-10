@@ -105,10 +105,14 @@ function App() {
         } />
         <Route path="/projects-gallery" element={<ProjectsShowcase />} />
         <Route path="/projects-gallery/:projectId" element={<ProjectStoryPage />} />
-        <Route path="/services/general-supplies" element={<GeneralSuppliesPage />} />
-        <Route path="/services/maintenance-renovation" element={<MaintenanceRenovationPage />} />
+        <Route path="/services/luxury-finishing" element={<LuxuryFinishingPage />} />
+        <Route path="/services/uberfix" element={<UberFixPage />} />
         <Route path="/services/brand-identity" element={<BrandIdentityPage />} />
-        <Route path="/services/luxury-cleaning" element={<LuxuryCleaningPage />} />
+        <Route path="/services/laban-alasfour" element={<LabanAlasfourPage />} />
+        {/* Legacy routes */}
+        <Route path="/services/general-supplies" element={<LabanAlasfourPage />} />
+        <Route path="/services/maintenance-renovation" element={<UberFixPage />} />
+        <Route path="/services/luxury-cleaning" element={<LuxuryFinishingPage />} />
         <Route path="/maintenance-request-details/:id" element={
           <ProtectedRoute>
             <MaintenanceRequestDetails />
