@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, MessageSquare, Globe } from 'lucide-react';
+import { Menu, Globe, ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/shared/Logo";
@@ -15,30 +15,53 @@ import {
   DrawerContent,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { AdvancedSidebar } from './layout/AdvancedSidebar';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const location = useLocation();
   const isMobile = useIsMobile();
   const { language, setLanguage, t } = useLanguage();
 
+  const productionLines = [
+    { 
+      name: t('التشطيب الراقي (Luxury Finishing)', 'Luxury Finishing'), 
+      href: '/services/luxury-finishing' 
+    },
+    { 
+      name: t('هوية العلامة التجارية (Brand Identity)', 'Brand Identity'), 
+      href: '/services/brand-identity' 
+    },
+    { 
+      name: t('أوبرفيكس (UberFix) - حلول الصيانة المعمارية', 'UberFix - Architectural Maintenance'), 
+      href: '/services/uberfix' 
+    },
+    { 
+      name: t('لبن العصفور (Laban Alasfour) - توريدات الخامات', 'Laban Alasfour - Raw Materials Supply'), 
+      href: '/services/laban-alasfour' 
+    },
+  ];
+
   const navigationItems = [
     { name: t('الرئيسية', 'Home'), href: '/' },
-    { name: t('خدماتنا', 'Services'), href: '/services' },
+    { name: t('من نحن', 'About Us'), href: '/about' },
+    { name: t('خطوط إنتاجنا', 'Our Solutions'), href: '#', isDropdown: true },
     { name: t('مشاريعنا', 'Projects'), href: '/projects' },
-    { name: t('معرض الأعمال', 'Portfolio'), href: '/portfolio' },
-    { name: t('من نحن', 'About'), href: '/about' },
-    { name: t('الشات بوت', 'Chatbot'), href: '/chatbot' },
-    { name: t('اتصل بنا', 'Contact'), href: '/contact' },
+    { name: t('اتصل بنا', 'Contact Us'), href: '/contact' },
   ];
 
   const isActive = (href: string) => {
-    if (href === '/') {
-      return location.pathname === '/';
-    }
+    if (href === '/') return location.pathname === '/';
+    if (href === '#') return location.pathname.startsWith('/services/');
     return location.pathname.startsWith(href);
   };
 
@@ -53,21 +76,49 @@ const Header: React.FC = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-4" role="navigation" aria-label="التنقل الرئيسي">
+          <nav className="hidden md:flex items-center gap-4" role="navigation" aria-label={t('التنقل الرئيسي', 'Main Navigation')}>
             {navigationItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={`text-base font-medium transition-colors hover:text-construction-accent focus:outline-none focus:ring-2 focus:ring-construction-accent rounded px-2 py-1 whitespace-nowrap ${
-                  isActive(item.href) 
-                    ? 'text-construction-accent border-b-2 border-construction-accent pb-1' 
-                    : 'text-gray-700'
-                }`}
-                aria-current={isActive(item.href) ? 'page' : undefined}
-              >
-                {item.name === 'الشات بوت' && <MessageSquare className="w-4 h-4 inline ml-1" aria-hidden="true" />}
-                {item.name}
-              </Link>
+              item.isDropdown ? (
+                <DropdownMenu key={item.name}>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      className={`text-base font-medium transition-colors hover:text-construction-accent focus:outline-none focus:ring-2 focus:ring-construction-accent rounded px-2 py-1 whitespace-nowrap flex items-center gap-1 ${
+                        isActive(item.href) 
+                          ? 'text-construction-accent' 
+                          : 'text-gray-700'
+                      }`}
+                    >
+                      {item.name}
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="center" className="w-72">
+                    {productionLines.map((line) => (
+                      <DropdownMenuItem key={line.href} asChild>
+                        <Link 
+                          to={line.href}
+                          className="cursor-pointer text-sm py-3 px-4"
+                        >
+                          {line.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`text-base font-medium transition-colors hover:text-construction-accent focus:outline-none focus:ring-2 focus:ring-construction-accent rounded px-2 py-1 whitespace-nowrap ${
+                    isActive(item.href) 
+                      ? 'text-construction-accent border-b-2 border-construction-accent pb-1' 
+                      : 'text-gray-700'
+                  }`}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                >
+                  {item.name}
+                </Link>
+              )
             ))}
           </nav>
 
@@ -84,6 +135,7 @@ const Header: React.FC = () => {
               <Globe className="h-4 w-4" />
               {language === 'ar' ? 'EN' : 'عربي'}
             </Button>
+
             {/* ERP Link - Hidden on Mobile */}
             <a
               href="https://erp.alazab.com/apps"
@@ -96,7 +148,7 @@ const Header: React.FC = () => {
                 <line x1="3" y1="9" x2="21" y2="9"></line>
                 <line x1="9" y1="21" x2="9" y2="9"></line>
               </svg>
-              نظام ERP
+              {t('نظام ERP', 'ERP System')}
             </a>
 
             {/* Advanced Sidebar Toggle */}
@@ -107,7 +159,7 @@ const Header: React.FC = () => {
                     variant="outline" 
                     size="icon" 
                     className="border-construction-primary text-construction-primary hover:bg-construction-primary hover:text-white"
-                    aria-label="فتح القائمة الجانبية"
+                    aria-label={t('فتح القائمة الجانبية', 'Open sidebar')}
                   >
                     <Menu className="h-5 w-5" aria-hidden="true" />
                   </Button>
@@ -123,7 +175,7 @@ const Header: React.FC = () => {
                     variant="outline" 
                     size="icon" 
                     className="border-construction-primary text-construction-primary hover:bg-construction-primary hover:text-white"
-                    aria-label="فتح القائمة الجانبية"
+                    aria-label={t('فتح القائمة الجانبية', 'Open sidebar')}
                   >
                     <Menu className="h-5 w-5" aria-hidden="true" />
                   </Button>
@@ -141,7 +193,7 @@ const Header: React.FC = () => {
                   variant="outline" 
                   className="border-construction-primary text-construction-primary hover:bg-construction-primary hover:text-white focus:ring-2 focus:ring-construction-primary"
                 >
-                  تسجيل الدخول
+                  {t('تسجيل الدخول', 'Login')}
                 </Button>
               </Link>
             </div>
@@ -154,39 +206,64 @@ const Header: React.FC = () => {
                 variant="ghost" 
                 size="icon" 
                 className="md:hidden"
-                aria-label={isMenuOpen ? "إغلاق القائمة" : "فتح القائمة"}
+                aria-label={isMenuOpen ? t('إغلاق القائمة', 'Close menu') : t('فتح القائمة', 'Open menu')}
               >
                 <Menu className="h-6 w-6" aria-hidden="true" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-80">
-              <nav className="flex flex-col gap-6 mt-6" role="navigation" aria-label="التنقل المتنقل">
+            <SheetContent side={language === 'ar' ? 'right' : 'left'} className="w-80">
+              <nav className="flex flex-col gap-4 mt-6" role="navigation" aria-label={t('التنقل المتنقل', 'Mobile navigation')}>
                 {navigationItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`text-lg font-medium transition-colors hover:text-construction-accent focus:outline-none focus:ring-2 focus:ring-construction-accent rounded px-2 py-1 ${
-                      isActive(item.href) 
-                        ? 'text-construction-accent' 
-                        : 'text-gray-700'
-                    }`}
-                    aria-current={isActive(item.href) ? 'page' : undefined}
-                  >
-                    {item.name === 'الشات بوت' && <MessageSquare className="w-4 h-4 inline ml-1" aria-hidden="true" />}
-                    {item.name}
-                  </Link>
+                  item.isDropdown ? (
+                    <div key={item.name}>
+                      <button
+                        onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
+                        className={`w-full text-lg font-medium transition-colors hover:text-construction-accent flex items-center justify-between px-2 py-1 ${
+                          isActive(item.href) ? 'text-construction-accent' : 'text-gray-700'
+                        }`}
+                      >
+                        {item.name}
+                        <ChevronDown className={`w-4 h-4 transition-transform ${mobileProductsOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      {mobileProductsOpen && (
+                        <div className="mt-2 space-y-2 ps-4">
+                          {productionLines.map((line) => (
+                            <Link
+                              key={line.href}
+                              to={line.href}
+                              onClick={() => setIsMenuOpen(false)}
+                              className="block text-sm text-gray-600 hover:text-construction-accent py-2 px-2 rounded transition-colors"
+                            >
+                              {line.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`text-lg font-medium transition-colors hover:text-construction-accent px-2 py-1 ${
+                        isActive(item.href) ? 'text-construction-accent' : 'text-gray-700'
+                      }`}
+                      aria-current={isActive(item.href) ? 'page' : undefined}
+                    >
+                      {item.name}
+                    </Link>
+                  )
                 ))}
                 
                 <div className="border-t pt-6 space-y-3">
                   <Link to="/maintenance-request" onClick={() => setIsMenuOpen(false)}>
                     <Button className="w-full bg-construction-primary hover:bg-construction-dark text-white">
-                      طلب صيانة
+                      {t('طلب صيانة', 'Request Maintenance')}
                     </Button>
                   </Link>
                   <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
                     <Button variant="outline" className="w-full border-construction-primary text-construction-primary hover:bg-construction-primary hover:text-white">
-                      تسجيل الدخول
+                      {t('تسجيل الدخول', 'Login')}
                     </Button>
                   </Link>
                 </div>

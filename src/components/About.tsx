@@ -4,40 +4,47 @@ import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const About: React.FC = () => {
+  const { t, isRTL } = useLanguage();
+
   const achievements = [
-    { number: "20+", label: "سنة من الخبرة" },
-    { number: "500+", label: "مشروع منجز" },
-    { number: "100+", label: "عميل راضي" },
-    { number: "3", label: "فروع في دول مختلفة" }
+    { number: "20+", labelAr: "سنة من الخبرة", labelEn: "Years of Experience" },
+    { number: "500+", labelAr: "مشروع منجز", labelEn: "Completed Projects" },
+    { number: "100+", labelAr: "عميل راضي", labelEn: "Satisfied Clients" },
+    { number: "4", labelAr: "خطوط إنتاج متخصصة", labelEn: "Specialized Production Lines" }
   ];
 
   const values = [
     {
-      title: "الجودة العالية",
-      description: "نلتزم بأعلى معايير الجودة في جميع مشاريعنا",
+      titleAr: "الجودة العالية", titleEn: "High Quality",
+      descriptionAr: "نلتزم بأعلى معايير الجودة في جميع مشاريعنا",
+      descriptionEn: "We commit to the highest quality standards in all our projects",
       icon: "🏆"
     },
     {
-      title: "الالتزام بالمواعيد",
-      description: "نحترم مواعيد التسليم ونلتزم بالجداول الزمنية المحددة",
+      titleAr: "الالتزام بالمواعيد", titleEn: "On-Time Delivery",
+      descriptionAr: "نحترم مواعيد التسليم ونلتزم بالجداول الزمنية المحددة",
+      descriptionEn: "We respect delivery deadlines and adhere to set schedules",
       icon: "⏰"
     },
     {
-      title: "الابتكار المستمر",
-      description: "نستخدم أحدث التقنيات والطرق في مجال البناء",
+      titleAr: "الابتكار المستمر", titleEn: "Continuous Innovation",
+      descriptionAr: "نستخدم أحدث التقنيات والطرق في مجال البناء",
+      descriptionEn: "We use the latest technologies and methods in construction",
       icon: "💡"
     },
     {
-      title: "فريق محترف",
-      description: "فريق من المهندسين والخبراء المتخصصين",
+      titleAr: "فريق محترف", titleEn: "Professional Team",
+      descriptionAr: "فريق من المهندسين والخبراء المتخصصين",
+      descriptionEn: "A team of specialized engineers and experts",
       icon: "👥"
     }
   ];
 
   return (
-    <section id="about" className="section bg-construction-light">
+    <section id="about" className="section bg-construction-light" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
           {/* About Image */}
@@ -45,7 +52,7 @@ const About: React.FC = () => {
             <div className="absolute -top-4 -right-4 w-72 h-72 lg:w-80 lg:h-80 bg-construction-primary rounded-lg"></div>
             <img 
               src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2574&auto=format&fit=crop" 
-              alt="شركة العزب للمقاولات" 
+              alt={t('شركة العزب للمقاولات', 'Alazab General Contracting')} 
               className="relative z-10 w-full h-auto rounded-lg shadow-xl"
             />
             <div className="absolute -bottom-6 -left-6 w-48 h-48 bg-construction-accent rounded-lg"></div>
@@ -54,21 +61,29 @@ const About: React.FC = () => {
           {/* About Content */}
           <div>
             <div className="inline-block bg-construction-accent/20 text-construction-accent px-3 py-1 rounded-full text-sm font-medium mb-4">
-              من نحن
+              {t('من نحن', 'About Us')}
             </div>
             <h2 className="text-2xl lg:text-3xl font-bold mb-6">
-              شركة العزب للمقاولات <br />
-              <span className="text-construction-accent">تاريخ من التميز والإبداع</span>
+              {t(
+                <>شركة العزب للمقاولات العامة <br /><span className="text-construction-accent">تاريخ من التميز في البناء والتشطيب</span></>,
+                <>Alazab General Contracting <br /><span className="text-construction-accent">A History of Excellence in Construction and Finishing</span></>
+              )}
             </h2>
             <p className="text-base text-gray-600 mb-6 leading-relaxed">
-              تأسست شركة العزب للمقاولات منذ أكثر من 20 عاماً لتصبح واحدة من أهم الشركات الرائدة في مجال المقاولات والبناء في المملكة العربية السعودية ومصر. تخصصنا في تقديم خدمات متكاملة في مجال الإنشاء والتعمير بأعلى معايير الجودة والالتزام بالمواعيد.
+              {t(
+                'تأسست شركة العزب للمقاولات منذ أكثر من 20 عاماً لتصبح من الشركات الرائدة في مجال المقاولات والبناء في المملكة العربية السعودية ومصر. قمنا بتطوير هيكلنا التشغيلي ليشمل أربعة خطوط إنتاج متكاملة، يدير كل منها فريق خبراء متخصصين، لتقديم حلول أكثر عمقاً تلبي احتياجات عملائنا.',
+                'Founded over 20 years ago, Alazab Contracting has become a leading company in the construction sector in Saudi Arabia and Egypt. We have strategically developed our operational structure to include four integrated production lines, each managed by a team of specialized experts, to provide deeper solutions that meet our clients\' needs.'
+              )}
             </p>
             <p className="text-base text-gray-600 mb-8 leading-relaxed">
-              نعمل بشغف لتحويل أفكار عملائنا إلى واقع ملموس، مع التركيز على الاستدامة والابتكار في جميع مشاريعنا. فريقنا المكون من مهندسين وخبراء متخصصين يعملون معاً لتقديم أفضل الحلول الهندسية والإنشائية.
+              {t(
+                'رسالتنا تمكينكم من تحقيق رؤاكم المعمارية بمعايير الجودة والالتزام.',
+                'Our mission is to empower you to achieve your architectural visions with the highest standards of quality and commitment.'
+              )}
             </p>
             
             <Button className="bg-construction-primary hover:bg-construction-dark text-white" asChild>
-              <Link to="/about">تعرف علينا أكثر</Link>
+              <Link to="/about">{t('تعرف علينا أكثر', 'Learn More About Us')}</Link>
             </Button>
           </div>
         </div>
@@ -82,7 +97,7 @@ const About: React.FC = () => {
                   {achievement.number}
                 </div>
                 <div className="text-sm md:text-base text-gray-600 font-medium">
-                  {achievement.label}
+                  {t(achievement.labelAr, achievement.labelEn)}
                 </div>
               </CardContent>
             </Card>
@@ -91,9 +106,12 @@ const About: React.FC = () => {
 
         {/* قيمنا الأساسية */}
         <div className="text-center mb-12">
-          <h3 className="section-title">قيمنا الأساسية</h3>
+          <h3 className="section-title">{t('قيمنا الأساسية', 'Our Core Values')}</h3>
           <p className="section-subtitle">
-            نؤمن بمجموعة من القيم الأساسية التي توجه عملنا وتضمن تحقيق أهدافنا ورضا عملائنا
+            {t(
+              'نؤمن بمجموعة من القيم الأساسية التي توجه عملنا وتضمن تحقيق أهدافنا ورضا عملائنا',
+              'We believe in a set of core values that guide our work and ensure we achieve our goals and client satisfaction'
+            )}
           </p>
         </div>
 
@@ -103,10 +121,10 @@ const About: React.FC = () => {
               <CardContent className="pt-6">
                 <div className="text-3xl mb-4">{value.icon}</div>
                 <h4 className="card-title text-lg mb-3">
-                  {value.title}
+                  {t(value.titleAr, value.titleEn)}
                 </h4>
                 <p className="card-content text-sm">
-                  {value.description}
+                  {t(value.descriptionAr, value.descriptionEn)}
                 </p>
               </CardContent>
             </Card>
@@ -117,26 +135,18 @@ const About: React.FC = () => {
         <div className="bg-white rounded-lg p-8 shadow-lg">
           <div className="text-center mb-8">
             <h3 className="text-xl md:text-2xl font-bold text-construction-primary mb-4">
-              شهادات الجودة والاعتمادات
+              {t('شهادات الجودة والاعتمادات', 'Quality Certifications & Accreditations')}
             </h3>
             <p className="text-base text-gray-600">
-              حاصلون على شهادات الجودة العالمية والاعتمادات المحلية
+              {t('حاصلون على شهادات الجودة العالمية والاعتمادات المحلية', 'Holders of international quality certificates and local accreditations')}
             </p>
           </div>
           
           <div className="flex flex-wrap justify-center gap-4">
-            <Badge variant="outline" className="px-4 py-2 text-sm">
-              ISO 9001:2015
-            </Badge>
-            <Badge variant="outline" className="px-4 py-2 text-sm">
-              شهادة الغرفة التجارية
-            </Badge>
-            <Badge variant="outline" className="px-4 py-2 text-sm">
-              عضوية جمعية المهندسين
-            </Badge>
-            <Badge variant="outline" className="px-4 py-2 text-sm">
-              اعتماد وزارة الإسكان
-            </Badge>
+            <Badge variant="outline" className="px-4 py-2 text-sm">ISO 9001:2015</Badge>
+            <Badge variant="outline" className="px-4 py-2 text-sm">{t('شهادة الغرفة التجارية', 'Chamber of Commerce Certificate')}</Badge>
+            <Badge variant="outline" className="px-4 py-2 text-sm">{t('عضوية جمعية المهندسين', 'Engineers Association Membership')}</Badge>
+            <Badge variant="outline" className="px-4 py-2 text-sm">{t('اعتماد وزارة الإسكان', 'Ministry of Housing Accreditation')}</Badge>
           </div>
         </div>
       </div>
