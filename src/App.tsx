@@ -30,10 +30,10 @@ import MaintenanceRequestDetails from "./pages/MaintenanceRequestDetails";
 import MaintenanceReports from "./pages/MaintenanceReports";
 import ProjectStoryPage from "./pages/ProjectStoryPage";
 import ChatbotTrainingPage from "./pages/ChatbotTrainingPage";
-import GeneralSuppliesPage from "./pages/services/GeneralSuppliesPage";
-import MaintenanceRenovationPage from "./pages/services/MaintenanceRenovationPage";
+import LuxuryFinishingPage from "./pages/services/LuxuryFinishingPage";
 import BrandIdentityPage from "./pages/services/BrandIdentityPage";
-import LuxuryCleaningPage from "./pages/services/LuxuryCleaningPage";
+import UberFixPage from "./pages/services/UberFixPage";
+import LabanAlasfourPage from "./pages/services/LabanAlasfourPage";
 import Portfolio from "./pages/Portfolio";
 import PrivacyPolicyPage from "./pages/legal/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/legal/TermsOfServicePage";
@@ -105,10 +105,14 @@ function App() {
         } />
         <Route path="/projects-gallery" element={<ProjectsShowcase />} />
         <Route path="/projects-gallery/:projectId" element={<ProjectStoryPage />} />
-        <Route path="/services/general-supplies" element={<GeneralSuppliesPage />} />
-        <Route path="/services/maintenance-renovation" element={<MaintenanceRenovationPage />} />
+        <Route path="/services/luxury-finishing" element={<LuxuryFinishingPage />} />
+        <Route path="/services/uberfix" element={<UberFixPage />} />
         <Route path="/services/brand-identity" element={<BrandIdentityPage />} />
-        <Route path="/services/luxury-cleaning" element={<LuxuryCleaningPage />} />
+        <Route path="/services/laban-alasfour" element={<LabanAlasfourPage />} />
+        {/* Legacy routes */}
+        <Route path="/services/general-supplies" element={<LabanAlasfourPage />} />
+        <Route path="/services/maintenance-renovation" element={<UberFixPage />} />
+        <Route path="/services/luxury-cleaning" element={<LuxuryFinishingPage />} />
         <Route path="/maintenance-request-details/:id" element={
           <ProtectedRoute>
             <MaintenanceRequestDetails />

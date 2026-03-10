@@ -5,7 +5,7 @@ type Language = 'ar' | 'en';
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (ar: string, en: string) => string;
+  t: <T extends ReactNode>(ar: T, en: T) => T;
   isRTL: boolean;
 }
 
@@ -21,7 +21,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     localStorage.setItem('app-language', lang);
   };
 
-  const t = (ar: string, en: string) => (language === 'ar' ? ar : en);
+  const t = <T extends ReactNode>(ar: T, en: T): T => (language === 'ar' ? ar : en);
   const isRTL = language === 'ar';
 
   useEffect(() => {
