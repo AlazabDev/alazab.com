@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_secrets: {
+        Row: {
+          created_at: string | null
+          id: string
+          key: string
+          updated_at: string | null
+          value: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          key: string
+          updated_at?: string | null
+          value: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          key?: string
+          updated_at?: string | null
+          value?: string
+        }
+        Relationships: []
+      }
       branches: {
         Row: {
           company_id: string | null
@@ -460,6 +484,87 @@ export type Database = {
           raw_body?: string | null
           signature?: string | null
           source?: string
+        }
+        Relationships: []
+      }
+      whatsapp_flows: {
+        Row: {
+          categories: string[] | null
+          created_at: string | null
+          id: string
+          json_version: string | null
+          name: string
+          preview_url: string | null
+          status: string | null
+          updated_at: string | null
+          validation_errors: Json | null
+          wa_flow_id: string | null
+        }
+        Insert: {
+          categories?: string[] | null
+          created_at?: string | null
+          id?: string
+          json_version?: string | null
+          name: string
+          preview_url?: string | null
+          status?: string | null
+          updated_at?: string | null
+          validation_errors?: Json | null
+          wa_flow_id?: string | null
+        }
+        Update: {
+          categories?: string[] | null
+          created_at?: string | null
+          id?: string
+          json_version?: string | null
+          name?: string
+          preview_url?: string | null
+          status?: string | null
+          updated_at?: string | null
+          validation_errors?: Json | null
+          wa_flow_id?: string | null
+        }
+        Relationships: []
+      }
+      whatsapp_messages: {
+        Row: {
+          content: string | null
+          created_at: string
+          customer_name: string | null
+          direction: string
+          id: string
+          media_mime_type: string | null
+          media_url: string | null
+          message_type: string
+          phone_number: string
+          status: string | null
+          wa_message_id: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          customer_name?: string | null
+          direction?: string
+          id?: string
+          media_mime_type?: string | null
+          media_url?: string | null
+          message_type?: string
+          phone_number: string
+          status?: string | null
+          wa_message_id?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          customer_name?: string | null
+          direction?: string
+          id?: string
+          media_mime_type?: string | null
+          media_url?: string | null
+          message_type?: string
+          phone_number?: string
+          status?: string | null
+          wa_message_id?: string | null
         }
         Relationships: []
       }
