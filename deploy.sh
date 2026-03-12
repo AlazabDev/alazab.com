@@ -7,13 +7,15 @@
 set -e  # Stop on any error
 
 # ─── Configuration ───
-APP_NAME="alazab-app"
+APP_NAME="alazab.com"
 DOMAIN="alazab.com"
-DEPLOY_DIR="/var/www/${APP_NAME}"
-REPO_URL=""  # ← ضع رابط GitHub هنا
+DEPLOY_DIR="/var/www/alazab.com"
+REPO_URL="https://github.com/AlazabDev/alazab.com"
 BRANCH="main"
-SUPABASE_URL="https://zrrffsjbfkphridqyais.supabase.co"
-SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpycmZmc2piZmtwaHJpZHF5YWlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0MzE1NzMsImV4cCI6MjA3MjAwNzU3M30.AwzY48mSUGeopBv5P6gzAPlipTbQasmXK8DR-L_Tm9A"
+SUPABASE_URL="https://bxuhcbfdoaflsgbxiqei.supabase.co"
+SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4dWhjYmZkb2FmbHNnYnhpcWVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwMTU1MDIsImV4cCI6MjA4NDU5MTUwMn0.W60YuL2zn9De95Jwgc7jn4_NLMdOVINHO6NUWY6yRlQ"
+SUPABASE_PUBLISHABLE_DEFAULT_KEY="sb_publishable_0WP0CHLPKhJ7mx1jMmnaYg_vl5zlrCR"
+SUPABASE_ID="bxuhcbfdoaflsgbxiqei"
 
 # Colors
 RED='\033[0;31m'
@@ -81,14 +83,14 @@ info "إعداد متغيرات البيئة..."
 cat > .env.production << EOF
 VITE_SUPABASE_URL=${SUPABASE_URL}
 VITE_SUPABASE_PUBLISHABLE_KEY=${SUPABASE_ANON_KEY}
-VITE_SUPABASE_PROJECT_ID=zrrffsjbfkphridqyais
+VITE_SUPABASE_PROJECT_ID=
 EOF
 
 log "تم إنشاء ملف البيئة"
 
 # ─── Step 5: Build ───
 info "بناء التطبيق للإنتاج..."
-npm run build
+pnpm build
 log "تم بناء التطبيق بنجاح"
 
 # ─── Step 6: Deploy ───
