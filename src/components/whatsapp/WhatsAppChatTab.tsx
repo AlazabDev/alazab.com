@@ -107,12 +107,16 @@ const WhatsAppChatTab: React.FC<WhatsAppChatTabProps> = ({ customerName, custome
   };
 
   const uploadFileToStorage = async (file: File): Promise<string> => {
-    const ext = file.name.split('.').pop();
-    const path = `whatsapp/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const { error } = await supabase.storage.from('projects-media').upload(path, file);
+    // Upload to Seafile via edge function
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('folder', '/whatsapp');
+
+    const { data, error } = await supabase.functions.invoke('upload-to-seafile', {
+      body: formData,
+    });
     if (error) throw new Error('فشل رفع الملف');
-    const { data } = supabase.storage.from('projects-media').getPublicUrl(path);
-    return data.publicUrl;
+    return data.public_url;
   };
 
   const handleSendMessage = async () => {

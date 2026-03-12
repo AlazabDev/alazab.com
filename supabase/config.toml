@@ -21,5 +21,8 @@ verify_jwt = false
 [functions.chatbot]
 verify_jwt = false
 
+[functions.upload-to-seafile]
+verify_jwt = false
+
 [functions.parse-training-file]
 verify_jwt = false
