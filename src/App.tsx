@@ -131,6 +131,7 @@ function App() {
         <Route path="/disclaimer" element={<DisclaimerPage />} />
         <Route path="/security" element={<SecurityDisclosurePage />} />
         <Route path="/whatsapp-setup" element={<WhatsAppSetupPage />} />
+        <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
         <Route path="/whatsapp-management" element={
           <AdminRoute>
             <WhatsAppManagementPage />
