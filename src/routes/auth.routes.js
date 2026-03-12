@@ -1,4 +1,288 @@
-// ... الكود السابق ...
+import express from 'express';
+import { body, validationResult } from 'express-validator';
+import rateLimit from 'express-rate-limit';
+import authService from '../services/auth.service.js';
+import { authenticate } from '../middleware/auth.js';
+import { validateRequest } from '../middleware/validate.js';
+
+const router = express.Router();
+
+// Rate limiting for auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts per window
+  skipSuccessfulRequests: true,
+});
+
+// Google OAuth callback
+router.post('/callback/google', async (req, res, next) => {
+  try {
+    const { code } = req.body;
+    const ipAddress = req.ip;
+    const userAgent = req.get('User-Agent');
+
+    // Check if IP is blocked
+    if (await authService.isIpBlocked(ipAddress)) {
+      return res.status(429).json({ 
+        message: 'Too many failed attempts. Please try again later.' 
+      });
+    }
+
+    const user = await authService.handleGoogleAuth(code, ipAddress, userAgent);
+    const { accessToken, refreshToken } = authService.generateTokens(
+      user, 
+      userAgent, 
+      ipAddress
+    );
+
+    await user.save();
+
+    res.json({
+      success: true,
+      user,
+      tokens: {
+        access: accessToken,
+        refresh: refreshToken,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Facebook OAuth callback
+router.post('/callback/facebook', async (req, res, next) => {
+  try {
+    const { code } = req.body;
+    const ipAddress = req.ip;
+    const userAgent = req.get('User-Agent');
+
+    if (await authService.isIpBlocked(ipAddress)) {
+      return res.status(429).json({ 
+        message: 'Too many failed attempts. Please try again later.' 
+      });
+    }
+
+    const user = await authService.handleFacebookAuth(code, ipAddress, userAgent);
+    const { accessToken, refreshToken } = authService.generateTokens(
+      user, 
+      userAgent, 
+      ipAddress
+    );
+
+    await user.save();
+
+    res.json({
+      success: true,
+      user,
+      tokens: {
+        access: accessToken,
+        refresh: refreshToken,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Local registration
+router.post('/register',
+  authLimiter,
+  [
+    body('email').isEmail().normalizeEmail(),
+    body('password').isLength({ min: 8 }).matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/),
+    body('name').trim().isLength({ min: 2, max: 50 }),
+  ],
+  validateRequest,
+  async (req, res, next) => {
+    try {
+      const ipAddress = req.ip;
+      const userAgent = req.get('User-Agent');
+
+      const user = await authService.register(req.body, ipAddress, userAgent);
+      const { accessToken, refreshToken } = authService.generateTokens(
+        user, 
+        userAgent, 
+        ipAddress
+      );
+
+      await user.save();
+
+      res.status(201).json({
+        success: true,
+        user,
+        tokens: {
+          access: accessToken,
+          refresh: refreshToken,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+});
+
+// Local login
+router.post('/login',
+  authLimiter,
+  [
+    body('email').isEmail().normalizeEmail(),
+    body('password').notEmpty(),
+  ],
+  validateRequest,
+  async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+      const ipAddress = req.ip;
+      const userAgent = req.get('User-Agent');
+
+      if (await authService.isIpBlocked(ipAddress)) {
+        return res.status(429).json({ 
+          message: 'Too many failed attempts. Please try again later.' 
+        });
+      }
+
+      const user = await authService.login(email, password, ipAddress, userAgent);
+      const { accessToken, refreshToken } = authService.generateTokens(
+        user, 
+        userAgent, 
+        ipAddress
+      );
+
+      await user.save();
+
+      res.json({
+        success: true,
+        user,
+        tokens: {
+          access: accessToken,
+          refresh: refreshToken,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+});
+
+// Refresh token
+router.post('/refresh', async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body;
+    const userId = req.userId; // From auth middleware
+
+    const user = await authService.verifyRefreshToken(refreshToken, userId);
+    const { accessToken, refreshToken: newRefreshToken } = authService.generateTokens(
+      user,
+      req.get('User-Agent'),
+      req.ip
+    );
+
+    // Remove old refresh token
+    await authService.removeRefreshToken(userId, refreshToken);
+    
+    // Add new refresh token
+    user.refreshTokens.push({
+      token: newRefreshToken,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      deviceInfo: req.get('User-Agent'),
+      ipAddress: req.ip,
+    });
+    await user.save();
+
+    res.json({
+      success: true,
+      tokens: {
+        access: accessToken,
+        refresh: newRefreshToken,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Logout
+router.post('/logout', authenticate, async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body;
+    await authService.removeRefreshToken(req.user._id, refreshToken);
+    
+    res.json({ success: true, message: 'Logged out successfully' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Logout from all devices
+router.post('/logout-all', authenticate, async (req, res, next) => {
+  try {
+    req.user.refreshTokens = [];
+    await req.user.save();
+    
+    res.json({ success: true, message: 'Logged out from all devices' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Request password reset
+router.post('/forgot-password',
+  authLimiter,
+  [body('email').isEmail().normalizeEmail()],
+  validateRequest,
+  async (req, res, next) => {
+    try {
+      await authService.initiatePasswordReset(req.body.email);
+      res.json({ 
+        success: true, 
+        message: 'If an account exists with this email, you will receive a password reset link.' 
+      });
+    } catch (error) {
+      next(error);
+    }
+});
+
+// Reset password
+router.post('/reset-password/:token',
+  [
+    body('password').isLength({ min: 8 }).matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/),
+  ],
+  validateRequest,
+  async (req, res, next) => {
+    try {
+      await authService.resetPassword(req.params.token, req.body.password);
+      res.json({ success: true, message: 'Password reset successfully' });
+    } catch (error) {
+      next(error);
+    }
+});
+
+// Verify email
+router.get('/verify-email/:token', async (req, res, next) => {
+  try {
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(req.params.token)
+      .digest('hex');
+
+    const user = await User.findOne({
+      emailVerificationToken: hashedToken,
+      emailVerificationExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired verification token' });
+    }
+
+    user.isEmailVerified = true;
+    user.emailVerificationToken = undefined;
+    user.emailVerificationExpires = undefined;
+    await user.save();
+
+    res.json({ success: true, message: 'Email verified successfully' });
+  } catch (error) {
+    next(error);
+  }
+});
 
 // طلب رمز تحقق عبر SMS
 router.post('/request-verification',
@@ -177,3 +461,5 @@ router.post('/webhooks/sms-status', (req, res) => {
   
   res.sendStatus(200);
 });
+
+export default router;
