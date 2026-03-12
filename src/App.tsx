@@ -45,6 +45,7 @@ import AcceptableUsePolicyPage from "./pages/legal/AcceptableUsePolicyPage";
 import DisclaimerPage from "./pages/legal/DisclaimerPage";
 import SecurityDisclosurePage from "./pages/legal/SecurityDisclosurePage";
 import WhatsAppSetupPage from "./pages/WhatsAppSetupPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import WhatsAppManagementPage from "./pages/WhatsAppManagementPage";
 import FloatingWhatsAppButton from "./components/shared/FloatingWhatsAppButton";
 
@@ -130,6 +131,7 @@ function App() {
         <Route path="/disclaimer" element={<DisclaimerPage />} />
         <Route path="/security" element={<SecurityDisclosurePage />} />
         <Route path="/whatsapp-setup" element={<WhatsAppSetupPage />} />
+        <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
         <Route path="/whatsapp-management" element={
           <AdminRoute>
             <WhatsAppManagementPage />
