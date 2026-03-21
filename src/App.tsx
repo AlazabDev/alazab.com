@@ -131,6 +131,7 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/furniture-gallery" element={<FurnitureGallery />} />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         <Route path="/terms-of-service" element={<TermsOfServicePage />} />
         <Route path="/cookie-policy" element={<CookiePolicyPage />} />
