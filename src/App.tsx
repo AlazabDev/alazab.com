@@ -1,58 +1,68 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import MaintenanceRequest from "./pages/MaintenanceRequest";
-import MaintenanceTracking from "./pages/MaintenanceTracking";
-import MaintenanceList from "./pages/MaintenanceList";
-import ServicesPage from "./pages/ServicesPage";
-import ProjectsPage from "./pages/ProjectsPage";
-import ProjectManagement from "./pages/ProjectManagement";
-import ProjectDetails from "./pages/ProjectDetails";
-import ProjectPortfolioDetails from "./pages/ProjectPortfolioDetails";
-import AboutPage from "./pages/AboutPage";
-import ContactPage from "./pages/ContactPage";
-import CEOPage from "./pages/CEOPage";
-import ChatbotPage from "./pages/ChatbotPage";
-import AuthPage from "./pages/AuthPage";
-import DashboardPage from "./pages/DashboardPage";
-import AdminDashboard from "./pages/AdminDashboard";
-import ProfilePage from "./pages/ProfilePage";
-import SettingsPage from "./pages/SettingsPage";
-import NotFound from "./pages/NotFound";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
-import AdminRoute from "./components/auth/AdminRoute";
 import { Toaster } from "./components/ui/toaster";
 import "./App.css";
 
-import ProjectsShowcase from "./pages/ProjectsShowcase";
-import MaintenanceRequestDetails from "./pages/MaintenanceRequestDetails";
-import MaintenanceReports from "./pages/MaintenanceReports";
-import ProjectStoryPage from "./pages/ProjectStoryPage";
-import ChatbotTrainingPage from "./pages/ChatbotTrainingPage";
-import LuxuryFinishingPage from "./pages/services/LuxuryFinishingPage";
-import BrandIdentityPage from "./pages/services/BrandIdentityPage";
-import UberFixPage from "./pages/services/UberFixPage";
-import LabanAlasfourPage from "./pages/services/LabanAlasfourPage";
-import Portfolio from "./pages/Portfolio";
-import PrivacyPolicyPage from "./pages/legal/PrivacyPolicyPage";
-import TermsOfServicePage from "./pages/legal/TermsOfServicePage";
-import CookiePolicyPage from "./pages/legal/CookiePolicyPage";
-import DataDeletionPage from "./pages/legal/DataDeletionPage";
-import LegalContactPage from "./pages/legal/LegalContactPage";
-import RefundPolicyPage from "./pages/legal/RefundPolicyPage";
-import AcceptableUsePolicyPage from "./pages/legal/AcceptableUsePolicyPage";
-import DisclaimerPage from "./pages/legal/DisclaimerPage";
-import SecurityDisclosurePage from "./pages/legal/SecurityDisclosurePage";
-import WhatsAppSetupPage from "./pages/WhatsAppSetupPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
-import WhatsAppManagementPage from "./pages/WhatsAppManagementPage";
+// Eagerly loaded (critical path)
+import Index from "./pages/Index";
+import AuthPage from "./pages/AuthPage";
+import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import AdminRoute from "./components/auth/AdminRoute";
 import FloatingWhatsAppButton from "./components/shared/FloatingWhatsAppButton";
+
+// Lazy loaded pages
+const MaintenanceRequest = lazy(() => import("./pages/MaintenanceRequest"));
+const MaintenanceTracking = lazy(() => import("./pages/MaintenanceTracking"));
+const MaintenanceList = lazy(() => import("./pages/MaintenanceList"));
+const ServicesPage = lazy(() => import("./pages/ServicesPage"));
+const ProjectsPage = lazy(() => import("./pages/ProjectsPage"));
+const ProjectManagement = lazy(() => import("./pages/ProjectManagement"));
+const ProjectDetails = lazy(() => import("./pages/ProjectDetails"));
+const ProjectPortfolioDetails = lazy(() => import("./pages/ProjectPortfolioDetails"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const CEOPage = lazy(() => import("./pages/CEOPage"));
+const ChatbotPage = lazy(() => import("./pages/ChatbotPage"));
+const DashboardPage = lazy(() => import("./pages/DashboardPage"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const SettingsPage = lazy(() => import("./pages/SettingsPage"));
+const ProjectsShowcase = lazy(() => import("./pages/ProjectsShowcase"));
+const MaintenanceRequestDetails = lazy(() => import("./pages/MaintenanceRequestDetails"));
+const MaintenanceReports = lazy(() => import("./pages/MaintenanceReports"));
+const ProjectStoryPage = lazy(() => import("./pages/ProjectStoryPage"));
+const ChatbotTrainingPage = lazy(() => import("./pages/ChatbotTrainingPage"));
+const LuxuryFinishingPage = lazy(() => import("./pages/services/LuxuryFinishingPage"));
+const BrandIdentityPage = lazy(() => import("./pages/services/BrandIdentityPage"));
+const UberFixPage = lazy(() => import("./pages/services/UberFixPage"));
+const LabanAlasfourPage = lazy(() => import("./pages/services/LabanAlasfourPage"));
+const Portfolio = lazy(() => import("./pages/Portfolio"));
+const PrivacyPolicyPage = lazy(() => import("./pages/legal/PrivacyPolicyPage"));
+const TermsOfServicePage = lazy(() => import("./pages/legal/TermsOfServicePage"));
+const CookiePolicyPage = lazy(() => import("./pages/legal/CookiePolicyPage"));
+const DataDeletionPage = lazy(() => import("./pages/legal/DataDeletionPage"));
+const LegalContactPage = lazy(() => import("./pages/legal/LegalContactPage"));
+const RefundPolicyPage = lazy(() => import("./pages/legal/RefundPolicyPage"));
+const AcceptableUsePolicyPage = lazy(() => import("./pages/legal/AcceptableUsePolicyPage"));
+const DisclaimerPage = lazy(() => import("./pages/legal/DisclaimerPage"));
+const SecurityDisclosurePage = lazy(() => import("./pages/legal/SecurityDisclosurePage"));
+const WhatsAppSetupPage = lazy(() => import("./pages/WhatsAppSetupPage"));
+const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
+const WhatsAppManagementPage = lazy(() => import("./pages/WhatsAppManagementPage"));
+
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+  </div>
+);
 
 function App() {
   return (
     <LanguageProvider>
     <BrowserRouter>
+      <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/auth" element={<AuthPage />} />
@@ -111,7 +121,6 @@ function App() {
         <Route path="/services/uberfix" element={<UberFixPage />} />
         <Route path="/services/brand-identity" element={<BrandIdentityPage />} />
         <Route path="/services/laban-alasfour" element={<LabanAlasfourPage />} />
-        {/* Legacy routes */}
         <Route path="/services/general-supplies" element={<LabanAlasfourPage />} />
         <Route path="/services/maintenance-renovation" element={<UberFixPage />} />
         <Route path="/services/luxury-cleaning" element={<LuxuryFinishingPage />} />
@@ -144,6 +153,7 @@ function App() {
         } />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      </Suspense>
       <FloatingWhatsAppButton />
       <Toaster />
     </BrowserRouter>
