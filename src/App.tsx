@@ -10,7 +10,7 @@ import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
-import FloatingWhatsAppButton from "./components/shared/FloatingWhatsAppButton";
+import FloatingChatBot from "./components/shared/FloatingChatBot";
 
 // Lazy loaded pages
 const MaintenanceRequest = lazy(() => import("./pages/MaintenanceRequest"));
@@ -154,7 +154,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Suspense>
-      <FloatingWhatsAppButton />
+      <FloatingChatBot />
       <Toaster />
     </BrowserRouter>
     </LanguageProvider>
