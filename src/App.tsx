@@ -39,6 +39,7 @@ const BrandIdentityPage = lazy(() => import("./pages/services/BrandIdentityPage"
 const UberFixPage = lazy(() => import("./pages/services/UberFixPage"));
 const LabanAlasfourPage = lazy(() => import("./pages/services/LabanAlasfourPage"));
 const Portfolio = lazy(() => import("./pages/Portfolio"));
+const FurnitureGallery = lazy(() => import("./pages/FurnitureGallery"));
 const PrivacyPolicyPage = lazy(() => import("./pages/legal/PrivacyPolicyPage"));
 const TermsOfServicePage = lazy(() => import("./pages/legal/TermsOfServicePage"));
 const CookiePolicyPage = lazy(() => import("./pages/legal/CookiePolicyPage"));
@@ -130,6 +131,7 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/furniture-gallery" element={<FurnitureGallery />} />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         <Route path="/terms-of-service" element={<TermsOfServicePage />} />
         <Route path="/cookie-policy" element={<CookiePolicyPage />} />
