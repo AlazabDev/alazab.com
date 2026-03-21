@@ -164,7 +164,7 @@ const Footer: React.FC = () => {
         {/* Copyright */}
         <div className="text-center text-gray-400 text-xs">
           <p className="mb-2">
-            جميع الحقوق محفوظة © 2024 شركة العزب للمقاولات
+            جميع الحقوق محفوظة © {new Date().getFullYear()} شركة العزب للمقاولات
           </p>
           <p className="leading-relaxed max-w-2xl mx-auto opacity-70">
             شركة العزب للإنشاءات تعمل تحت العلامة التجارية المسجلة D-U-N-S No: 849203826
