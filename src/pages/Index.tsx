@@ -59,10 +59,10 @@ const Index: React.FC = () => {
         <meta property="og:description" content="رائدة في مجال المقاولات والإنشاءات في المملكة العربية السعودية" />
         <meta property="og:type" content="website" />
         <meta property="fb:app_id" content="889346333913449" />
-        <meta property="og:image" content="https://alazab-site.lovable.app/alazab-icon.png" />
+        <meta property="og:image" content="https://alazab.com/alazab-icon.png" />
         <meta property="og:url" content="https://alazab.com" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://alazab-site.lovable.app/alazab-icon.png" />
+        <meta name="twitter:image" content="https://alazab.com/alazab-icon.png" />
         <link rel="canonical" href="https://alazab.com" />
       </Helmet>
 
