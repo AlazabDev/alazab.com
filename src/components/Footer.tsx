@@ -85,16 +85,16 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-bold mb-5 text-white border-b border-construction-accent/30 pb-2">خدماتنا</h3>
             <ul className="space-y-3 text-gray-300 text-sm">
               {[
-                'المقاولات العامة',
-                'التصميم المعماري',
-                'إدارة المشاريع',
-                'الصيانة والتشغيل',
-                'الاستشارات الهندسية',
-                'التطوير العقاري',
+                { to: '/services/luxury-finishing', label: 'التشطيب الراقي' },
+                { to: '/services/brand-identity', label: 'هوية العلامة التجارية' },
+                { to: '/services/uberfix', label: 'أوبرفيكس - الصيانة المعمارية' },
+                { to: '/services/laban-alasfour', label: 'لبن العصفور - التوريدات' },
               ].map((service) => (
-                <li key={service} className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-construction-accent rounded-full"></span>
-                  {service}
+                <li key={service.to}>
+                  <Link to={service.to} className="flex items-center gap-2 hover:text-construction-accent transition-colors">
+                    <span className="w-1.5 h-1.5 bg-construction-accent rounded-full shrink-0"></span>
+                    {service.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -164,7 +164,7 @@ const Footer: React.FC = () => {
         {/* Copyright */}
         <div className="text-center text-gray-400 text-xs">
           <p className="mb-2">
-            جميع الحقوق محفوظة © 2024 شركة العزب للمقاولات
+            جميع الحقوق محفوظة © {new Date().getFullYear()} شركة العزب للمقاولات
           </p>
           <p className="leading-relaxed max-w-2xl mx-auto opacity-70">
             شركة العزب للإنشاءات تعمل تحت العلامة التجارية المسجلة D-U-N-S No: 849203826
