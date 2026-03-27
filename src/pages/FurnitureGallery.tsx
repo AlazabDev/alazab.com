@@ -13,8 +13,12 @@ import Footer from '@/components/Footer';
 const THUMB = 'w_600,q_auto,f_auto';
 const FULL = 'w_1400,q_auto,f_auto';
 
-const optimizeUrl = (url: string, transform: string) =>
-  url.replace('/upload/', `/upload/${transform}/`);
+const optimizeUrl = (url: string, transform: string) => {
+  if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+    return url.replace('/upload/', `/upload/${transform}/`);
+  }
+  return url;
+};
 
 const FurnitureGallery: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
