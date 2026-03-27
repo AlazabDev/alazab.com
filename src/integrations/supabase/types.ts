@@ -113,6 +113,39 @@ export type Database = {
         }
         Relationships: []
       }
+      finishing_levels: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          name_en: string | null
+          price_per_sqm: number
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          name_en?: string | null
+          price_per_sqm?: number
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          name_en?: string | null
+          price_per_sqm?: number
+          sort_order?: number
+        }
+        Relationships: []
+      }
       integrations: {
         Row: {
           config: Json | null
@@ -321,6 +354,223 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      quotation_categories: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      quotation_items: {
+        Row: {
+          category_id: string
+          created_at: string
+          default_unit_price: number
+          description: string
+          id: string
+          is_active: boolean
+          item_code: string | null
+          sort_order: number
+          unit: string
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          default_unit_price?: number
+          description: string
+          id?: string
+          is_active?: boolean
+          item_code?: string | null
+          sort_order?: number
+          unit?: string
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          default_unit_price?: number
+          description?: string
+          id?: string
+          is_active?: boolean
+          item_code?: string | null
+          sort_order?: number
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotation_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "quotation_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotation_line_items: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          item_id: string | null
+          notes: string | null
+          quantity: number
+          quotation_id: string
+          sort_order: number
+          total: number
+          unit: string
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          item_id?: string | null
+          notes?: string | null
+          quantity?: number
+          quotation_id: string
+          sort_order?: number
+          total?: number
+          unit?: string
+          unit_price?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          item_id?: string | null
+          notes?: string | null
+          quantity?: number
+          quotation_id?: string
+          sort_order?: number
+          total?: number
+          unit?: string
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotation_line_items_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "quotation_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_line_items_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: false
+            referencedRelation: "quotations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotations: {
+        Row: {
+          client_email: string | null
+          client_name: string
+          client_phone: string | null
+          created_at: string
+          created_by: string | null
+          discount_amount: number | null
+          discount_percentage: number | null
+          finishing_level_id: string | null
+          id: string
+          labor_percentage: number | null
+          material_cost: number | null
+          notes: string | null
+          pdf_url: string | null
+          pricing_system: string
+          project_type: string
+          property_area: number | null
+          property_type: string | null
+          quotation_number: string
+          status: string
+          subtotal: number
+          tax_amount: number | null
+          tax_percentage: number | null
+          total: number
+          updated_at: string
+          valid_until: string | null
+        }
+        Insert: {
+          client_email?: string | null
+          client_name: string
+          client_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          discount_amount?: number | null
+          discount_percentage?: number | null
+          finishing_level_id?: string | null
+          id?: string
+          labor_percentage?: number | null
+          material_cost?: number | null
+          notes?: string | null
+          pdf_url?: string | null
+          pricing_system?: string
+          project_type?: string
+          property_area?: number | null
+          property_type?: string | null
+          quotation_number: string
+          status?: string
+          subtotal?: number
+          tax_amount?: number | null
+          tax_percentage?: number | null
+          total?: number
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Update: {
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          discount_amount?: number | null
+          discount_percentage?: number | null
+          finishing_level_id?: string | null
+          id?: string
+          labor_percentage?: number | null
+          material_cost?: number | null
+          notes?: string | null
+          pdf_url?: string | null
+          pricing_system?: string
+          project_type?: string
+          property_area?: number | null
+          property_type?: string | null
+          quotation_number?: string
+          status?: string
+          subtotal?: number
+          tax_amount?: number | null
+          tax_percentage?: number | null
+          total?: number
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotations_finishing_level_id_fkey"
+            columns: ["finishing_level_id"]
+            isOneToOne: false
+            referencedRelation: "finishing_levels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       request_server: {
         Row: {
@@ -630,6 +880,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_quotation_number: { Args: never; Returns: string }
       is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
