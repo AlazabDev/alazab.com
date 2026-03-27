@@ -26,3 +26,9 @@ verify_jwt = false
 
 [functions.parse-training-file]
 verify_jwt = false
+
+[functions.generate-quotation-pdf]
+verify_jwt = false
+
+[functions.quotation-notifications]
+verify_jwt = false
