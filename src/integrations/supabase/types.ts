@@ -301,6 +301,36 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_settings: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          setting_key: string
+          setting_value: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          setting_key: string
+          setting_value: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          setting_key?: string
+          setting_value?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       projects: {
         Row: {
           budget: number | null
@@ -480,8 +510,52 @@ export type Database = {
           },
         ]
       }
+      quotation_notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          notification_type: string
+          quotation_id: string
+          recipient_phone: string | null
+          recipient_type: string
+          status: string | null
+          wa_message_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          notification_type: string
+          quotation_id: string
+          recipient_phone?: string | null
+          recipient_type: string
+          status?: string | null
+          wa_message_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          notification_type?: string
+          quotation_id?: string
+          recipient_phone?: string | null
+          recipient_type?: string
+          status?: string | null
+          wa_message_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotation_notifications_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: false
+            referencedRelation: "quotations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quotations: {
         Row: {
+          approval_notes: string | null
+          approved_at: string | null
+          approved_by: string | null
           client_email: string | null
           client_name: string
           client_phone: string | null
@@ -493,6 +567,8 @@ export type Database = {
           id: string
           labor_percentage: number | null
           material_cost: number | null
+          modified_at: string | null
+          modified_by: string | null
           notes: string | null
           pdf_url: string | null
           pricing_system: string
@@ -500,6 +576,7 @@ export type Database = {
           property_area: number | null
           property_type: string | null
           quotation_number: string
+          rejection_reason: string | null
           status: string
           subtotal: number
           tax_amount: number | null
@@ -509,6 +586,9 @@ export type Database = {
           valid_until: string | null
         }
         Insert: {
+          approval_notes?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
           client_email?: string | null
           client_name: string
           client_phone?: string | null
@@ -520,6 +600,8 @@ export type Database = {
           id?: string
           labor_percentage?: number | null
           material_cost?: number | null
+          modified_at?: string | null
+          modified_by?: string | null
           notes?: string | null
           pdf_url?: string | null
           pricing_system?: string
@@ -527,6 +609,7 @@ export type Database = {
           property_area?: number | null
           property_type?: string | null
           quotation_number: string
+          rejection_reason?: string | null
           status?: string
           subtotal?: number
           tax_amount?: number | null
@@ -536,6 +619,9 @@ export type Database = {
           valid_until?: string | null
         }
         Update: {
+          approval_notes?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
           client_email?: string | null
           client_name?: string
           client_phone?: string | null
@@ -547,6 +633,8 @@ export type Database = {
           id?: string
           labor_percentage?: number | null
           material_cost?: number | null
+          modified_at?: string | null
+          modified_by?: string | null
           notes?: string | null
           pdf_url?: string | null
           pricing_system?: string
@@ -554,6 +642,7 @@ export type Database = {
           property_area?: number | null
           property_type?: string | null
           quotation_number?: string
+          rejection_reason?: string | null
           status?: string
           subtotal?: number
           tax_amount?: number | null
