@@ -11,7 +11,8 @@ import {
   HelpCircle,
   Folder,
   Calendar,
-  MessageSquare
+  MessageSquare,
+  Webhook
 } from 'lucide-react';
 
 const menuItems = [

@@ -53,6 +53,7 @@ const WhatsAppSetupPage = lazy(() => import("./pages/WhatsAppSetupPage"));
 const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
 const WhatsAppManagementPage = lazy(() => import("./pages/WhatsAppManagementPage"));
 const QuotationManagement = lazy(() => import("./pages/QuotationManagement"));
+const WebhookMonitorPage = lazy(() => import("./pages/WebhookMonitorPage"));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
@@ -152,6 +153,11 @@ function App() {
         <Route path="/quotation-management" element={
           <AdminRoute>
             <QuotationManagement />
+          </AdminRoute>
+        } />
+        <Route path="/webhook-monitor" element={
+          <AdminRoute>
+            <WebhookMonitorPage />
           </AdminRoute>
         } />
         <Route path="/maintenance-reports" element={
