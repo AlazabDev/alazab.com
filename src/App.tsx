@@ -52,6 +52,7 @@ const SecurityDisclosurePage = lazy(() => import("./pages/legal/SecurityDisclosu
 const WhatsAppSetupPage = lazy(() => import("./pages/WhatsAppSetupPage"));
 const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
 const WhatsAppManagementPage = lazy(() => import("./pages/WhatsAppManagementPage"));
+const QuotationManagement = lazy(() => import("./pages/QuotationManagement"));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
@@ -146,6 +147,11 @@ function App() {
         <Route path="/whatsapp-management" element={
           <AdminRoute>
             <WhatsAppManagementPage />
+          </AdminRoute>
+        } />
+        <Route path="/quotation-management" element={
+          <AdminRoute>
+            <QuotationManagement />
           </AdminRoute>
         } />
         <Route path="/maintenance-reports" element={
