@@ -59,6 +59,12 @@ const menuItems = [
     badge: '3'
   },
   {
+    title: 'مراقبة الويب هوك',
+    icon: Webhook,
+    path: '/webhook-monitor',
+    badge: null
+  },
+  {
     title: 'التقويم',
     icon: Calendar,
     path: '/calendar',
