@@ -8,7 +8,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-hub-signature-256",
 };
 
-const VERIFY_TOKEN = "QvacXnwH_5QWUTKsEsxEgtYd8kHpVcf3U";
+const VERIFY_TOKEN = Deno.env.get("WHATSAPP_WEBHOOK_VERIFY_TOKEN") || "QvacXnwH_5QWUTKsEsxEgtYd8kHpVcf3U";
 
 // Rate limiting: in-memory store (per cold-start)
 const rateLimiter = new Map<string, { count: number; resetAt: number }>();
