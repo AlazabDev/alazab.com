@@ -748,24 +748,18 @@ export type Database = {
           email: string
           id: string
           is_active: boolean | null
-          password_hash: string
-          role: string
         }
         Insert: {
           created_at?: string | null
           email: string
           id?: string
           is_active?: boolean | null
-          password_hash: string
-          role?: string
         }
         Update: {
           created_at?: string | null
           email?: string
           id?: string
           is_active?: boolean | null
-          password_hash?: string
-          role?: string
         }
         Relationships: []
       }
