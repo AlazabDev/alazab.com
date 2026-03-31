@@ -50,6 +50,7 @@ const AuthPage: React.FC = () => {
           <LoginForm
             onSwitchToSignup={() => setMode('signup')}
             onSwitchToReset={() => setMode('reset')}
+            onSwitchToWhatsApp={() => setMode('whatsapp')}
             onSuccess={handleAuthSuccess}
           />
         )}
