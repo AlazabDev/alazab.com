@@ -31,9 +31,9 @@ const WhatsAppOTPForm: React.FC<WhatsAppOTPFormProps> = ({ onSwitchToEmail, onSu
 
   const formatPhone = (value: string) => {
     const digits = value.replace(/\D/g, '');
-    if (digits.startsWith('966')) return digits;
-    if (digits.startsWith('0')) return '966' + digits.slice(1);
-    return '966' + digits;
+    if (digits.startsWith('20')) return digits;
+    if (digits.startsWith('0')) return '20' + digits.slice(1);
+    return '20' + digits;
   };
 
   const handleSendOTP = async (e: React.FormEvent) => {
