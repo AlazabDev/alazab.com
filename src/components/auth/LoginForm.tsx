@@ -13,10 +13,11 @@ import { Mail, Lock, Loader2 } from 'lucide-react';
 interface LoginFormProps {
   onSwitchToSignup: () => void;
   onSwitchToReset: () => void;
+  onSwitchToWhatsApp?: () => void;
   onSuccess: () => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup, onSwitchToReset, onSuccess }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup, onSwitchToReset, onSwitchToWhatsApp, onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
