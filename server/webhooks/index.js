@@ -2,7 +2,7 @@ const express = require('express');
 const crypto = require('crypto');
 const app = express();
 
-const PORT = process.env.AZABOT_PORT || 3001;
+const PORT = process.env.AZABOT_PORT || 3003;
 const VERIFY_TOKEN = process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN || '';
 const APP_SECRET = process.env.FACEBOOK_APP_SECRET || '';
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN || '';
