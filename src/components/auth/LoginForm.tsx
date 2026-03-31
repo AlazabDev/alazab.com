@@ -13,6 +13,7 @@ import { Mail, Lock, Loader2 } from 'lucide-react';
 interface LoginFormProps {
   onSwitchToSignup: () => void;
   onSwitchToReset: () => void;
+  onSwitchToWhatsApp?: () => void;
   onSuccess: () => void;
 }
 
