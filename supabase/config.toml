@@ -33,5 +33,3 @@ verify_jwt = false
 [functions.quotation-notifications]
 verify_jwt = false
 
-[functions.azabot-webhook]
-verify_jwt = false

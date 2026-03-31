@@ -1,0 +1,20 @@
+[Unit]
+Description=AzaBot Webhook Server
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/core/alazab.com/server/webhooks
+Environment=NODE_ENV=production
+Environment=AZABOT_PORT=3001
+Environment=WHATSAPP_WEBHOOK_VERIFY_TOKEN=QvacXnwH_5QWUTKsEsxEgtYd8kHpVcf3U
+# أضف المتغيرات التالية:
+# Environment=FACEBOOK_APP_SECRET=your_app_secret
+# Environment=FACEBOOK_PAGE_ACCESS_TOKEN=your_page_token
+ExecStart=/usr/bin/node index.js
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
