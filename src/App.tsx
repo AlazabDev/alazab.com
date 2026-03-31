@@ -54,6 +54,7 @@ const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
 const WhatsAppManagementPage = lazy(() => import("./pages/WhatsAppManagementPage"));
 const QuotationManagement = lazy(() => import("./pages/QuotationManagement"));
 const WebhookMonitorPage = lazy(() => import("./pages/WebhookMonitorPage"));
+const FacebookPage = lazy(() => import("./pages/FacebookPage"));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
@@ -143,6 +144,7 @@ function App() {
         <Route path="/acceptable-use" element={<AcceptableUsePolicyPage />} />
         <Route path="/disclaimer" element={<DisclaimerPage />} />
         <Route path="/security" element={<SecurityDisclosurePage />} />
+        <Route path="/facebook" element={<FacebookPage />} />
         <Route path="/whatsapp-setup" element={<WhatsAppSetupPage />} />
         <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
         <Route path="/whatsapp-management" element={
