@@ -36,7 +36,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children, title }) => {
   }, []);
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-background min-h-screen">
       <Header />
       <main className="pt-16 md:pt-24">
         <div className="container mx-auto px-4 py-4 md:py-8">
