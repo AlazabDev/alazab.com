@@ -54,6 +54,7 @@ const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
 const WhatsAppManagementPage = lazy(() => import("./pages/WhatsAppManagementPage"));
 const QuotationManagement = lazy(() => import("./pages/QuotationManagement"));
 const WebhookMonitorPage = lazy(() => import("./pages/WebhookMonitorPage"));
+const FacebookPage = lazy(() => import("./pages/FacebookPage"));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">

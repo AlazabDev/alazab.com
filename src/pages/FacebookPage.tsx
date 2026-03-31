@@ -9,9 +9,9 @@ import { Link } from 'react-router-dom';
 
 const FacebookPage: React.FC = () => {
   useEffect(() => {
-    // Parse Facebook embeds
-    if (window.FB) {
-      window.FB.XFBML.parse();
+    const win = window as any;
+    if (win.FB) {
+      win.FB.XFBML.parse();
     }
   }, []);
 
