@@ -1,0 +1,24 @@
+[Unit]
+Description=Al-Azab API Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/core/alazab.com/server/api
+ExecStart=/usr/bin/node index.js
+Restart=on-failure
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=alazab-api
+
+# Environment
+Environment=NODE_ENV=production
+Environment=API_PORT=3002
+Environment=SUPABASE_URL=https://bxuhcbfdoaflsgbxiqei.supabase.co
+# Add your service role key:
+# Environment=SUPABASE_SERVICE_ROLE_KEY=your_key_here
+
+[Install]
+WantedBy=multi-user.target
