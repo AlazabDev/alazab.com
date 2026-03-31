@@ -134,6 +134,10 @@
     "vitest": "^2.0.0"
   },
   "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "esbuild"
+    ],
     "overrides": {
       "react": "^18.3.1",
       "react-dom": "^18.3.1"
