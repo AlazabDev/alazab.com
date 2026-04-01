@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">شركة العزب للمقاولات</string>
+    <string name="title_activity_main">شركة العزب للمقاولات</string>
+    <string name="package_name">com.alazab.app</string>
+    <string name="custom_url_scheme">com.alazab.app</string>
+</resources>
