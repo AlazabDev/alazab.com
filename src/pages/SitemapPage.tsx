@@ -72,7 +72,7 @@ const SitemapPage: React.FC = () => {
         <meta name="description" content="خريطة موقع شركة العزب للمقاولات - تصفح جميع صفحات الموقع بسهولة" />
         <link rel="canonical" href="https://alazab.com/sitemap" />
       </Helmet>
-      <Navbar />
+      <Header />
 
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
