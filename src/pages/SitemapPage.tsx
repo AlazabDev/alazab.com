@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Map, Home, Wrench, Building2, Users, Phone, MessageSquare, Shield, FileText, Image, Armchair } from 'lucide-react';
-import Navbar from '@/components/Navbar';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 const sitemapSections = [
