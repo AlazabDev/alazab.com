@@ -3,6 +3,14 @@ import { corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.95.0/cors";
 
 const WHATSAPP_API = "https://graph.facebook.com/v21.0";
 
+async function hashOtp(otp: string, salt: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(otp + salt);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -52,12 +60,16 @@ Deno.serve(async (req) => {
 
     // Generate 6-digit OTP
     const otp = String(Math.floor(100000 + Math.random() * 900000));
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString(); // 5 min
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
 
-    // Store OTP
+    // Generate a unique salt and hash the OTP before storing
+    const salt = crypto.randomUUID();
+    const hashedOtp = await hashOtp(otp, salt);
+
+    // Store hashed OTP with salt
     const { error: insertError } = await supabase.from("otp_codes").insert({
       phone_number: cleanPhone,
-      otp_code: otp,
+      otp_code: `${salt}:${hashedOtp}`,
       expires_at: expiresAt,
     });
 
