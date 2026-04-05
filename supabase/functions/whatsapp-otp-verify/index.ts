@@ -1,6 +1,14 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 import { corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.95.0/cors";
 
+async function hashOtp(otp: string, salt: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(otp + salt);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -61,8 +69,21 @@ Deno.serve(async (req) => {
       .update({ attempts: otpRecord.attempts + 1 })
       .eq("id", otpRecord.id);
 
-    // Verify OTP
-    if (otpRecord.otp_code !== otp_code) {
+    // Verify OTP by hashing the input and comparing
+    const storedValue = otpRecord.otp_code;
+    let isValid = false;
+
+    if (storedValue.includes(":")) {
+      // New hashed format: salt:hash
+      const [salt, storedHash] = storedValue.split(":");
+      const inputHash = await hashOtp(otp_code, salt);
+      isValid = inputHash === storedHash;
+    } else {
+      // Legacy plaintext fallback (for any existing records)
+      isValid = storedValue === otp_code;
+    }
+
+    if (!isValid) {
       return new Response(
         JSON.stringify({
           error: "رمز التحقق غير صحيح",
@@ -85,32 +106,9 @@ Deno.serve(async (req) => {
     const { data: existingUsers } = await supabase.auth.admin.listUsers();
     const existingUser = existingUsers?.users?.find((u) => u.email === email);
 
-    let session = null;
     let user = null;
 
     if (existingUser) {
-      // Generate magic link session for existing user
-      const { data, error } = await supabase.auth.admin.generateLink({
-        type: "magiclink",
-        email,
-      });
-
-      if (error) {
-        console.error("Magic link error:", error.message);
-        return new Response(
-          JSON.stringify({ error: "خطأ في تسجيل الدخول" }),
-          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
-      // Sign in with the token
-      const { data: signInData, error: signInError } =
-        await supabase.auth.admin.generateLink({
-          type: "magiclink",
-          email,
-          options: { data: { phone: cleanPhone } },
-        });
-
       user = existingUser;
     } else {
       // Create new user
@@ -149,6 +147,13 @@ Deno.serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    // Clean up expired/verified OTPs for this phone
+    await supabase
+      .from("otp_codes")
+      .delete()
+      .eq("phone_number", cleanPhone)
+      .eq("verified", true);
 
     console.log(`OTP verified for ${cleanPhone.slice(-4)}`);
 
