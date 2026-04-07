@@ -62,7 +62,7 @@ const ChatbotTrainingPage: React.FC = () => {
     setLoading(false);
   };
 
-  useEffect(() => { fetchEntries(); }, []);
+  useEffect(() => { fetchEntries(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const addEntry = async () => {
     if (!newTitle.trim() || !newContent.trim()) {
