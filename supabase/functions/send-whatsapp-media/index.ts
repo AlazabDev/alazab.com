@@ -63,7 +63,7 @@ serve(async (req) => {
     };
 
     const waType = typeMap[media_type] || 'document';
-    const mediaBody: any = { link: media_url };
+    const mediaBody: Record<string, string> = { link: media_url };
     if (caption && (waType === 'image' || waType === 'video' || waType === 'document')) {
       mediaBody.caption = caption;
     }

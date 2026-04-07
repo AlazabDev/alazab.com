@@ -57,7 +57,7 @@ serve(async (req) => {
     for (const tpl of templates) {
       const phoneNumberId = secretsMap['WHATSAPP_PHONE_NUMBER_ID'] || 'default';
       const components = tpl.components || [];
-      const bodyComponent = components.find((c: any) => c.type === 'BODY');
+      const bodyComponent = components.find((c: Record<string, string>) => c.type === 'BODY');
       const variablesCount = bodyComponent?.example?.body_text?.[0]?.length || 0;
 
       const { error } = await supabase

@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    const cleanPhone = phone_number.replace(/[\s\-\+]/g, "");
+    const cleanPhone = phone_number.replace(/[\s+]/g, "");
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;

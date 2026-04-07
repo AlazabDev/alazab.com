@@ -22,7 +22,7 @@ serve(async (req) => {
       .in('key', ['WHATSAPP_ACCESS_TOKEN', 'WABA_ID']);
 
     const secretsMap: Record<string, string> = {};
-    secrets?.forEach((s: any) => { secretsMap[s.key] = s.value; });
+    secrets?.forEach((s: { key: string; value: string }) => { secretsMap[s.key] = s.value; });
 
     const accessToken = secretsMap['WHATSAPP_ACCESS_TOKEN'];
     const wabaId = secretsMap['WABA_ID'];

@@ -44,7 +44,7 @@ serve(async (req) => {
     const fileText = await file.text();
 
     // Parse based on file type
-    let entries: { title: string; content: string }[] = [];
+    const entries: { title: string; content: string }[] = [];
 
     if (fileName.endsWith(".csv")) {
       // CSV: each row becomes an entry
