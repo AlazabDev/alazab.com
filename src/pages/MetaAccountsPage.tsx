@@ -274,15 +274,15 @@ const MetaAccountsPage: React.FC = () => {
                         <div className="py-12 text-center text-muted-foreground">لا توجد محادثات</div>
                       ) : (
                         <div className="divide-y">
-                          {conversations.map((conv, i) => (
+                          {conversations.map((conv: Record<string, string | number>, i: number) => (
                             <div key={i} className="p-3 flex items-center justify-between">
                               <div>
-                                <p className="font-medium text-sm">{conv.customer_name || conv.phone_number}</p>
-                                <p className="text-xs text-muted-foreground font-mono" dir="ltr">{conv.phone_number}</p>
+                                <p className="font-medium text-sm">{String(conv.customer_name || conv.phone_number)}</p>
+                                <p className="text-xs text-muted-foreground font-mono" dir="ltr">{String(conv.phone_number)}</p>
                               </div>
                               <div className="text-left">
-                                <p className="text-sm">{conv.message_count} رسالة</p>
-                                {parseInt(conv.unread) > 0 && <Badge variant="destructive" className="text-[10px]">{conv.unread} جديدة</Badge>}
+                                <p className="text-sm">{String(conv.message_count)} رسالة</p>
+                                {parseInt(String(conv.unread)) > 0 && <Badge variant="destructive" className="text-[10px]">{String(conv.unread)} جديدة</Badge>}
                               </div>
                             </div>
                           ))}
