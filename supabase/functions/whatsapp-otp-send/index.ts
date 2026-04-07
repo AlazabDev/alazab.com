@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
   try {
     const { phone_number } = await req.json();
 
-    if (!phone_number || !/^\+?\d{10,15}$/.test(phone_number.replace(/[\s\-]/g, ""))) {
+    if (!phone_number || !/^\+?\d{10,15}$/.test(phone_number.replace(/[\s-]/g, ""))) {
       return new Response(
         JSON.stringify({ error: "رقم هاتف غير صالح" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
