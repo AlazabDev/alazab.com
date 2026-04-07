@@ -28,7 +28,7 @@ const MaintenanceTracking: React.FC = () => {
     if (requestNumber) {
       fetchRequestDetails();
     }
-  }, [requestNumber]);
+  }, [requestNumber]); // eslint-disable-line react-hooks/exhaustive-deps
   
   const fetchRequestDetails = async () => {
     setIsLoading(true);

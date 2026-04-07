@@ -60,7 +60,7 @@ const MaintenanceList: React.FC = () => {
 
   useEffect(() => {
     filterRequests();
-  }, [searchTerm, statusFilter, priorityFilter, requests]);
+  }, [searchTerm, statusFilter, priorityFilter, requests]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const filterRequests = () => {
     let filtered = [...requests];
