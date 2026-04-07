@@ -68,7 +68,7 @@ const Portfolio: React.FC = () => {
       ? (currentImageIndex - 1 + filteredImages.length) % filteredImages.length
       : (currentImageIndex + 1) % filteredImages.length;
     setSelectedImage(filteredImages[newIndex]);
-  };
+  }, [currentImageIndex, filteredImages]);
 
   const toggleFavorite = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
