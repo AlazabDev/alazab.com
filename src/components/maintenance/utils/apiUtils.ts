@@ -53,7 +53,7 @@ export const updateRequestStatus = async (requestId: string, newStatus: string) 
   
   const { error } = await supabase
     .from('maintenance_requests')
-    .update({ status: dbStatus as any })
+    .update({ status: dbStatus as Database["public"]["Enums"]["mr_status"] })
     .eq('id', requestId);
   
   if (error) throw error;
