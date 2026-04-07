@@ -315,4 +315,10 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
   );
 };
 
+const VoiceConversation: React.FC<VoiceConversationProps> = (props) => (
+  <ConversationProvider>
+    <VoiceConversationInner {...props} />
+  </ConversationProvider>
+);
+
 export default VoiceConversation;
