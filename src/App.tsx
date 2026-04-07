@@ -170,6 +170,11 @@ function App() {
             <MaintenanceReports />
           </ProtectedRoute>
         } />
+        <Route path="/meta-accounts" element={
+          <AdminRoute>
+            <MetaAccountsPage />
+          </AdminRoute>
+        } />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Suspense>
