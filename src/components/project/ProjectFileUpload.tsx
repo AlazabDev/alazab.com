@@ -66,7 +66,7 @@ const ProjectFileUpload: React.FC<ProjectFileUploadProps> = ({ projectId, onFile
           });
           
           successCount++;
-        } catch (fileError: any) {
+        } catch (fileError: unknown) {
           console.error(`Error uploading file ${file.name}:`, fileError);
           failCount++;
         }
