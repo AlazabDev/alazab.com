@@ -13,9 +13,9 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chatbot`;
 
 const ELEVENLABS_AGENT_ID = 'ihycSANIrpHfhWoaq1g3';
 const VOICES = [
-  { id: 'LXrTqFIgiubkrMkwvOUr', name: 'الصوت الأساسي' },
-  { id: 'EXAVITQu4vr4xnSDxMaL', name: 'سارة' },
-  { id: 'JBFqnCBsd6RMkjVDRZzb', name: 'جورج' },
+  { id: 'LXrTqFIgiubkrMkwvOUr', name: 'الصوت الأساسي', accent: 'عربي', gender: 'ذكر', age: 'شاب' },
+  { id: 'EXAVITQu4vr4xnSDxMaL', name: 'سارة', accent: 'أمريكي', gender: 'أنثى', age: 'شابة' },
+  { id: 'JBFqnCBsd6RMkjVDRZzb', name: 'جورج', accent: 'أمريكي', gender: 'ذكر', age: 'متوسط' },
 ];
 
 const escapeHtml = (s: string) =>
