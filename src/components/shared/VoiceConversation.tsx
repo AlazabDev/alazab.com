@@ -77,7 +77,7 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
       if (!data.signed_url) throw new Error('No signed URL received');
 
       const overrides: Record<string, unknown> = {};
-      if (selectedVoice) overrides.tts = { voiceId: selectedVoice };
+      if (selectedVoice) (overrides as Record<string, unknown>).tts = { voiceId: selectedVoice };
 
       await conversation.startSession({
         signedUrl: data.signed_url,
