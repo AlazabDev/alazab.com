@@ -20,9 +20,9 @@ const MetaAccountsPage: React.FC = () => {
   const [selectedAccount, setSelectedAccount] = useState<MetaAccount | null>(null);
   const [stats, setStats] = useState<MetaAccountStats | null>(null);
   const [messages, setMessages] = useState<MetaMessage[]>([]);
-  const [conversations, setConversations] = useState<any[]>([]);
+  const [conversations, setConversations] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
-  const [serverHealth, setServerHealth] = useState<any>(null);
+  const [serverHealth, setServerHealth] = useState<Record<string, unknown> | null>(null);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newAccount, setNewAccount] = useState({
     display_name: '', business_name: '', waba_id: '', phone_number_id: '',
