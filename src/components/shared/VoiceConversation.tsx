@@ -36,7 +36,7 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
   const conversation = useConversation({
     onConnect: () => console.log('ElevenLabs connected'),
     onDisconnect: () => console.log('ElevenLabs disconnected'),
-    onMessage: (message: any) => {
+    onMessage: (message: Record<string, unknown>) => {
       if (message.type === 'user_transcript') {
         setTranscripts(prev => [...prev, { role: 'user', text: message.user_transcription_event?.user_transcript || '' }]);
       } else if (message.type === 'agent_response') {
