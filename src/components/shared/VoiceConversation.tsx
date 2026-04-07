@@ -247,60 +247,66 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
         ))}
       </div>
 
-      {/* Bottom Conversation Bar */}
+      {/* Bottom Conversation Bar - matching reference design */}
       <div className="p-3 border-t border-border flex-shrink-0">
-        {/* Customer Support label + action icons */}
-        <div className="flex items-center justify-between bg-muted/50 rounded-2xl px-2 py-1.5 border border-border">
-          <div className="px-3 py-1 bg-background rounded-full border border-border">
-            <span className="text-[10px] text-muted-foreground font-medium">خدمة العملاء</span>
+        <div className="flex items-center justify-between bg-background rounded-full px-1.5 py-1.5 border border-border shadow-sm">
+          {/* Label */}
+          <div className="px-4 py-1.5 bg-muted rounded-full">
+            <span className="text-[11px] text-muted-foreground font-medium whitespace-nowrap">خدمة العملاء</span>
           </div>
           
-          <div className="flex items-center gap-1">
+          {/* Icons group */}
+          <div className="flex items-center gap-0.5">
             {/* Mute/Volume */}
             {isConnected && (
-              <Button variant="ghost" size="icon" onClick={toggleMute} className="h-8 w-8 rounded-full">
-                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-              </Button>
+              <button onClick={toggleMute} className="h-9 w-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors" title={isMuted ? 'تشغيل الصوت' : 'كتم الصوت'}>
+                {isMuted ? <VolumeX className="w-[18px] h-[18px] text-muted-foreground" /> : <Volume2 className="w-[18px] h-[18px] text-muted-foreground" />}
+              </button>
             )}
 
-            {/* Download transcript */}
+            {/* Download */}
             {transcripts.length > 0 && (
-              <Button variant="ghost" size="icon" onClick={downloadTranscript} className="h-8 w-8 rounded-full" title="تحميل المحادثة">
-                <Download className="w-4 h-4" />
-              </Button>
+              <button onClick={downloadTranscript} className="h-9 w-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors" title="تحميل المحادثة">
+                <Download className="w-[18px] h-[18px] text-muted-foreground" />
+              </button>
             )}
 
-            {/* Switch to text chat */}
+            {/* Mic indicator */}
+            <button className="h-9 w-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors" title="ميكروفون">
+              <Mic className={`w-[18px] h-[18px] ${isConnected && !isSpeaking ? 'text-construction-accent' : 'text-muted-foreground'}`} />
+            </button>
+
+            {/* Switch to keyboard/text */}
             {onSwitchToChat && (
-              <Button variant="ghost" size="icon" onClick={onSwitchToChat} className="h-8 w-8 rounded-full" title="محادثة نصية">
-                <Keyboard className="w-4 h-4" />
-              </Button>
+              <button onClick={onSwitchToChat} className="h-9 w-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors" title="محادثة نصية">
+                <Keyboard className="w-[18px] h-[18px] text-muted-foreground" />
+              </button>
             )}
 
-            {/* Call/End call */}
+            {/* Call / End call */}
             {!isConnected ? (
-              <Button
+              <button
                 onClick={startConversation}
                 disabled={isConnecting}
-                size="icon"
-                className="h-9 w-9 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-md"
+                className="h-9 w-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-50"
+                title="بدء المكالمة"
               >
                 {isConnecting ? (
                   <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
-                    <Phone className="w-4 h-4" />
+                    <Phone className="w-[18px] h-[18px] text-foreground" />
                   </motion.div>
                 ) : (
-                  <Phone className="w-4 h-4" />
+                  <Phone className="w-[18px] h-[18px] text-foreground" />
                 )}
-              </Button>
+              </button>
             ) : (
-              <Button
+              <button
                 onClick={stopConversation}
-                size="icon"
-                className="h-9 w-9 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md"
+                className="h-9 w-9 rounded-full flex items-center justify-center bg-destructive/10 hover:bg-destructive/20 transition-colors"
+                title="إنهاء المكالمة"
               >
-                <PhoneOff className="w-4 h-4" />
-              </Button>
+                <PhoneOff className="w-[18px] h-[18px] text-destructive" />
+              </button>
             )}
           </div>
         </div>
