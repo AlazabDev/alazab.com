@@ -138,7 +138,7 @@ const WhatsAppSetupPage: React.FC = () => {
       ));
       toast({
         title: 'فشل الإرسال',
-        description: err.message || 'حدث خطأ أثناء إرسال الرسالة',
+        description: err instanceof Error ? err.message : 'حدث خطأ أثناء إرسال الرسالة',
         variant: 'destructive',
       });
     } finally {

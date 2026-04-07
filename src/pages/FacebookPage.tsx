@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 const FacebookPage: React.FC = () => {
   useEffect(() => {
-    const win = window as any;
+    const win = window as unknown as { FB?: { XFBML: { parse: () => void } } };
     if (win.FB) {
       win.FB.XFBML.parse();
     }

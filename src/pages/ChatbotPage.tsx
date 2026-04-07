@@ -91,8 +91,9 @@ const ChatbotPage: React.FC = () => {
           }
         }
       }
-    } catch (e: any) {
-      setMessages(prev => [...prev, { role: 'assistant', content: `⚠️ ${e.message || 'حدث خطأ، يرجى المحاولة مرة أخرى.'}` }]);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'حدث خطأ، يرجى المحاولة مرة أخرى.';
+      setMessages(prev => [...prev, { role: 'assistant', content: `⚠️ ${message}` }]);
     } finally {
       setIsLoading(false);
     }

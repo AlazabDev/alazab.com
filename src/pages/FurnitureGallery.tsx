@@ -81,7 +81,7 @@ const FurnitureGallery: React.FC = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedImage, currentImageIndex]);
+  }, [selectedImage, currentImageIndex, navigateImage]);
 
   const activeCategories = furnitureCategories.filter(c => c.count > 0 || c.id === 'all');
 

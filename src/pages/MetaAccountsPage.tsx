@@ -83,8 +83,8 @@ const MetaAccountsPage: React.FC = () => {
       toast({ title: 'تم', description: 'تم حذف الحساب' });
       if (selectedAccount?.id === id) setSelectedAccount(null);
       loadAccounts();
-    } catch (err: any) {
-      toast({ title: 'خطأ', description: err.message, variant: 'destructive' });
+    } catch (err: unknown) {
+      toast({ title: 'خطأ', description: err instanceof Error ? err.message : 'خطأ', variant: 'destructive' });
     }
   };
 
