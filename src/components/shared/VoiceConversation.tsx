@@ -55,7 +55,7 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
         });
       }
     },
-    onError: (error: any) => console.error('ElevenLabs error:', error),
+    onError: (error: unknown) => console.error('ElevenLabs error:', error),
   });
 
   useEffect(() => {
