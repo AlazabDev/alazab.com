@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { ConversationProvider } from '@elevenlabs/react';
 import { useConversation } from '@elevenlabs/react';
 import { Mic, MicOff, Phone, PhoneOff, Volume2, VolumeX, Keyboard, Search, Check, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
