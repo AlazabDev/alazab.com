@@ -55,7 +55,7 @@ serve(async (req) => {
     }
 
     // Clean phone number
-    let cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+    let cleanPhone = phone.replace(/[\s\-()]/g, '');
     if (cleanPhone.startsWith('+')) cleanPhone = cleanPhone.substring(1);
     if (cleanPhone.startsWith('0')) {
       cleanPhone = '20' + cleanPhone.substring(1);
