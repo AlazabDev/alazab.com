@@ -23,7 +23,7 @@ interface VoiceConversationProps {
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, onClose, onSwitchToChat }) => {
+const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voices, onClose, onSwitchToChat }) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [selectedVoice, setSelectedVoice] = useState(voices[0]?.id || '');
