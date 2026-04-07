@@ -71,8 +71,8 @@ const MetaAccountsPage: React.FC = () => {
       setShowAddDialog(false);
       setNewAccount({ display_name: '', business_name: '', waba_id: '', phone_number_id: '', phone_number: '', access_token: '', app_secret: '', verify_token: '' });
       loadAccounts();
-    } catch (err: any) {
-      toast({ title: 'خطأ', description: err.message, variant: 'destructive' });
+    } catch (err: unknown) {
+      toast({ title: 'خطأ', description: err instanceof Error ? err.message : 'خطأ', variant: 'destructive' });
     }
   };
 
