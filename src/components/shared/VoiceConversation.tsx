@@ -86,7 +86,7 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
       await conversation.setVolume({ volume });
     } catch (error: unknown) {
       console.error('Failed to start voice conversation:', error);
-      alert(error.message || 'فشل في بدء المحادثة الصوتية');
+      alert(error instanceof Error ? error.message : 'فشل في بدء المحادثة الصوتية');
     } finally {
       setIsConnecting(false);
     }

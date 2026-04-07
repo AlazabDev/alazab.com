@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PhoneInput from 'react-phone-input-2';
+// PhoneInput is used when react-phone-input-2 is available
 import 'react-phone-input-2/lib/style.css';
 
 interface PhoneVerificationProps {

@@ -60,11 +60,12 @@ const WhatsAppChatTab: React.FC<WhatsAppChatTabProps> = ({ customerName, custome
         schema: 'public',
         table: 'whatsapp_messages',
         filter: `phone_number=eq.${cleanPhone}`,
-      }, (payload: { new: Record<string, unknown> }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      }, (payload: any) => {
         const msg = payload.new;
         if (msg.direction === 'inbound') {
           setMessages(prev => [...prev, {
-            id: msg.id,
+            id: String(msg.id),
             content: msg.content || `[${msg.message_type}]`,
             sender: 'bot',
             timestamp: new Date(msg.created_at),

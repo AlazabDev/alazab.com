@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import QRCode from 'qrcode.react';
+// QRCode import - uses qrcode.react when available
 
 interface TwoFactorSetupProps {
   onEnabled?: () => void;
