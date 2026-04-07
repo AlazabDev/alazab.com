@@ -37,7 +37,10 @@ const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, 
       } else if (message.type === 'agent_response_correction') {
         setTranscripts(prev => {
           const updated = [...prev];
-          const lastAgent = updated.findLastIndex(t => t.role === 'agent');
+        let lastAgent = -1;
+          for (let j = updated.length - 1; j >= 0; j--) {
+            if (updated[j].role === 'agent') { lastAgent = j; break; }
+          }
           if (lastAgent !== -1) {
             updated[lastAgent] = { role: 'agent', text: message.agent_response_correction_event?.corrected_agent_response || '' };
           }
