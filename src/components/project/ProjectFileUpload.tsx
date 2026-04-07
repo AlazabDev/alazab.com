@@ -94,12 +94,13 @@ const ProjectFileUpload: React.FC<ProjectFileUploadProps> = ({ projectId, onFile
       const fileInput = document.getElementById('file-upload') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
       
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error in upload process:", err);
-      setError(err.message || "حدث خطأ أثناء محاولة تحميل الملفات");
+      const message = err instanceof Error ? err.message : "حدث خطأ أثناء محاولة تحميل الملفات";
+      setError(message);
       toast({
         title: "خطأ في تحميل الملفات",
-        description: err.message || "حدث خطأ أثناء محاولة تحميل الملفات",
+        description: message,
         variant: "destructive",
       });
     } finally {

@@ -170,7 +170,7 @@ const WhatsAppChatTab: React.FC<WhatsAppChatTabProps> = ({ customerName, custome
       setMessages(prev => prev.map(m =>
         m.id === tempId ? { ...m, status: 'failed' as const } : m
       ));
-      toast({ title: 'فشل الإرسال', description: err.message, variant: 'destructive' });
+      toast({ title: 'فشل الإرسال', description: err instanceof Error ? err.message : 'خطأ غير معروف', variant: 'destructive' });
     } finally {
       setSending(false);
     }

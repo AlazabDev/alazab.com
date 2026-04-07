@@ -70,7 +70,7 @@ const CreateStorageBucket: React.FC = () => {
       toast({
         variant: "destructive",
         title: "خطأ في إنشاء خزنة التخزين",
-        description: error.message || "حدث خطأ أثناء محاولة إنشاء خزنة التخزين"
+        description: error instanceof Error ? error.message : "حدث خطأ أثناء محاولة إنشاء خزنة التخزين"
       });
     } finally {
       setCreating(false);

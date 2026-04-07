@@ -75,7 +75,7 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
       const data = await resp.json();
       if (!data.signed_url) throw new Error('No signed URL received');
 
-      const overrides: any = {};
+      const overrides: Record<string, unknown> = {};
       if (selectedVoice) overrides.tts = { voiceId: selectedVoice };
 
       await conversation.startSession({
@@ -83,7 +83,7 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
         overrides: Object.keys(overrides).length > 0 ? overrides : undefined,
       });
       await conversation.setVolume({ volume });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to start voice conversation:', error);
       alert(error.message || 'فشل في بدء المحادثة الصوتية');
     } finally {

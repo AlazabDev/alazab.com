@@ -1,6 +1,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { MaintenanceRequestDetails, AttachmentDetails } from '@/types/maintenance';
+import type { Database } from '@/integrations/supabase/types';
 
 export const fetchMaintenanceRequest = async (requestNumber: string) => {
   const { data: requestData, error: requestError } = await supabase

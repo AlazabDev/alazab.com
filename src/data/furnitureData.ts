@@ -10008,7 +10008,7 @@ export const furnitureImages: FurnitureImage[] = [
     folder: "fireplace",
     folderName: "مدافئ",
     name: "20190610_130116-150x150_dkjj83",
-  },,
+  },
   {
     id: "eabddeb486f304f99da56e45bf2040b3",
     url: "https://objectstorage.me-jeddah-1.oraclecloud.com/n/axwmiwn72of7/b/alazab-media/o/retail-interiors/retail-interiors-001.jpg",

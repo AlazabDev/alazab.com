@@ -44,8 +44,8 @@ const WhatsAppFlowsTab: React.FC = () => {
       if (error) throw error;
       toast({ title: 'تم المزامنة', description: `تم مزامنة ${data?.synced || 0} تدفق من Meta` });
       await fetchFlows();
-    } catch (err: any) {
-      toast({ title: 'فشل المزامنة', description: err.message, variant: 'destructive' });
+    } catch (err: unknown) {
+      toast({ title: 'فشل المزامنة', description: err instanceof Error ? err.message : 'خطأ غير معروف', variant: 'destructive' });
     } finally {
       setSyncing(false);
     }

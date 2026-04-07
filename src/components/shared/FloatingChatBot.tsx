@@ -119,8 +119,9 @@ const FloatingChatBot: React.FC = () => {
           }
         }
       }
-    } catch (e: any) {
-      setMessages(prev => [...prev, { role: 'assistant', content: `⚠️ ${e.message || 'حدث خطأ'}` }]);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'حدث خطأ';
+      setMessages(prev => [...prev, { role: 'assistant', content: `⚠️ ${message}` }]);
     } finally {
       setIsLoading(false);
     }

@@ -72,7 +72,7 @@ export const metaApi = {
     if (params?.phone) qs.set('phone', params.phone);
     return metaFetch(`/messages/${accountId}?${qs}`);
   },
-  sendMessage: (accountId: number, data: { to: string; type?: string; text?: string; template?: any }) =>
+  sendMessage: (accountId: number, data: { to: string; type?: string; text?: string; template?: Record<string, unknown> }) =>
     metaFetch(`/messages/${accountId}/send`, { method: 'POST', body: JSON.stringify(data) }),
   getConversations: (accountId: number) => metaFetch(`/messages/${accountId}/conversations`),
 
