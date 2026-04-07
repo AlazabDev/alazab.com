@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, User, Loader2, X, MessageSquare, Trash2 } from 'lucide-react';
+import { Send, Bot, User, Loader2, X, MessageSquare, Trash2, Mic } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
+import VoiceConversation from './VoiceConversation';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -9,6 +10,13 @@ interface Message {
 }
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chatbot`;
+
+const ELEVENLABS_AGENT_ID = 'ihycSANIrpHfhWoaq1g3';
+const VOICES = [
+  { id: 'LXrTqFIgiubkrMkwvOUr', name: 'الصوت الأساسي' },
+  { id: 'EXAVITQu4vr4xnSDxMaL', name: 'سارة' },
+  { id: 'JBFqnCBsd6RMkjVDRZzb', name: 'جورج' },
+];
 
 const escapeHtml = (s: string) =>
   s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
@@ -26,11 +34,14 @@ const renderMarkdown = (text: string) => {
     .replace(/\n/g, '<br/>');
 };
 
+type TabMode = 'chat' | 'voice';
+
 const FloatingChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabMode>('chat');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -39,8 +50,8 @@ const FloatingChatBot: React.FC = () => {
   }, [messages]);
 
   useEffect(() => {
-    if (isOpen) setTimeout(() => inputRef.current?.focus(), 300);
-  }, [isOpen]);
+    if (isOpen && activeTab === 'chat') setTimeout(() => inputRef.current?.focus(), 300);
+  }, [isOpen, activeTab]);
 
   const sendMessage = useCallback(async (text?: string) => {
     const msg = (text || input).trim();
@@ -153,7 +164,7 @@ const FloatingChatBot: React.FC = () => {
                 <p className="text-[10px] text-white/70">المساعد الذكي - متصل الآن</p>
               </div>
               <div className="flex items-center gap-1">
-                {messages.length > 0 && (
+                {activeTab === 'chat' && messages.length > 0 && (
                   <Button variant="ghost" size="icon" onClick={() => setMessages([])} className="h-7 w-7 text-white/70 hover:text-white hover:bg-white/10">
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
@@ -164,98 +175,135 @@ const FloatingChatBot: React.FC = () => {
               </div>
             </div>
 
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
-              {messages.length === 0 && (
-                <div className="text-center py-6">
-                  <div className="w-14 h-14 rounded-full bg-construction-accent/10 flex items-center justify-center mx-auto mb-3">
-                    <MessageSquare className="w-7 h-7 text-construction-accent" />
-                  </div>
-                  <p className="text-sm font-bold text-foreground mb-1">مرحباً! أنا عزبوت 👋</p>
-                  <p className="text-xs text-muted-foreground mb-3">كيف يمكنني مساعدتك؟</p>
-                  <div className="flex flex-wrap gap-1.5 justify-center">
-                    {quickQuestions.map((q) => (
-                      <button
-                        key={q}
-                        onClick={() => sendMessage(q)}
-                        className="text-[11px] px-3 py-1.5 rounded-full border border-border bg-background hover:bg-muted transition-colors text-foreground"
-                      >
-                        {q}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+            {/* Tab Switcher */}
+            <div className="flex border-b border-border flex-shrink-0">
+              <button
+                onClick={() => setActiveTab('chat')}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium transition-colors ${
+                  activeTab === 'chat'
+                    ? 'text-construction-primary border-b-2 border-construction-accent bg-construction-accent/5'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                محادثة نصية
+              </button>
+              <button
+                onClick={() => setActiveTab('voice')}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium transition-colors ${
+                  activeTab === 'voice'
+                    ? 'text-construction-primary border-b-2 border-construction-accent bg-construction-accent/5'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Mic className="w-3.5 h-3.5" />
+                محادثة صوتية
+              </button>
+            </div>
 
-              {messages.map((msg, i) => (
-                <div key={i} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                    msg.role === 'user'
-                      ? 'bg-construction-primary text-white'
-                      : 'bg-construction-accent text-construction-primary'
-                  }`}>
-                    {msg.role === 'user' ? <User className="w-3 h-3" /> : <Bot className="w-3 h-3" />}
-                  </div>
-                  <div className={`max-w-[80%] rounded-xl px-3 py-2 ${
-                    msg.role === 'user'
-                      ? 'bg-construction-primary text-white rounded-br-sm'
-                      : 'bg-muted rounded-bl-sm'
-                  }`}>
-                    {msg.role === 'assistant' ? (
-                      <div
-                        className="text-xs leading-relaxed"
-                        dangerouslySetInnerHTML={{ __html: renderMarkdown(msg.content) }}
-                      />
-                    ) : (
-                      <p className="text-xs leading-relaxed">{msg.content}</p>
-                    )}
-                  </div>
-                </div>
-              ))}
-
-              {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
-                <div className="flex gap-2">
-                  <div className="w-6 h-6 rounded-full bg-construction-accent flex items-center justify-center">
-                    <Bot className="w-3 h-3 text-construction-primary" />
-                  </div>
-                  <div className="bg-muted rounded-xl rounded-bl-sm px-3 py-2">
-                    <div className="flex gap-1">
-                      <span className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            {/* Content */}
+            {activeTab === 'chat' ? (
+              <>
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
+                  {messages.length === 0 && (
+                    <div className="text-center py-6">
+                      <div className="w-14 h-14 rounded-full bg-construction-accent/10 flex items-center justify-center mx-auto mb-3">
+                        <MessageSquare className="w-7 h-7 text-construction-accent" />
+                      </div>
+                      <p className="text-sm font-bold text-foreground mb-1">مرحباً! أنا عزبوت 👋</p>
+                      <p className="text-xs text-muted-foreground mb-3">كيف يمكنني مساعدتك؟</p>
+                      <div className="flex flex-wrap gap-1.5 justify-center">
+                        {quickQuestions.map((q) => (
+                          <button
+                            key={q}
+                            onClick={() => sendMessage(q)}
+                            className="text-[11px] px-3 py-1.5 rounded-full border border-border bg-background hover:bg-muted transition-colors text-foreground"
+                          >
+                            {q}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
+
+                  {messages.map((msg, i) => (
+                    <div key={i} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                        msg.role === 'user'
+                          ? 'bg-construction-primary text-white'
+                          : 'bg-construction-accent text-construction-primary'
+                      }`}>
+                        {msg.role === 'user' ? <User className="w-3 h-3" /> : <Bot className="w-3 h-3" />}
+                      </div>
+                      <div className={`max-w-[80%] rounded-xl px-3 py-2 ${
+                        msg.role === 'user'
+                          ? 'bg-construction-primary text-white rounded-br-sm'
+                          : 'bg-muted rounded-bl-sm'
+                      }`}>
+                        {msg.role === 'assistant' ? (
+                          <div
+                            className="text-xs leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: renderMarkdown(msg.content) }}
+                          />
+                        ) : (
+                          <p className="text-xs leading-relaxed">{msg.content}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+
+                  {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
+                    <div className="flex gap-2">
+                      <div className="w-6 h-6 rounded-full bg-construction-accent flex items-center justify-center">
+                        <Bot className="w-3 h-3 text-construction-primary" />
+                      </div>
+                      <div className="bg-muted rounded-xl rounded-bl-sm px-3 py-2">
+                        <div className="flex gap-1">
+                          <span className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                          <span className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                          <span className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div ref={messagesEndRef} />
                 </div>
-              )}
 
-              <div ref={messagesEndRef} />
-            </div>
-
-            {/* Input */}
-            <div className="p-2.5 border-t border-border flex-shrink-0">
-              <div className="flex gap-2 items-center">
-                <input
-                  ref={inputRef}
-                  value={input}
-                  onChange={e => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="اكتب رسالتك..."
-                  className="flex-1 bg-muted rounded-full px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-construction-accent"
-                  disabled={isLoading}
-                />
-                <Button
-                  onClick={() => sendMessage()}
-                  disabled={isLoading || !input.trim()}
-                  size="icon"
-                  className="h-8 w-8 rounded-full bg-construction-accent hover:bg-construction-accent/90 text-construction-primary flex-shrink-0"
-                >
-                  {isLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-                </Button>
-              </div>
-              <p className="text-[9px] text-muted-foreground text-center mt-1.5">
-                مدعوم بالذكاء الاصطناعي · قد يخطئ أحياناً
-              </p>
-            </div>
+                {/* Input */}
+                <div className="p-2.5 border-t border-border flex-shrink-0">
+                  <div className="flex gap-2 items-center">
+                    <input
+                      ref={inputRef}
+                      value={input}
+                      onChange={e => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="اكتب رسالتك..."
+                      className="flex-1 bg-muted rounded-full px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-construction-accent"
+                      disabled={isLoading}
+                    />
+                    <Button
+                      onClick={() => sendMessage()}
+                      disabled={isLoading || !input.trim()}
+                      size="icon"
+                      className="h-8 w-8 rounded-full bg-construction-accent hover:bg-construction-accent/90 text-construction-primary flex-shrink-0"
+                    >
+                      {isLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                    </Button>
+                  </div>
+                  <p className="text-[9px] text-muted-foreground text-center mt-1.5">
+                    مدعوم بالذكاء الاصطناعي · قد يخطئ أحياناً
+                  </p>
+                </div>
+              </>
+            ) : (
+              <VoiceConversation
+                agentId={ELEVENLABS_AGENT_ID}
+                voices={VOICES}
+                onClose={() => setActiveTab('chat')}
+              />
+            )}
           </motion.div>
         )}
       </AnimatePresence>
