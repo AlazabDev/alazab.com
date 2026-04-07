@@ -56,6 +56,7 @@ const QuotationManagement = lazy(() => import("./pages/QuotationManagement"));
 const WebhookMonitorPage = lazy(() => import("./pages/WebhookMonitorPage"));
 const FacebookPage = lazy(() => import("./pages/FacebookPage"));
 const SitemapPage = lazy(() => import("./pages/SitemapPage"));
+const MetaAccountsPage = lazy(() => import("./pages/MetaAccountsPage"));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
