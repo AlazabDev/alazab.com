@@ -251,7 +251,7 @@ serve(async (req) => {
     if (qErr || !quotation) throw new Error("عرض السعر غير موجود");
 
     // Fetch line items if itemized
-    let lineItems: any[] = [];
+    let lineItems: Record<string, unknown>[] = [];
     if (quotation.pricing_system === 'itemized') {
       const { data } = await supabase
         .from("quotation_line_items")
