@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, User, Loader2, X, MessageSquare, Trash2, Mic } from 'lucide-react';
+import { Send, Bot, User, Loader2, X, MessageSquare, Trash2, Mic, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import VoiceConversation from './VoiceConversation';

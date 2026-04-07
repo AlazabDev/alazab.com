@@ -1,34 +1,40 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useConversation } from '@elevenlabs/react';
-import { Mic, MicOff, Phone, PhoneOff, Volume2, VolumeX, ChevronDown } from 'lucide-react';
+import { Mic, MicOff, Phone, PhoneOff, Volume2, VolumeX, Keyboard, Search, Check, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface Voice {
+  id: string;
+  name: string;
+  accent?: string;
+  gender?: string;
+  age?: string;
+}
+
 interface VoiceConversationProps {
   agentId: string;
-  voices: { id: string; name: string }[];
+  voices: Voice[];
   onClose: () => void;
+  onSwitchToChat?: () => void;
 }
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, onClose }) => {
+const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, onClose, onSwitchToChat }) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [selectedVoice, setSelectedVoice] = useState(voices[0]?.id || '');
   const [showVoicePicker, setShowVoicePicker] = useState(false);
+  const [voiceSearch, setVoiceSearch] = useState('');
   const [transcripts, setTranscripts] = useState<{ role: 'user' | 'agent'; text: string }[]>([]);
   const [volume, setVolume] = useState(0.8);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const conversation = useConversation({
-    onConnect: () => {
-      console.log('ElevenLabs connected');
-    },
-    onDisconnect: () => {
-      console.log('ElevenLabs disconnected');
-    },
+    onConnect: () => console.log('ElevenLabs connected'),
+    onDisconnect: () => console.log('ElevenLabs disconnected'),
     onMessage: (message: any) => {
       if (message.type === 'user_transcript') {
         setTranscripts(prev => [...prev, { role: 'user', text: message.user_transcription_event?.user_transcript || '' }]);
@@ -37,7 +43,7 @@ const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, 
       } else if (message.type === 'agent_response_correction') {
         setTranscripts(prev => {
           const updated = [...prev];
-        let lastAgent = -1;
+          let lastAgent = -1;
           for (let j = updated.length - 1; j >= 0; j--) {
             if (updated[j].role === 'agent') { lastAgent = j; break; }
           }
@@ -48,9 +54,7 @@ const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, 
         });
       }
     },
-    onError: (error: any) => {
-      console.error('ElevenLabs error:', error);
-    },
+    onError: (error: any) => console.error('ElevenLabs error:', error),
   });
 
   useEffect(() => {
@@ -61,34 +65,22 @@ const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, 
     setIsConnecting(true);
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
-
       const resp = await fetch(`${SUPABASE_URL}/functions/v1/elevenlabs-token`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${SUPABASE_KEY}`,
-        },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${SUPABASE_KEY}` },
         body: JSON.stringify({ agentId }),
       });
-
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({}));
-        throw new Error(err.error || `Error ${resp.status}`);
-      }
-
+      if (!resp.ok) throw new Error((await resp.json().catch(() => ({}))).error || `Error ${resp.status}`);
       const data = await resp.json();
       if (!data.signed_url) throw new Error('No signed URL received');
 
       const overrides: any = {};
-      if (selectedVoice) {
-        overrides.tts = { voiceId: selectedVoice };
-      }
+      if (selectedVoice) overrides.tts = { voiceId: selectedVoice };
 
       await conversation.startSession({
         signedUrl: data.signed_url,
         overrides: Object.keys(overrides).length > 0 ? overrides : undefined,
       });
-
       await conversation.setVolume({ volume });
     } catch (error: any) {
       console.error('Failed to start voice conversation:', error);
@@ -109,39 +101,105 @@ const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, 
     conversation.setVolume({ volume: newMuted ? 0 : volume });
   }, [isMuted, conversation, volume]);
 
+  const downloadTranscript = useCallback(() => {
+    if (transcripts.length === 0) return;
+    const lines = transcripts.map(t => `${t.role === 'user' ? 'أنت' : 'عزبوت'}: ${t.text}`).join('\n');
+    const header = `محادثة صوتية مع عزبوت - ${new Date().toLocaleString('ar-EG')}\n${'─'.repeat(40)}\n\n`;
+    const blob = new Blob([header + lines], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `azabot-voice-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [transcripts]);
+
   const isConnected = conversation.status === 'connected';
   const isSpeaking = conversation.isSpeaking;
 
+  const filteredVoices = voices.filter(v =>
+    v.name.toLowerCase().includes(voiceSearch.toLowerCase()) ||
+    v.accent?.toLowerCase().includes(voiceSearch.toLowerCase()) ||
+    v.gender?.toLowerCase().includes(voiceSearch.toLowerCase())
+  );
+
+  const selectedVoiceObj = voices.find(v => v.id === selectedVoice);
+
   return (
     <div className="flex flex-col h-full" dir="rtl">
-      {/* Voice Picker */}
+      {/* Voice Picker Dropdown */}
       {!isConnected && (
-        <div className="p-3 border-b border-border">
+        <div className="p-3 border-b border-border flex-shrink-0">
           <div className="relative">
             <button
               onClick={() => setShowVoicePicker(!showVoicePicker)}
-              className="w-full flex items-center justify-between px-3 py-2 bg-muted rounded-lg text-xs"
+              className="w-full flex items-center justify-between px-3 py-2.5 bg-muted rounded-xl text-xs border border-border hover:border-construction-accent/50 transition-colors"
             >
-              <span>{voices.find(v => v.id === selectedVoice)?.name || 'اختر الصوت'}</span>
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showVoicePicker ? 'rotate-180' : ''}`} />
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-construction-accent/20 flex items-center justify-center">
+                  <Volume2 className="w-3 h-3 text-construction-primary" />
+                </div>
+                <div className="text-right">
+                  <span className="font-medium">{selectedVoiceObj?.name || 'اختر الصوت'}</span>
+                  {selectedVoiceObj?.accent && (
+                    <span className="text-muted-foreground mr-1">• {selectedVoiceObj.accent}</span>
+                  )}
+                </div>
+              </div>
+              <svg className={`w-4 h-4 text-muted-foreground transition-transform ${showVoicePicker ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </button>
+
             <AnimatePresence>
               {showVoicePicker && (
                 <motion.div
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -5 }}
-                  className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-lg shadow-lg z-10 overflow-hidden"
+                  className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-xl shadow-lg z-10 overflow-hidden"
                 >
-                  {voices.map(voice => (
-                    <button
-                      key={voice.id}
-                      onClick={() => { setSelectedVoice(voice.id); setShowVoicePicker(false); }}
-                      className={`w-full text-right px-3 py-2 text-xs hover:bg-muted transition-colors ${selectedVoice === voice.id ? 'bg-construction-accent/10 text-construction-primary font-bold' : ''}`}
-                    >
-                      {voice.name}
-                    </button>
-                  ))}
+                  {/* Search */}
+                  <div className="p-2 border-b border-border">
+                    <div className="flex items-center gap-2 bg-muted rounded-lg px-2.5 py-1.5">
+                      <Search className="w-3.5 h-3.5 text-muted-foreground" />
+                      <input
+                        value={voiceSearch}
+                        onChange={e => setVoiceSearch(e.target.value)}
+                        placeholder="ابحث عن صوت..."
+                        className="flex-1 bg-transparent text-xs outline-none placeholder:text-muted-foreground"
+                        autoFocus
+                      />
+                    </div>
+                  </div>
+                  {/* Voice List */}
+                  <div className="max-h-40 overflow-y-auto">
+                    {filteredVoices.map(voice => (
+                      <button
+                        key={voice.id}
+                        onClick={() => { setSelectedVoice(voice.id); setShowVoicePicker(false); setVoiceSearch(''); }}
+                        className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-xs hover:bg-muted transition-colors ${
+                          selectedVoice === voice.id ? 'bg-construction-accent/5' : ''
+                        }`}
+                      >
+                        <div className="w-7 h-7 rounded-full bg-construction-accent/15 flex items-center justify-center flex-shrink-0">
+                          <Volume2 className="w-3.5 h-3.5 text-construction-primary" />
+                        </div>
+                        <div className="flex-1 text-right">
+                          <p className="font-medium">{voice.name}</p>
+                          {(voice.accent || voice.gender || voice.age) && (
+                            <p className="text-[10px] text-muted-foreground">
+                              {[voice.accent, voice.gender, voice.age].filter(Boolean).join(' • ')}
+                            </p>
+                          )}
+                        </div>
+                        {selectedVoice === voice.id && (
+                          <Check className="w-4 h-4 text-construction-primary flex-shrink-0" />
+                        )}
+                      </button>
+                    ))}
+                    {filteredVoices.length === 0 && (
+                      <p className="text-xs text-muted-foreground text-center py-3">لا توجد نتائج</p>
+                    )}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -149,7 +207,7 @@ const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, 
         </div>
       )}
 
-      {/* Conversation Transcripts */}
+      {/* Transcripts */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-2 min-h-0">
         {transcripts.length === 0 && !isConnected && (
           <div className="text-center py-8">
@@ -188,53 +246,62 @@ const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, 
         ))}
       </div>
 
-      {/* Conversation Bar */}
+      {/* Bottom Conversation Bar */}
       <div className="p-3 border-t border-border flex-shrink-0">
-        <div className="flex items-center justify-center gap-3">
-          {isConnected && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleMute}
-              className="h-10 w-10 rounded-full"
-            >
-              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            </Button>
-          )}
+        {/* Customer Support label + action icons */}
+        <div className="flex items-center justify-between bg-muted/50 rounded-2xl px-2 py-1.5 border border-border">
+          <div className="px-3 py-1 bg-background rounded-full border border-border">
+            <span className="text-[10px] text-muted-foreground font-medium">خدمة العملاء</span>
+          </div>
+          
+          <div className="flex items-center gap-1">
+            {/* Mute/Volume */}
+            {isConnected && (
+              <Button variant="ghost" size="icon" onClick={toggleMute} className="h-8 w-8 rounded-full">
+                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+              </Button>
+            )}
 
-          {!isConnected ? (
-            <Button
-              onClick={startConversation}
-              disabled={isConnecting}
-              className="h-12 w-12 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-lg"
-            >
-              {isConnecting ? (
-                <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
-                  <Phone className="w-5 h-5" />
-                </motion.div>
-              ) : (
-                <Phone className="w-5 h-5" />
-              )}
-            </Button>
-          ) : (
-            <Button
-              onClick={stopConversation}
-              className="h-12 w-12 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-lg"
-            >
-              <PhoneOff className="w-5 h-5" />
-            </Button>
-          )}
+            {/* Download transcript */}
+            {transcripts.length > 0 && (
+              <Button variant="ghost" size="icon" onClick={downloadTranscript} className="h-8 w-8 rounded-full" title="تحميل المحادثة">
+                <Download className="w-4 h-4" />
+              </Button>
+            )}
 
-          {isConnected && (
-            <div className={`h-10 w-10 rounded-full flex items-center justify-center ${isSpeaking ? 'bg-construction-accent/20' : 'bg-muted'}`}>
-              <motion.div
-                animate={isSpeaking ? { scale: [1, 1.3, 1] } : {}}
-                transition={{ repeat: Infinity, duration: 0.6 }}
+            {/* Switch to text chat */}
+            {onSwitchToChat && (
+              <Button variant="ghost" size="icon" onClick={onSwitchToChat} className="h-8 w-8 rounded-full" title="محادثة نصية">
+                <Keyboard className="w-4 h-4" />
+              </Button>
+            )}
+
+            {/* Call/End call */}
+            {!isConnected ? (
+              <Button
+                onClick={startConversation}
+                disabled={isConnecting}
+                size="icon"
+                className="h-9 w-9 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-md"
               >
-                {isSpeaking ? <Volume2 className="w-4 h-4 text-construction-accent" /> : <Mic className="w-4 h-4 text-muted-foreground" />}
-              </motion.div>
-            </div>
-          )}
+                {isConnecting ? (
+                  <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
+                    <Phone className="w-4 h-4" />
+                  </motion.div>
+                ) : (
+                  <Phone className="w-4 h-4" />
+                )}
+              </Button>
+            ) : (
+              <Button
+                onClick={stopConversation}
+                size="icon"
+                className="h-9 w-9 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-md"
+              >
+                <PhoneOff className="w-4 h-4" />
+              </Button>
+            )}
+          </div>
         </div>
 
         {isConnected && (
