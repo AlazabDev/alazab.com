@@ -62,7 +62,7 @@ const Portfolio: React.FC = () => {
   const currentImageIndex = selectedImage 
     ? filteredImages.findIndex(img => img.id === selectedImage.id) : -1;
 
-  const navigateImage = (direction: 'prev' | 'next') => {
+  const navigateImage = useCallback((direction: 'prev' | 'next') => {
     if (currentImageIndex === -1) return;
     const newIndex = direction === 'prev' 
       ? (currentImageIndex - 1 + filteredImages.length) % filteredImages.length
