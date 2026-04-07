@@ -62,7 +62,7 @@ const ChatbotTrainingPage: React.FC = () => {
     setLoading(false);
   };
 
-  useEffect(() => { fetchEntries(); }, []);
+  useEffect(() => { fetchEntries(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const addEntry = async () => {
     if (!newTitle.trim() || !newContent.trim()) {
@@ -141,8 +141,8 @@ const ChatbotTrainingPage: React.FC = () => {
 
       toast({ title: 'تم رفع الملف', description: `تم استخراج ${result.entries_count} عنصر من الملف` });
       fetchEntries();
-    } catch (err: any) {
-      toast({ title: 'خطأ', description: err.message, variant: 'destructive' });
+    } catch (err: unknown) {
+      toast({ title: 'خطأ', description: err instanceof Error ? err.message : 'خطأ', variant: 'destructive' });
     } finally {
       setIsUploading(false);
       e.target.value = '';

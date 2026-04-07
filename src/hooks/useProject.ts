@@ -142,7 +142,7 @@ export const useProject = (projectId: string | undefined) => {
       fetchProjectDetails();
       fetchProjectFiles();
     }
-  }, [projectId]);
+  }, [projectId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     project,

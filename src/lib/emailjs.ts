@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser';
 // تهيئة EmailJS
 emailjs.init('18ygGgryRoGve-Tpw');
 
-export const sendEmail = async (templateParams: any) => {
+export const sendEmail = async (templateParams: Record<string, unknown>) => {
   try {
     const response = await emailjs.send(
       'service_Alazab.co', 

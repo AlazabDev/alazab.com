@@ -11,12 +11,12 @@ import { z } from 'zod';
 const phoneSchema = z.string()
   .min(10, 'رقم الهاتف قصير جداً')
   .max(15, 'رقم الهاتف طويل جداً')
-  .regex(/^[\d\s\-\+\(\)]+$/, 'رقم هاتف غير صالح');
+  .regex(/^[\d\s\-+()]+$/, 'رقم هاتف غير صالح');
 
 const nameSchema = z.string()
   .min(2, 'الاسم قصير جداً')
   .max(100, 'الاسم طويل جداً')
-  .regex(/^[^\<\>\"\'\;]+$/, 'الاسم يحتوي على أحرف غير مسموحة');
+  .regex(/^[^<>"';]+$/, 'الاسم يحتوي على أحرف غير مسموحة');
 
 interface ChatMessage {
   id: string;
@@ -46,7 +46,7 @@ const WhatsAppSetupPage: React.FC = () => {
   useEffect(() => {
     if (step !== 'chat' || !customerPhone) return;
 
-    let cleanPhone = customerPhone.replace(/[\s\-\(\)]/g, '');
+    let cleanPhone = customerPhone.replace(/[\s\-()]/g, '');
     if (cleanPhone.startsWith('0')) cleanPhone = '20' + cleanPhone.substring(1);
 
     const channel = supabase
@@ -56,6 +56,7 @@ const WhatsAppSetupPage: React.FC = () => {
         schema: 'public',
         table: 'whatsapp_messages',
         filter: `phone_number=eq.${cleanPhone}`,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }, (payload: any) => {
         const msg = payload.new;
         if (msg.direction === 'inbound') {
@@ -131,13 +132,13 @@ const WhatsAppSetupPage: React.FC = () => {
       setMessages(prev => prev.map(m =>
         m.id === tempId ? { ...m, status: 'sent' as const } : m
       ));
-    } catch (err: any) {
+    } catch (err: unknown) {
       setMessages(prev => prev.map(m =>
         m.id === tempId ? { ...m, status: 'failed' as const } : m
       ));
       toast({
         title: 'فشل الإرسال',
-        description: err.message || 'حدث خطأ أثناء إرسال الرسالة',
+        description: err instanceof Error ? err.message : 'حدث خطأ أثناء إرسال الرسالة',
         variant: 'destructive',
       });
     } finally {

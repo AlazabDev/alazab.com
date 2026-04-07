@@ -35,7 +35,7 @@ const ProjectsPage: React.FC = () => {
     const fetchProjects = async () => {
       setLoading(true);
       try {
-        let { data, error } = await supabase
+        const { data, error } = await supabase
           .from('projects')
           .select('*')
           .order('created_at', { ascending: false });

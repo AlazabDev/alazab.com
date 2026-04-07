@@ -21,7 +21,7 @@ serve(async (req) => {
       );
     }
 
-    let cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+    let cleanPhone = phone.replace(/[\s\-()]/g, '');
     if (cleanPhone.startsWith('+')) cleanPhone = cleanPhone.substring(1);
     if (cleanPhone.startsWith('0')) cleanPhone = '20' + cleanPhone.substring(1);
 
@@ -42,7 +42,7 @@ serve(async (req) => {
       .in('key', ['WHATSAPP_ACCESS_TOKEN', 'WHATSAPP_PHONE_NUMBER_ID']);
 
     const secretsMap: Record<string, string> = {};
-    secrets?.forEach((s: any) => { secretsMap[s.key] = s.value; });
+    secrets?.forEach((s: { key: string; value: string }) => { secretsMap[s.key] = s.value; });
 
     const accessToken = secretsMap['WHATSAPP_ACCESS_TOKEN'];
     const phoneNumberId = secretsMap['WHATSAPP_PHONE_NUMBER_ID'];
@@ -63,7 +63,7 @@ serve(async (req) => {
     };
 
     const waType = typeMap[media_type] || 'document';
-    const mediaBody: any = { link: media_url };
+    const mediaBody: Record<string, string> = { link: media_url };
     if (caption && (waType === 'image' || waType === 'video' || waType === 'document')) {
       mediaBody.caption = caption;
     }

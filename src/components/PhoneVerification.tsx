@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const axios: any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const PhoneInput: any;
 
-const PhoneVerification = ({ onVerified }) => {
+interface PhoneVerificationProps {
+  onVerified?: () => void;
+}
+
+const PhoneVerification: React.FC<PhoneVerificationProps> = ({ onVerified }) => {
   const [step, setStep] = useState('input'); // input, verify, success
   const [phoneNumber, setPhoneNumber] = useState('');
   const [code, setCode] = useState(['', '', '', '', '', '']);

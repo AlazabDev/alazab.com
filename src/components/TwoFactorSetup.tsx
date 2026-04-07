@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import QRCode from 'qrcode.react';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const axios: any;
 
-const TwoFactorSetup = ({ onEnabled }) => {
+interface TwoFactorSetupProps {
+  onEnabled?: () => void;
+}
+
+const TwoFactorSetup: React.FC<TwoFactorSetupProps> = ({ onEnabled }) => {
   const [step, setStep] = useState('intro'); // intro, qr, verify, success
   const [secret, setSecret] = useState('');
   const [qrCode, setQrCode] = useState('');

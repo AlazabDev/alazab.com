@@ -36,6 +36,7 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
   const conversation = useConversation({
     onConnect: () => console.log('ElevenLabs connected'),
     onDisconnect: () => console.log('ElevenLabs disconnected'),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onMessage: (message: any) => {
       if (message.type === 'user_transcript') {
         setTranscripts(prev => [...prev, { role: 'user', text: message.user_transcription_event?.user_transcript || '' }]);
@@ -55,7 +56,7 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
         });
       }
     },
-    onError: (error: any) => console.error('ElevenLabs error:', error),
+    onError: (message: string) => console.error('ElevenLabs error:', message),
   });
 
   useEffect(() => {
@@ -75,17 +76,17 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
       const data = await resp.json();
       if (!data.signed_url) throw new Error('No signed URL received');
 
-      const overrides: any = {};
-      if (selectedVoice) overrides.tts = { voiceId: selectedVoice };
+      const overrides: Record<string, unknown> = {};
+      if (selectedVoice) (overrides as Record<string, unknown>).tts = { voiceId: selectedVoice };
 
       await conversation.startSession({
         signedUrl: data.signed_url,
         overrides: Object.keys(overrides).length > 0 ? overrides : undefined,
       });
       await conversation.setVolume({ volume });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to start voice conversation:', error);
-      alert(error.message || 'فشل في بدء المحادثة الصوتية');
+      alert(error instanceof Error ? error.message : 'فشل في بدء المحادثة الصوتية');
     } finally {
       setIsConnecting(false);
     }

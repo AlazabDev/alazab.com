@@ -20,9 +20,9 @@ const MetaAccountsPage: React.FC = () => {
   const [selectedAccount, setSelectedAccount] = useState<MetaAccount | null>(null);
   const [stats, setStats] = useState<MetaAccountStats | null>(null);
   const [messages, setMessages] = useState<MetaMessage[]>([]);
-  const [conversations, setConversations] = useState<any[]>([]);
+  const [conversations, setConversations] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
-  const [serverHealth, setServerHealth] = useState<any>(null);
+  const [serverHealth, setServerHealth] = useState<Record<string, unknown> | null>(null);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newAccount, setNewAccount] = useState({
     display_name: '', business_name: '', waba_id: '', phone_number_id: '',
@@ -71,8 +71,8 @@ const MetaAccountsPage: React.FC = () => {
       setShowAddDialog(false);
       setNewAccount({ display_name: '', business_name: '', waba_id: '', phone_number_id: '', phone_number: '', access_token: '', app_secret: '', verify_token: '' });
       loadAccounts();
-    } catch (err: any) {
-      toast({ title: 'خطأ', description: err.message, variant: 'destructive' });
+    } catch (err: unknown) {
+      toast({ title: 'خطأ', description: err instanceof Error ? err.message : 'خطأ', variant: 'destructive' });
     }
   };
 
@@ -83,8 +83,8 @@ const MetaAccountsPage: React.FC = () => {
       toast({ title: 'تم', description: 'تم حذف الحساب' });
       if (selectedAccount?.id === id) setSelectedAccount(null);
       loadAccounts();
-    } catch (err: any) {
-      toast({ title: 'خطأ', description: err.message, variant: 'destructive' });
+    } catch (err: unknown) {
+      toast({ title: 'خطأ', description: err instanceof Error ? err.message : 'خطأ', variant: 'destructive' });
     }
   };
 
@@ -274,15 +274,15 @@ const MetaAccountsPage: React.FC = () => {
                         <div className="py-12 text-center text-muted-foreground">لا توجد محادثات</div>
                       ) : (
                         <div className="divide-y">
-                          {conversations.map((conv, i) => (
+                          {conversations.map((conv: Record<string, string | number>, i: number) => (
                             <div key={i} className="p-3 flex items-center justify-between">
                               <div>
-                                <p className="font-medium text-sm">{conv.customer_name || conv.phone_number}</p>
-                                <p className="text-xs text-muted-foreground font-mono" dir="ltr">{conv.phone_number}</p>
+                                <p className="font-medium text-sm">{String(conv.customer_name || conv.phone_number)}</p>
+                                <p className="text-xs text-muted-foreground font-mono" dir="ltr">{String(conv.phone_number)}</p>
                               </div>
                               <div className="text-left">
-                                <p className="text-sm">{conv.message_count} رسالة</p>
-                                {parseInt(conv.unread) > 0 && <Badge variant="destructive" className="text-[10px]">{conv.unread} جديدة</Badge>}
+                                <p className="text-sm">{String(conv.message_count)} رسالة</p>
+                                {parseInt(String(conv.unread)) > 0 && <Badge variant="destructive" className="text-[10px]">{String(conv.unread)} جديدة</Badge>}
                               </div>
                             </div>
                           ))}

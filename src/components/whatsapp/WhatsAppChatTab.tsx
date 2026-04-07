@@ -50,7 +50,7 @@ const WhatsAppChatTab: React.FC<WhatsAppChatTabProps> = ({ customerName, custome
   // Realtime listener for inbound messages
   useEffect(() => {
     if (!customerPhone) return;
-    let cleanPhone = customerPhone.replace(/[\s\-\(\)]/g, '');
+    let cleanPhone = customerPhone.replace(/[\s\-()]/g, '');
     if (cleanPhone.startsWith('0')) cleanPhone = '20' + cleanPhone.substring(1);
 
     const channel = supabase
@@ -60,11 +60,12 @@ const WhatsAppChatTab: React.FC<WhatsAppChatTabProps> = ({ customerName, custome
         schema: 'public',
         table: 'whatsapp_messages',
         filter: `phone_number=eq.${cleanPhone}`,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }, (payload: any) => {
         const msg = payload.new;
         if (msg.direction === 'inbound') {
           setMessages(prev => [...prev, {
-            id: msg.id,
+            id: String(msg.id),
             content: msg.content || `[${msg.message_type}]`,
             sender: 'bot',
             timestamp: new Date(msg.created_at),
@@ -166,11 +167,11 @@ const WhatsAppChatTab: React.FC<WhatsAppChatTabProps> = ({ customerName, custome
       setMessages(prev => prev.map(m =>
         m.id === tempId ? { ...m, status: 'sent' as const } : m
       ));
-    } catch (err: any) {
+    } catch (err: unknown) {
       setMessages(prev => prev.map(m =>
         m.id === tempId ? { ...m, status: 'failed' as const } : m
       ));
-      toast({ title: 'فشل الإرسال', description: err.message, variant: 'destructive' });
+      toast({ title: 'فشل الإرسال', description: err instanceof Error ? err.message : 'خطأ غير معروف', variant: 'destructive' });
     } finally {
       setSending(false);
     }

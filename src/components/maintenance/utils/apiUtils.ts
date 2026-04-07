@@ -1,6 +1,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { MaintenanceRequestDetails, AttachmentDetails } from '@/types/maintenance';
+import type { Database } from '@/integrations/supabase/types';
 
 export const fetchMaintenanceRequest = async (requestNumber: string) => {
   const { data: requestData, error: requestError } = await supabase
@@ -53,7 +54,7 @@ export const updateRequestStatus = async (requestId: string, newStatus: string) 
   
   const { error } = await supabase
     .from('maintenance_requests')
-    .update({ status: dbStatus as any })
+    .update({ status: dbStatus as Database["public"]["Enums"]["mr_status"] })
     .eq('id', requestId);
   
   if (error) throw error;

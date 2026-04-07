@@ -51,7 +51,7 @@ interface SidebarSection {
 interface SidebarItem {
   title: string;
   href: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   badge?: string;
   description?: string;
   comingSoon?: boolean;

@@ -64,13 +64,13 @@ const CreateStorageBucket: React.FC = () => {
         });
         setBucketExists(true);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating storage bucket:", error);
       
       toast({
         variant: "destructive",
         title: "خطأ في إنشاء خزنة التخزين",
-        description: error.message || "حدث خطأ أثناء محاولة إنشاء خزنة التخزين"
+        description: error instanceof Error ? error.message : "حدث خطأ أثناء محاولة إنشاء خزنة التخزين"
       });
     } finally {
       setCreating(false);

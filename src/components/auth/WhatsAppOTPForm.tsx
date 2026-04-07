@@ -62,10 +62,11 @@ const WhatsAppOTPForm: React.FC<WhatsAppOTPFormProps> = ({ onSwitchToEmail, onSu
       } else {
         throw new Error(data?.error || 'فشل إرسال الرمز');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "فشل إرسال رمز التحقق";
       toast({
         title: "خطأ",
-        description: err.message || "فشل إرسال رمز التحقق",
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -153,10 +154,11 @@ const WhatsAppOTPForm: React.FC<WhatsAppOTPFormProps> = ({ onSwitchToEmail, onSu
           });
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "فشل التحقق من الرمز";
       toast({
         title: "خطأ",
-        description: err.message || "فشل التحقق من الرمز",
+        description: message,
         variant: "destructive",
       });
     } finally {

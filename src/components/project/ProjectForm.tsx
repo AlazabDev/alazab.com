@@ -114,7 +114,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
             progress: data.progress || null,
             company_name: data.company_name || null,
             budget: data.budget || null,
-          } as any)
+          })
           .select();
 
         if (error) throw error;

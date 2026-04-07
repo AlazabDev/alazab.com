@@ -35,7 +35,7 @@ const MaintenanceRequestDetails: React.FC = () => {
     if (id) {
       fetchRequestDetails();
     }
-  }, [id]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchRequestDetails = async () => {
     try {

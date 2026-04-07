@@ -67,7 +67,7 @@ const FurnitureGallery: React.FC = () => {
     e.stopPropagation();
     setFavorites(prev => {
       const s = new Set(prev);
-      s.has(id) ? s.delete(id) : s.add(id);
+      if (s.has(id)) { s.delete(id); } else { s.add(id); }
       return s;
     });
   };
@@ -81,7 +81,7 @@ const FurnitureGallery: React.FC = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedImage, currentImageIndex]);
+  }, [selectedImage, currentImageIndex, navigateImage]);
 
   const activeCategories = furnitureCategories.filter(c => c.count > 0 || c.id === 'all');
 

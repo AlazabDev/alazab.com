@@ -10,7 +10,7 @@ import WhatsAppFlowsTab from '@/components/whatsapp/WhatsAppFlowsTab';
 import WhatsAppChatTab from '@/components/whatsapp/WhatsAppChatTab';
 import { z } from 'zod';
 
-const phoneSchema = z.string().min(10).max(15).regex(/^[\d\s\-\+\(\)]+$/);
+const phoneSchema = z.string().min(10).max(15).regex(/^[\d\s\-+()]+$/);
 const nameSchema = z.string().min(2).max(100);
 
 const WhatsAppManagementPage: React.FC = () => {

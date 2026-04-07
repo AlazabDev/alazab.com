@@ -23,7 +23,7 @@ serve(async (req) => {
       .in('key', ['WHATSAPP_ACCESS_TOKEN', 'WHATSAPP_PHONE_NUMBER_ID', 'WABA_ID']);
 
     const secretsMap: Record<string, string> = {};
-    secrets?.forEach((s: any) => { secretsMap[s.key] = s.value; });
+    secrets?.forEach((s: { key: string; value: string }) => { secretsMap[s.key] = s.value; });
 
     const accessToken = secretsMap['WHATSAPP_ACCESS_TOKEN'];
     const wabaId = secretsMap['WABA_ID'];
@@ -57,7 +57,7 @@ serve(async (req) => {
     for (const tpl of templates) {
       const phoneNumberId = secretsMap['WHATSAPP_PHONE_NUMBER_ID'] || 'default';
       const components = tpl.components || [];
-      const bodyComponent = components.find((c: any) => c.type === 'BODY');
+      const bodyComponent = components.find((c: Record<string, string>) => c.type === 'BODY');
       const variablesCount = bodyComponent?.example?.body_text?.[0]?.length || 0;
 
       const { error } = await supabase

@@ -74,7 +74,7 @@ const Portfolio: React.FC = () => {
     e.stopPropagation();
     setFavorites(prev => {
       const s = new Set(prev);
-      s.has(id) ? s.delete(id) : s.add(id);
+      if (s.has(id)) { s.delete(id); } else { s.add(id); }
       return s;
     });
   };
@@ -92,7 +92,7 @@ const Portfolio: React.FC = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedImage, currentImageIndex]);
+  }, [selectedImage, currentImageIndex, navigateImage]);
 
   const activeCategories = getCategoriesWithImages();
 

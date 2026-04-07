@@ -51,7 +51,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ searchTerm = '' }) => {
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchProjects = async () => {
     try {
