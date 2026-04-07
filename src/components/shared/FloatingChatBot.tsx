@@ -317,6 +317,7 @@ const FloatingChatBot: React.FC = () => {
                 agentId={ELEVENLABS_AGENT_ID}
                 voices={VOICES}
                 onClose={() => setActiveTab('chat')}
+                onSwitchToChat={() => setActiveTab('chat')}
               />
             )}
           </motion.div>
