@@ -42,7 +42,7 @@ serve(async (req) => {
       .in('key', ['WHATSAPP_ACCESS_TOKEN', 'WHATSAPP_PHONE_NUMBER_ID']);
 
     const secretsMap: Record<string, string> = {};
-    secrets?.forEach((s: any) => { secretsMap[s.key] = s.value; });
+    secrets?.forEach((s: { key: string; value: string }) => { secretsMap[s.key] = s.value; });
 
     const accessToken = secretsMap['WHATSAPP_ACCESS_TOKEN'];
     const phoneNumberId = secretsMap['WHATSAPP_PHONE_NUMBER_ID'];
