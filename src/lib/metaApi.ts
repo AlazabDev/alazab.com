@@ -23,7 +23,7 @@ export interface MetaAccount {
   display_name: string;
   business_name: string | null;
   status: string;
-  config: Record<string, any>;
+  config: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
