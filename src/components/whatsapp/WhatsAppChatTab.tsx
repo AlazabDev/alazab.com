@@ -166,7 +166,7 @@ const WhatsAppChatTab: React.FC<WhatsAppChatTabProps> = ({ customerName, custome
       setMessages(prev => prev.map(m =>
         m.id === tempId ? { ...m, status: 'sent' as const } : m
       ));
-    } catch (err: any) {
+    } catch (err: unknown) {
       setMessages(prev => prev.map(m =>
         m.id === tempId ? { ...m, status: 'failed' as const } : m
       ));
