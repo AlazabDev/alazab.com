@@ -11,6 +11,7 @@ function formatNumber(n: number): string {
   return new Intl.NumberFormat('ar-EG').format(n);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function generateHTML(quotation: any, lineItems: any[], finishingLevel: any): string {
   const today = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
   const validUntil = quotation.valid_until 
