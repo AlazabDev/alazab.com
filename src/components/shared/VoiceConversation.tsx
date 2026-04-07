@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { ConversationProvider } from '@elevenlabs/react';
 import { useConversation } from '@elevenlabs/react';
 import { Mic, MicOff, Phone, PhoneOff, Volume2, VolumeX, Keyboard, Search, Check, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,7 +23,7 @@ interface VoiceConversationProps {
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, onClose, onSwitchToChat }) => {
+const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voices, onClose, onSwitchToChat }) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [selectedVoice, setSelectedVoice] = useState(voices[0]?.id || '');
@@ -313,5 +314,11 @@ const VoiceConversation: React.FC<VoiceConversationProps> = ({ agentId, voices, 
     </div>
   );
 };
+
+const VoiceConversation: React.FC<VoiceConversationProps> = (props) => (
+  <ConversationProvider>
+    <VoiceConversationInner {...props} />
+  </ConversationProvider>
+);
 
 export default VoiceConversation;
