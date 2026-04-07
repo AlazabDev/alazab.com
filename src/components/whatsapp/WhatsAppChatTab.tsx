@@ -50,7 +50,7 @@ const WhatsAppChatTab: React.FC<WhatsAppChatTabProps> = ({ customerName, custome
   // Realtime listener for inbound messages
   useEffect(() => {
     if (!customerPhone) return;
-    let cleanPhone = customerPhone.replace(/[\s\-\(\)]/g, '');
+    let cleanPhone = customerPhone.replace(/[\s\-()]/g, '');
     if (cleanPhone.startsWith('0')) cleanPhone = '20' + cleanPhone.substring(1);
 
     const channel = supabase
