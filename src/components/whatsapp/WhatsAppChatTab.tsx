@@ -60,7 +60,7 @@ const WhatsAppChatTab: React.FC<WhatsAppChatTabProps> = ({ customerName, custome
         schema: 'public',
         table: 'whatsapp_messages',
         filter: `phone_number=eq.${cleanPhone}`,
-      }, (payload: any) => {
+      }, (payload: { new: Record<string, unknown> }) => {
         const msg = payload.new;
         if (msg.direction === 'inbound') {
           setMessages(prev => [...prev, {
