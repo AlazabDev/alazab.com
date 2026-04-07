@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, User, Loader2, X, MessageSquare, Trash2, Mic } from 'lucide-react';
+import { Send, Bot, User, Loader2, X, MessageSquare, Trash2, Mic, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import VoiceConversation from './VoiceConversation';
@@ -13,9 +13,9 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chatbot`;
 
 const ELEVENLABS_AGENT_ID = 'ihycSANIrpHfhWoaq1g3';
 const VOICES = [
-  { id: 'LXrTqFIgiubkrMkwvOUr', name: 'الصوت الأساسي' },
-  { id: 'EXAVITQu4vr4xnSDxMaL', name: 'سارة' },
-  { id: 'JBFqnCBsd6RMkjVDRZzb', name: 'جورج' },
+  { id: 'LXrTqFIgiubkrMkwvOUr', name: 'الصوت الأساسي', accent: 'عربي', gender: 'ذكر', age: 'شاب' },
+  { id: 'EXAVITQu4vr4xnSDxMaL', name: 'سارة', accent: 'أمريكي', gender: 'أنثى', age: 'شابة' },
+  { id: 'JBFqnCBsd6RMkjVDRZzb', name: 'جورج', accent: 'أمريكي', gender: 'ذكر', age: 'متوسط' },
 ];
 
 const escapeHtml = (s: string) =>
@@ -165,9 +165,24 @@ const FloatingChatBot: React.FC = () => {
               </div>
               <div className="flex items-center gap-1">
                 {activeTab === 'chat' && messages.length > 0 && (
-                  <Button variant="ghost" size="icon" onClick={() => setMessages([])} className="h-7 w-7 text-white/70 hover:text-white hover:bg-white/10">
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
+                  <>
+                    <Button variant="ghost" size="icon" onClick={() => {
+                      const lines = messages.map(m => `${m.role === 'user' ? 'أنت' : 'عزبوت'}: ${m.content}`).join('\n');
+                      const header = `محادثة نصية مع عزبوت - ${new Date().toLocaleString('ar-EG')}\n${'─'.repeat(40)}\n\n`;
+                      const blob = new Blob([header + lines], { type: 'text/plain;charset=utf-8' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = `azabot-chat-${Date.now()}.txt`;
+                      a.click();
+                      URL.revokeObjectURL(url);
+                    }} className="h-7 w-7 text-white/70 hover:text-white hover:bg-white/10" title="تحميل المحادثة">
+                      <Download className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => setMessages([])} className="h-7 w-7 text-white/70 hover:text-white hover:bg-white/10">
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </>
                 )}
                 <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-7 w-7 text-white/70 hover:text-white hover:bg-white/10">
                   <X className="h-4 w-4" />
@@ -302,6 +317,7 @@ const FloatingChatBot: React.FC = () => {
                 agentId={ELEVENLABS_AGENT_ID}
                 voices={VOICES}
                 onClose={() => setActiveTab('chat')}
+                onSwitchToChat={() => setActiveTab('chat')}
               />
             )}
           </motion.div>
