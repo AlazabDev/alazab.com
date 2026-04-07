@@ -64,7 +64,7 @@ const CreateStorageBucket: React.FC = () => {
         });
         setBucketExists(true);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating storage bucket:", error);
       
       toast({
