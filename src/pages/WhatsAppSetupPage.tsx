@@ -56,6 +56,7 @@ const WhatsAppSetupPage: React.FC = () => {
         schema: 'public',
         table: 'whatsapp_messages',
         filter: `phone_number=eq.${cleanPhone}`,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }, (payload: any) => {
         const msg = payload.new;
         if (msg.direction === 'inbound') {
