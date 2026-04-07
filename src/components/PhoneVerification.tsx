@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-// PhoneInput is used when react-phone-input-2 is available
-import 'react-phone-input-2/lib/style.css';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const axios: any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const PhoneInput: any;
 
 interface PhoneVerificationProps {
   onVerified?: () => void;

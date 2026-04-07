@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-// QRCode import - uses qrcode.react when available
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const axios: any;
 
 interface TwoFactorSetupProps {
   onEnabled?: () => void;
