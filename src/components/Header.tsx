@@ -54,7 +54,7 @@ const Header: React.FC = () => {
   const navigationItems = [
     { name: t('الرئيسية', 'Home'), href: '/' },
     { name: t('من نحن', 'About Us'), href: '/about' },
-    { name: t('خطوط إنتاجنا', 'Our Solutions'), href: '#', isDropdown: true },
+    { name: t('خدماتنا', 'Our Services'), href: '#', isDropdown: true },
     { name: t('مشاريعنا', 'Projects'), href: '/projects' },
     { name: t('اتصل بنا', 'Contact Us'), href: '/contact' },
   ];
