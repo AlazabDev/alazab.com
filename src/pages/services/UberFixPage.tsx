@@ -63,7 +63,7 @@ const UberFixPage: React.FC = () => {
                   <ArrowRight className={`${isRTL ? 'mr-2 rotate-180' : 'ml-2'} w-5 h-5`} />
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10 rounded-full px-8 text-lg backdrop-blur-sm">
+              <Button asChild size="lg" className="bg-white/20 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-gray-900 rounded-full px-8 text-lg font-bold transition-all">
                 <Link to="/maintenance-tracking">{t('تتبع طلبك', 'Track Your Request')}</Link>
               </Button>
             </div>
@@ -180,7 +180,7 @@ const UberFixPage: React.FC = () => {
             <Button asChild size="lg" className="bg-white text-orange-600 hover:bg-gray-100 rounded-full px-8 text-lg">
               <Link to="/maintenance-request">{t('اطلب صيانة الآن', 'Request Maintenance Now')}</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10 rounded-full px-8 text-lg">
+            <Button asChild size="lg" className="bg-white/20 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-gray-900 rounded-full px-8 text-lg font-bold transition-all">
               <Link to="/maintenance-tracking">{t('تتبع طلب الصيانة', 'Track Maintenance Request')}</Link>
             </Button>
           </div>
