@@ -57,15 +57,15 @@ const FloatingSocialButton: React.FC = () => {
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
-  // Spiral positions - items fan out in an arc
+  // Spiral arc positions - fan out to the upper-left
   const getItemPosition = (index: number, total: number) => {
-    const startAngle = 90; // start from top
-    const spreadAngle = 180 / (total + 1);
-    const angle = startAngle + spreadAngle * (index + 1);
-    const radius = 72;
+    const startAngle = 100;
+    const spreadAngle = 70 / (total - 1 || 1);
+    const angle = startAngle + spreadAngle * index;
+    const radius = 70 + index * 8;
     const rad = (angle * Math.PI) / 180;
     return {
-      x: Math.cos(rad) * radius,
+      x: -Math.cos(rad) * radius,
       y: -Math.sin(rad) * radius,
     };
   };
@@ -97,13 +97,13 @@ const FloatingSocialButton: React.FC = () => {
                   damping: 20,
                   delay: index * 0.06,
                 }}
-                className="absolute bottom-0 left-0 flex items-center justify-center w-12 h-12 rounded-full text-white shadow-lg hover:scale-110 transition-transform duration-200 group"
+                className="absolute bottom-0 right-0 flex items-center justify-center w-12 h-12 rounded-full text-white shadow-lg hover:scale-110 transition-transform duration-200 group"
                 style={{ backgroundColor: link.color }}
                 title={link.name}
               >
                 {link.icon}
                 {/* Tooltip */}
-                <span className="absolute right-full mr-2 px-2 py-1 bg-foreground text-background text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                <span className="absolute left-0 -translate-x-full -ml-2 px-2 py-1 bg-foreground text-background text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                   {link.name}
                 </span>
               </motion.a>
