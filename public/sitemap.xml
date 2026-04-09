@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- الصفحات الرئيسية -->
   <url>
     <loc>https://alazab.com/</loc>
     <changefreq>weekly</changefreq>
@@ -11,6 +12,23 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://alazab.com/ceo</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alazab.com/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alazab.com/sitemap</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- الخدمات -->
+  <url>
     <loc>https://alazab.com/services</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -21,12 +39,12 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://alazab.com/services/brand-identity</loc>
+    <loc>https://alazab.com/services/uberfix</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://alazab.com/services/uberfix</loc>
+    <loc>https://alazab.com/services/brand-identity</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -35,10 +53,17 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- المشاريع والأعمال -->
   <url>
     <loc>https://alazab.com/projects</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://alazab.com/projects-gallery</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://alazab.com/portfolio</loc>
@@ -46,35 +71,34 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://alazab.com/contact</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://alazab.com/ceo</loc>
+    <loc>https://alazab.com/furniture-gallery</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+
+  <!-- خدمات العملاء -->
   <url>
     <loc>https://alazab.com/maintenance-request</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://alazab.com/maintenance-tracking</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alazab.com/chatbot</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://alazab.com/facebook</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  <url>
-    <loc>https://alazab.com/furniture-gallery</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://alazab.com/projects-gallery</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
+
+  <!-- الصفحات القانونية -->
   <url>
     <loc>https://alazab.com/privacy-policy</loc>
     <changefreq>yearly</changefreq>
@@ -87,11 +111,6 @@
   </url>
   <url>
     <loc>https://alazab.com/cookie-policy</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://alazab.com/data-deletion</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -112,6 +131,11 @@
   </url>
   <url>
     <loc>https://alazab.com/security</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://alazab.com/data-deletion</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
