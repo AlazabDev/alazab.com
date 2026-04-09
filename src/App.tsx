@@ -185,6 +185,7 @@ function App() {
       <FloatingChatBot />
       <Toaster />
     </BrowserRouter>
+    </ErrorBoundary>
     </LanguageProvider>
   );
 }
