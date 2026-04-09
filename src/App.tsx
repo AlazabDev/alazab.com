@@ -2,6 +2,8 @@ import React, { lazy, Suspense } from 'react';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "./components/ui/toaster";
+import ErrorBoundary from "./components/ErrorBoundary";
+import JsonLd from "./components/SEO/JsonLd";
 import "./App.css";
 
 // Eagerly loaded (critical path)
