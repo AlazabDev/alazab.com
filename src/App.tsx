@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import FloatingChatBot from "./components/shared/FloatingChatBot";
+import FloatingSocialButton from "./components/shared/FloatingSocialButton";
 
 // Lazy loaded pages
 const MaintenanceRequest = lazy(() => import("./pages/MaintenanceRequest"));
@@ -183,6 +184,7 @@ function App() {
       </Routes>
       </Suspense>
       <FloatingChatBot />
+      <FloatingSocialButton />
       <Toaster />
     </BrowserRouter>
     </ErrorBoundary>
