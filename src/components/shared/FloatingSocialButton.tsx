@@ -57,26 +57,23 @@ const FloatingSocialButton: React.FC = () => {
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
-  // Spiral positions - items fan out in an arc
-  const getItemPosition = (index: number, total: number) => {
-    const startAngle = 90; // start from top
-    const spreadAngle = 180 / (total + 1);
-    const angle = startAngle + spreadAngle * (index + 1);
-    const radius = 72;
-    const rad = (angle * Math.PI) / 180;
+  // Spiral arc - items fan upward with slight curve to the left
+  const getItemPosition = (index: number) => {
+    const spacing = 60;
+    const curveOffset = index * 12;
     return {
-      x: Math.cos(rad) * radius,
-      y: -Math.sin(rad) * radius,
+      x: -curveOffset,
+      y: -(spacing * (index + 1)),
     };
   };
 
   return (
-    <div className="fixed bottom-6 left-6 z-40" dir="ltr">
+    <div className="fixed bottom-6 right-6 z-40" dir="ltr">
       {/* Social link items */}
       <AnimatePresence>
         {isOpen &&
           socialLinks.map((link, index) => {
-            const pos = getItemPosition(index, socialLinks.length);
+            const pos = getItemPosition(index);
             return (
               <motion.a
                 key={link.name}
@@ -97,13 +94,13 @@ const FloatingSocialButton: React.FC = () => {
                   damping: 20,
                   delay: index * 0.06,
                 }}
-                className="absolute bottom-0 left-0 flex items-center justify-center w-12 h-12 rounded-full text-white shadow-lg hover:scale-110 transition-transform duration-200 group"
+                className="absolute bottom-0 right-0 flex items-center justify-center w-12 h-12 rounded-full text-white shadow-lg hover:scale-110 transition-transform duration-200 group"
                 style={{ backgroundColor: link.color }}
                 title={link.name}
               >
                 {link.icon}
                 {/* Tooltip */}
-                <span className="absolute right-full mr-2 px-2 py-1 bg-foreground text-background text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                <span className="absolute left-0 -translate-x-full -ml-2 px-2 py-1 bg-foreground text-background text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                   {link.name}
                 </span>
               </motion.a>
