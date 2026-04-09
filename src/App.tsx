@@ -69,7 +69,9 @@ const PageLoader = () => (
 function App() {
   return (
     <LanguageProvider>
+    <ErrorBoundary>
     <BrowserRouter>
+      <JsonLd />
       <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/" element={<Index />} />
