@@ -57,16 +57,13 @@ const FloatingSocialButton: React.FC = () => {
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
-  // Spiral arc positions - fan out to the upper-left
-  const getItemPosition = (index: number, total: number) => {
-    const startAngle = 100;
-    const spreadAngle = 70 / (total - 1 || 1);
-    const angle = startAngle + spreadAngle * index;
-    const radius = 70 + index * 8;
-    const rad = (angle * Math.PI) / 180;
+  // Spiral arc - items fan upward with slight curve to the left
+  const getItemPosition = (index: number) => {
+    const spacing = 60;
+    const curveOffset = index * 12;
     return {
-      x: -Math.cos(rad) * radius,
-      y: -Math.sin(rad) * radius,
+      x: -curveOffset,
+      y: -(spacing * (index + 1)),
     };
   };
 
@@ -76,7 +73,7 @@ const FloatingSocialButton: React.FC = () => {
       <AnimatePresence>
         {isOpen &&
           socialLinks.map((link, index) => {
-            const pos = getItemPosition(index, socialLinks.length);
+            const pos = getItemPosition(index);
             return (
               <motion.a
                 key={link.name}
