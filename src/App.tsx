@@ -181,6 +181,11 @@ function App() {
             <MetaAccountsPage />
           </AdminRoute>
         } />
+        <Route path="/internal-webhook" element={
+          <AdminRoute>
+            <InternalWebhookPage />
+          </AdminRoute>
+        } />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Suspense>
