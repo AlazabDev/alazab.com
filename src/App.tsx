@@ -60,6 +60,7 @@ const WebhookMonitorPage = lazy(() => import("./pages/WebhookMonitorPage"));
 const FacebookPage = lazy(() => import("./pages/FacebookPage"));
 const SitemapPage = lazy(() => import("./pages/SitemapPage"));
 const MetaAccountsPage = lazy(() => import("./pages/MetaAccountsPage"));
+const InternalWebhookPage = lazy(() => import("./pages/InternalWebhookPage"));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
