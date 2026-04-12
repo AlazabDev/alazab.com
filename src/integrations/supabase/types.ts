@@ -113,6 +113,108 @@ export type Database = {
         }
         Relationships: []
       }
+      conversation_analytics: {
+        Row: {
+          action_items: Json | null
+          conversation_id: string
+          created_at: string | null
+          entities: Json | null
+          id: number
+          sentiment_label: string | null
+          sentiment_score: number | null
+          summary: string | null
+          topics: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          action_items?: Json | null
+          conversation_id: string
+          created_at?: string | null
+          entities?: Json | null
+          id?: number
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          summary?: string | null
+          topics?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          action_items?: Json | null
+          conversation_id?: string
+          created_at?: string | null
+          entities?: Json | null
+          id?: number
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          summary?: string | null
+          topics?: string[] | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      conversations: {
+        Row: {
+          agent_id: string | null
+          analysis: Json | null
+          audio_url: string | null
+          conversation_id: string
+          created_at: string | null
+          duration_seconds: number | null
+          dynamic_variables: Json | null
+          ended_at: string | null
+          failure_metadata: Json | null
+          failure_reason: string | null
+          has_audio: boolean | null
+          has_transcript: boolean | null
+          id: number
+          started_at: string | null
+          status: string | null
+          telephony_metadata: Json | null
+          transcript: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          agent_id?: string | null
+          analysis?: Json | null
+          audio_url?: string | null
+          conversation_id: string
+          created_at?: string | null
+          duration_seconds?: number | null
+          dynamic_variables?: Json | null
+          ended_at?: string | null
+          failure_metadata?: Json | null
+          failure_reason?: string | null
+          has_audio?: boolean | null
+          has_transcript?: boolean | null
+          id?: number
+          started_at?: string | null
+          status?: string | null
+          telephony_metadata?: Json | null
+          transcript?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          agent_id?: string | null
+          analysis?: Json | null
+          audio_url?: string | null
+          conversation_id?: string
+          created_at?: string | null
+          duration_seconds?: number | null
+          dynamic_variables?: Json | null
+          ended_at?: string | null
+          failure_metadata?: Json | null
+          failure_reason?: string | null
+          has_audio?: boolean | null
+          has_transcript?: boolean | null
+          id?: number
+          started_at?: string | null
+          status?: string | null
+          telephony_metadata?: Json | null
+          transcript?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       finishing_levels: {
         Row: {
           created_at: string
@@ -143,6 +245,54 @@ export type Database = {
           name_en?: string | null
           price_per_sqm?: number
           sort_order?: number
+        }
+        Relationships: []
+      }
+      followup_tasks: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          conversation_id: string
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          id: number
+          metadata: Json | null
+          priority: string | null
+          status: string | null
+          task_type: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          conversation_id: string
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: number
+          metadata?: Json | null
+          priority?: string | null
+          status?: string | null
+          task_type?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          conversation_id?: string
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: number
+          metadata?: Json | null
+          priority?: string | null
+          status?: string | null
+          task_type?: string | null
+          title?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -182,6 +332,30 @@ export type Database = {
         }
         Update: {
           id?: number
+        }
+        Relationships: []
+      }
+      login_otp: {
+        Row: {
+          code: string
+          created_at: string | null
+          expires_at: string
+          id: string
+          phone: string
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          phone: string
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          phone?: string
         }
         Relationships: []
       }
@@ -298,6 +472,48 @@ export type Database = {
           storage_path?: string | null
           whatsapp_number_id?: string
           workflow_id?: string
+        }
+        Relationships: []
+      }
+      media_messages: {
+        Row: {
+          conversation_id: string
+          file_size: number | null
+          id: number
+          is_processed: boolean | null
+          media_base64: string | null
+          media_type: string | null
+          media_url: string | null
+          mime_type: string | null
+          processed_at: string | null
+          received_at: string | null
+          transcript: string | null
+        }
+        Insert: {
+          conversation_id: string
+          file_size?: number | null
+          id?: number
+          is_processed?: boolean | null
+          media_base64?: string | null
+          media_type?: string | null
+          media_url?: string | null
+          mime_type?: string | null
+          processed_at?: string | null
+          received_at?: string | null
+          transcript?: string | null
+        }
+        Update: {
+          conversation_id?: string
+          file_size?: number | null
+          id?: number
+          is_processed?: boolean | null
+          media_base64?: string | null
+          media_type?: string | null
+          media_url?: string | null
+          mime_type?: string | null
+          processed_at?: string | null
+          received_at?: string | null
+          transcript?: string | null
         }
         Relationships: []
       }
@@ -850,6 +1066,87 @@ export type Database = {
         }
         Relationships: []
       }
+      webhook_logs: {
+        Row: {
+          conversation_id: string | null
+          error_message: string | null
+          id: number
+          payload: Json | null
+          processed_at: string | null
+          processing_time_ms: number | null
+          received_at: string | null
+          response_status: number | null
+          webhook_type: string | null
+        }
+        Insert: {
+          conversation_id?: string | null
+          error_message?: string | null
+          id?: number
+          payload?: Json | null
+          processed_at?: string | null
+          processing_time_ms?: number | null
+          received_at?: string | null
+          response_status?: number | null
+          webhook_type?: string | null
+        }
+        Update: {
+          conversation_id?: string | null
+          error_message?: string | null
+          id?: number
+          payload?: Json | null
+          processed_at?: string | null
+          processing_time_ms?: number | null
+          received_at?: string | null
+          response_status?: number | null
+          webhook_type?: string | null
+        }
+        Relationships: []
+      }
+      whatsapp_conversations: {
+        Row: {
+          conversation_id: string
+          created_at: string | null
+          ended_at: string | null
+          id: number
+          last_message_at: string | null
+          message_count: number | null
+          platform_metadata: Json | null
+          started_at: string | null
+          status: string | null
+          updated_at: string | null
+          user_phone: string
+          whatsapp_conversation_id: string | null
+        }
+        Insert: {
+          conversation_id: string
+          created_at?: string | null
+          ended_at?: string | null
+          id?: number
+          last_message_at?: string | null
+          message_count?: number | null
+          platform_metadata?: Json | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_phone: string
+          whatsapp_conversation_id?: string | null
+        }
+        Update: {
+          conversation_id?: string
+          created_at?: string | null
+          ended_at?: string | null
+          id?: number
+          last_message_at?: string | null
+          message_count?: number | null
+          platform_metadata?: Json | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_phone?: string
+          whatsapp_conversation_id?: string | null
+        }
+        Relationships: []
+      }
       whatsapp_flows: {
         Row: {
           categories: string[] | null
@@ -994,6 +1291,16 @@ export type Database = {
     }
     Functions: {
       generate_quotation_number: { Args: never; Returns: string }
+      get_conversation_stats: {
+        Args: { end_date: string; start_date: string }
+        Returns: {
+          avg_duration: number
+          needs_followup_count: number
+          negative_sentiment_count: number
+          positive_sentiment_count: number
+          total_conversations: number
+        }[]
+      }
       is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
