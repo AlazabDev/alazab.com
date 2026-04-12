@@ -11,11 +11,12 @@ interface Message {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chatbot`;
 
-const ELEVENLABS_AGENT_ID = 'ihycSANIrpHfhWoaq1g3';
+const ELEVENLABS_AGENT_ID = 'agent_9701knm87j4mernbr61m7yedwysn';
 const VOICES = [
-  { id: 'LXrTqFIgiubkrMkwvOUr', name: 'الصوت الأساسي', accent: 'عربي', gender: 'ذكر', age: 'شاب' },
-  { id: 'EXAVITQu4vr4xnSDxMaL', name: 'سارة', accent: 'أمريكي', gender: 'أنثى', age: 'شابة' },
-  { id: 'JBFqnCBsd6RMkjVDRZzb', name: 'جورج', accent: 'أمريكي', gender: 'ذكر', age: 'متوسط' },
+  { id: 'LXrTqFIgiubkrMkwvOUr', name: 'مصري', accent: 'مصري', gender: 'ذكر', age: 'شاب' },
+  { id: 'amSNjVC0vWYiE8iGimVb', name: 'مجدي', accent: 'عربي', gender: 'ذكر', age: 'متوسط' },
+  { id: 'yrPIy5b3iLnVLIBfUSw8', name: 'عمرو', accent: 'عربي', gender: 'ذكر', age: 'شاب' },
+  { id: 'ihycSANIrpHfhWoaq1g3', name: 'عزب', accent: 'عربي', gender: 'ذكر', age: 'متوسط' },
 ];
 
 const escapeHtml = (s: string) =>
