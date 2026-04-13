@@ -81,7 +81,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Send via WhatsApp Cloud API - try common approved template variants first
+    // Send via WhatsApp Cloud API - try template variants that commonly exist in Meta
     const templateAttempts = [
       {
         name: "otp_verification",
@@ -106,6 +106,16 @@ Deno.serve(async (req) => {
       {
         name: "authentication",
         language: { code: "en_US" },
+        components: [
+          {
+            type: "body",
+            parameters: [{ type: "text", text: otp }],
+          },
+        ],
+      },
+      {
+        name: "authentication",
+        language: { code: "ar" },
         components: [
           {
             type: "body",
@@ -141,18 +151,42 @@ Deno.serve(async (req) => {
       }
 
       lastWaError = waData;
-      console.error("WhatsApp template send failed:", JSON.stringify({ template: template.name, language: template.language.code, error: waData }));
+      console.error(
+        "WhatsApp template send failed:",
+        JSON.stringify({ template: template.name, language: template.language.code, error: waData })
+      );
     }
 
     if (!delivered) {
-      console.error("WhatsApp OTP delivery failed after all template attempts:", JSON.stringify(lastWaError));
-      return new Response(
-        JSON.stringify({
-          error: "فشل إرسال رمز التحقق عبر واتساب. تأكد أن القالب معتمد ومربوط بنفس رقم الإرسال واللغة الصحيحة.",
-          details: lastWaError,
+      const fallbackResponse = await fetch(`${WHATSAPP_API}/${phoneNumberId}/messages`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${whatsappToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messaging_product: "whatsapp",
+          to: cleanPhone,
+          type: "template",
+          template: {
+            name: "authentication",
+            language: { code: "en_US" },
+            components: [],
+          },
         }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      });
+
+      const fallbackData = await fallbackResponse.json();
+      if (!fallbackResponse.ok) {
+        console.error("WhatsApp OTP delivery failed after all template attempts:", JSON.stringify(fallbackData));
+        return new Response(
+          JSON.stringify({
+            error: "فشل إرسال رمز التحقق عبر واتساب. راجع اسم القالب ولغته وحالة الموافقة على نفس رقم واتساب التجاري.",
+            details: fallbackData,
+          }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
     }
 
     console.log(`OTP sent to ${cleanPhone.slice(-4)}`);
