@@ -69,18 +69,29 @@ const VoiceConversationInner: React.FC<VoiceConversationProps> = ({ agentId, voi
       await navigator.mediaDevices.getUserMedia({ audio: true });
       const resp = await fetch(`${SUPABASE_URL}/functions/v1/elevenlabs-token`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${SUPABASE_KEY}` },
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+        },
         body: JSON.stringify({ agentId }),
       });
-      if (!resp.ok) throw new Error((await resp.json().catch(() => ({}))).error || `Error ${resp.status}`);
+
+      if (!resp.ok) {
+        throw new Error((await resp.json().catch(() => ({}))).error || `Error ${resp.status}`);
+      }
+
       const data = await resp.json();
       if (!data.signed_url) throw new Error('No signed URL received');
 
       const overrides: Record<string, unknown> = {};
-      if (selectedVoice) (overrides as Record<string, unknown>).tts = { voiceId: selectedVoice };
+      if (selectedVoice) {
+        (overrides as Record<string, unknown>).tts = { voiceId: selectedVoice };
+      }
 
       await conversation.startSession({
         signedUrl: data.signed_url,
+        connectionType: 'websocket',
         overrides: Object.keys(overrides).length > 0 ? overrides : undefined,
       });
       await conversation.setVolume({ volume });

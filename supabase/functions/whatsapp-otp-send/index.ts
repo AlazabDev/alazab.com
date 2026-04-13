@@ -81,10 +81,45 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Send via WhatsApp Cloud API - Authentication Template
-    const waResponse = await fetch(
-      `${WHATSAPP_API}/${phoneNumberId}/messages`,
+    // Send via WhatsApp Cloud API - try common approved template variants first
+    const templateAttempts = [
       {
+        name: "otp_verification",
+        language: { code: "ar" },
+        components: [
+          {
+            type: "body",
+            parameters: [{ type: "text", text: otp }],
+          },
+        ],
+      },
+      {
+        name: "otp_verification",
+        language: { code: "ar_EG" },
+        components: [
+          {
+            type: "body",
+            parameters: [{ type: "text", text: otp }],
+          },
+        ],
+      },
+      {
+        name: "authentication",
+        language: { code: "en_US" },
+        components: [
+          {
+            type: "body",
+            parameters: [{ type: "text", text: otp }],
+          },
+        ],
+      },
+    ];
+
+    let delivered = false;
+    let lastWaError: unknown = null;
+
+    for (const template of templateAttempts) {
+      const waResponse = await fetch(`${WHATSAPP_API}/${phoneNumberId}/messages`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${whatsappToken}`,
@@ -94,63 +129,30 @@ Deno.serve(async (req) => {
           messaging_product: "whatsapp",
           to: cleanPhone,
           type: "template",
-          template: {
-            name: "otp_verification",
-            language: { code: "ar" },
-            components: [
-              {
-                type: "body",
-                parameters: [
-                  { type: "text", text: otp },
-                ],
-              },
-              {
-                type: "button",
-                sub_type: "url",
-                index: "0",
-                parameters: [
-                  { type: "text", text: otp },
-                ],
-              },
-            ],
-          },
+          template,
         }),
+      });
+
+      const waData = await waResponse.json();
+
+      if (waResponse.ok) {
+        delivered = true;
+        break;
       }
-    );
 
-    const waData = await waResponse.json();
+      lastWaError = waData;
+      console.error("WhatsApp template send failed:", JSON.stringify({ template: template.name, language: template.language.code, error: waData }));
+    }
 
-    if (!waResponse.ok) {
-      console.error("WhatsApp API error:", JSON.stringify(waData));
-      
-      // Fallback: send as regular text message
-      const fallbackResponse = await fetch(
-        `${WHATSAPP_API}/${phoneNumberId}/messages`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${whatsappToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            messaging_product: "whatsapp",
-            to: cleanPhone,
-            type: "text",
-            text: {
-              body: `رمز التحقق الخاص بك من العزب للمقاولات: ${otp}\n\nصالح لمدة 5 دقائق. لا تشارك هذا الرمز مع أحد.`,
-            },
-          }),
-        }
+    if (!delivered) {
+      console.error("WhatsApp OTP delivery failed after all template attempts:", JSON.stringify(lastWaError));
+      return new Response(
+        JSON.stringify({
+          error: "فشل إرسال رمز التحقق عبر واتساب. تأكد أن القالب معتمد ومربوط بنفس رقم الإرسال واللغة الصحيحة.",
+          details: lastWaError,
+        }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
-
-      const fallbackData = await fallbackResponse.json();
-      if (!fallbackResponse.ok) {
-        console.error("WhatsApp fallback error:", JSON.stringify(fallbackData));
-        return new Response(
-          JSON.stringify({ error: "فشل إرسال رمز التحقق" }),
-          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
     }
 
     console.log(`OTP sent to ${cleanPhone.slice(-4)}`);
