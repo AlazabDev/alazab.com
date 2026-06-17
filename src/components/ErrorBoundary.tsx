@@ -1,16 +1,19 @@
 import React, { Component, type ErrorInfo, type ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ErrorHandler } from '@/lib/errors/ErrorHandler';
+import { AppError } from '@/lib/errors/AppError';
 
 interface Props {
   children: ReactNode;
   fallbackTitle?: string;
   fallbackMessage?: string;
+  onError?: (error: AppError) => void;
 }
 
 interface State {
   hasError: boolean;
-  error: Error | null;
+  error: AppError | null;
 }
 
 class ErrorBoundary extends Component<Props, State> {
@@ -20,19 +23,24 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+    const appError = ErrorHandler.handle(error);
+    return { hasError: true, error: appError };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught:', error, errorInfo);
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    const appError = ErrorHandler.handle(error, {
+      componentStack: errorInfo.componentStack,
+    });
+    this.props.onError?.(appError);
   }
 
-  handleRetry = () => {
+  handleRetry = (): void => {
     this.setState({ hasError: false, error: null });
   };
 
-  render() {
-    if (this.state.hasError) {
+  render(): ReactNode {
+    if (this.state.hasError && this.state.error) {
+      const error = this.state.error;
       return (
         <div className="flex items-center justify-center min-h-[300px] p-8">
           <div className="text-center max-w-md space-y-4">
@@ -41,12 +49,14 @@ class ErrorBoundary extends Component<Props, State> {
               {this.props.fallbackTitle || 'حدث خطأ غير متوقع'}
             </h3>
             <p className="text-sm text-muted-foreground">
-              {this.props.fallbackMessage || 'نعتذر عن هذا الخطأ. يرجى المحاولة مرة أخرى.'}
+              {this.props.fallbackMessage || error.userMessage}
             </p>
-            <Button onClick={this.handleRetry} variant="outline" className="gap-2">
-              <RefreshCw className="w-4 h-4" />
-              إعادة المحاولة
-            </Button>
+            {error.recoverable && (
+              <Button onClick={this.handleRetry} variant="outline" className="gap-2">
+                <RefreshCw className="w-4 h-4" />
+                إعادة المحاولة
+              </Button>
+            )}
           </div>
         </div>
       );
