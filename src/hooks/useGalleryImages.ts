@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import {
   CLOUDINARY_GALLERY,
+  type CloudinaryCategory,
   getCloudinaryImageUrl,
   getCloudinaryImages,
   getRandomCloudinaryImage,
@@ -9,15 +10,15 @@ import {
 } from '@/data/imageUrls';
 
 interface UseGalleryImagesOptions {
-  category?: keyof typeof CLOUDINARY_GALLERY.categories;
+  category?: CloudinaryCategory;
   preset?: keyof typeof imagePresets;
   limit?: number;
   shuffle?: boolean;
 }
 
 /**
- * Hook for managing gallery images
- * Provides utility functions to fetch, filter, and optimize images
+ * Hook for managing gallery images.
+ * Keeps the full Cloudinary public path/version instead of stripping it to filename only.
  */
 export const useGalleryImages = (options: UseGalleryImagesOptions = {}) => {
   const {
@@ -27,8 +28,9 @@ export const useGalleryImages = (options: UseGalleryImagesOptions = {}) => {
     shuffle = false,
   } = options;
 
-  const images = useMemo(() => {
-    let imgs = getCloudinaryImages(category);
+  const optimizedImages = useMemo(() => {
+    const presetConfig = imagePresets[preset];
+    let imgs = getCloudinaryImages(category, presetConfig);
 
     if (shuffle) {
       imgs = [...imgs].sort(() => Math.random() - 0.5);
@@ -39,15 +41,7 @@ export const useGalleryImages = (options: UseGalleryImagesOptions = {}) => {
     }
 
     return imgs;
-  }, [category, limit, shuffle]);
-
-  const optimizedImages = useMemo(() => {
-    const presetConfig = imagePresets[preset];
-    return images.map(url => {
-      const pathPart = url.split('/').slice(-1)[0];
-      return getCloudinaryImageUrl(pathPart, presetConfig);
-    });
-  }, [images, preset]);
+  }, [category, limit, preset, shuffle]);
 
   return {
     images: optimizedImages,
@@ -57,35 +51,35 @@ export const useGalleryImages = (options: UseGalleryImagesOptions = {}) => {
 };
 
 /**
- * Hook for single image optimization
+ * Hook for single image optimization.
+ * - Cloudinary full URLs are rebuilt with the requested preset.
+ * - Non-Cloudinary absolute URLs remain untouched.
+ * - Local/static paths are normalized safely.
  */
 export const useOptimizedImage = (url: string | undefined, preset: keyof typeof imagePresets = 'gallery') => {
-  const safeUrl = getSafeImageUrl(url);
-
   return useMemo(() => {
-    if (!safeUrl || safeUrl.includes('placeholder')) {
+    const safeUrl = getSafeImageUrl(url);
+
+    if (!safeUrl || safeUrl.startsWith('data:') || safeUrl.startsWith('blob:')) {
       return safeUrl;
     }
 
-    // Extract the path from Cloudinary URL if it's already a full URL
     if (safeUrl.includes('cloudinary.com')) {
-      const parts = safeUrl.split('/');
-      const filename = parts[parts.length - 1];
-      return getCloudinaryImageUrl(filename, imagePresets[preset]);
+      return getCloudinaryImageUrl(safeUrl, imagePresets[preset]);
     }
 
-    return getCloudinaryImageUrl(safeUrl, imagePresets[preset]);
-  }, [safeUrl, preset]);
+    return safeUrl;
+  }, [url, preset]);
 };
 
 /**
- * Hook to get images by multiple categories
+ * Hook to get images by multiple categories.
  */
-export const useMultiCategoryImages = (categories: Array<keyof typeof CLOUDINARY_GALLERY.categories>) => {
+export const useMultiCategoryImages = (categories: CloudinaryCategory[]) => {
   return useMemo(() => {
     return categories.reduce((acc, cat) => {
       acc[cat] = getCloudinaryImages(cat);
       return acc;
-    }, {} as Record<keyof typeof CLOUDINARY_GALLERY.categories, string[]>);
+    }, {} as Record<CloudinaryCategory, string[]>);
   }, [categories.join(',')]);
 };
