@@ -144,6 +144,7 @@ function App() {
         } />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/furniture-gallery" element={<FurnitureGallery />} />
+        <Route path="/knowledge" element={<ContentBrowser />} />
         <Route path="/content-browser" element={<ContentBrowser />} />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         <Route path="/terms-of-service" element={<TermsOfServicePage />} />
