@@ -48,6 +48,7 @@ const Footer: React.FC = () => {
                 { to: '/about', label: 'من نحن' },
                 { to: '/services', label: 'خدماتنا' },
                 { to: '/projects', label: 'مشاريعنا' },
+                { to: '/knowledge', label: 'بوابة المعرفة' },
                 { to: '/contact', label: 'اتصل بنا' },
                 { to: '/ceo', label: 'المدير التنفيذي' },
               ].map((link) => (
