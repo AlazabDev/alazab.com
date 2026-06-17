@@ -22,19 +22,14 @@ import {
   Camera,
   Search,
   TrendingUp,
-  PlusCircle,
   Database,
   Hammer,
   UserCircle,
-  HardDrive,
-  Send,
   DollarSign,
   HeadphonesIcon,
   BarChart3,
   Newspaper,
   Printer,
-  Palette,
-  Languages,
   MessageCircle,
   ExternalLink
 } from 'lucide-react';
@@ -72,6 +67,16 @@ const mainSections: SidebarSection[] = [
       { title: "معرض الأثاث", href: "/furniture-gallery", icon: Camera, description: "أثاث وتصميم داخلي فاخر", badge: "جديد" },
       { title: "من نحن", href: "/about", icon: Users, description: "تعرف على شركتنا" },
       { title: "اتصل بنا", href: "/contact", icon: Phone, description: "طرق التواصل معنا" },
+    ]
+  },
+  {
+    title: "بوابة المعرفة",
+    expandable: true,
+    items: [
+      { title: "كل المحتوى", href: "/knowledge", icon: Newspaper, description: "بوابة مركزية لكل محتوى العزب", badge: "جديد" },
+      { title: "المقالات", href: "/knowledge?section=blogs", icon: FileText, description: "مقالات ورؤى تشغيلية ومعمارية" },
+      { title: "الأسئلة الشائعة", href: "/knowledge?section=faq", icon: MessageCircle, description: "إجابات منظمة لأسئلة العملاء" },
+      { title: "العلامات التجارية", href: "/knowledge?section=brands", icon: Building, description: "مسارات وخدمات مجموعة العزب" },
     ]
   },
   {
@@ -165,7 +170,7 @@ const futureSections: SidebarSection[] = [
 ];
 
 export const AdvancedSidebar: React.FC<AdvancedSidebarProps> = ({ onClose }) => {
-  const [expandedSections, setExpandedSections] = useState<string[]>(['التنقل الأساسي', 'الخدمات التفاعلية']);
+  const [expandedSections, setExpandedSections] = useState<string[]>(['التنقل الأساسي', 'بوابة المعرفة', 'الخدمات التفاعلية']);
 
   const toggleSection = (sectionTitle: string) => {
     setExpandedSections(prev => 
