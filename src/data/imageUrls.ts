@@ -1,8 +1,30 @@
 /**
  * Image URLs Configuration
- * Centralized management of all image URLs from CDNs
- * Updated: 2025
+ * Centralized management of all image URLs from remote CDNs and static data fallbacks.
+ * This file is safe to import from Vite/React browser code.
  */
+
+export type CloudinaryCategory = keyof typeof CLOUDINARY_GALLERY.categories;
+
+export interface StaticGalleryImage {
+  id: string;
+  title: string;
+  url: string;
+  category: string;
+  description?: string;
+  alt_text?: string;
+  created_at: string;
+}
+
+const FALLBACK_SVG = encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f3f4f6"/>
+  <text x="400" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111827">Alazab Group</text>
+  <text x="400" y="335" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#6b7280">Image preview unavailable</text>
+</svg>
+`);
+
+export const DEFAULT_IMAGE_FALLBACK = `data:image/svg+xml;charset=UTF-8,${FALLBACK_SVG}`;
 
 // AWS S3 Gallery - Hotel Collection Images
 export const AWS_S3_GALLERY = {
@@ -52,60 +74,146 @@ export const CLOUDINARY_GALLERY = {
       'v1774581514/azw-301_g0bq1x.jpg', 'v1774581512/azw-300_heawkp.jpg',
     ],
   },
-};
+} as const;
 
-// Helper Functions
-export const getAWSImageUrl = (filename: string): string => {
-  return `${AWS_S3_GALLERY.baseUrl}/${filename}`;
-};
-
-export const getCloudinaryImageUrl = (path: string, options?: { width?: number; height?: number; quality?: string }): string => {
-  const baseUrl = CLOUDINARY_GALLERY.baseUrl;
-  const transformations = [];
-
-  if (options?.width || options?.height) {
-    const width = options.width ? `w_${options.width}` : '';
-    const height = options.height ? `h_${options.height}` : '';
-    const q = options.quality || 'auto';
-    transformations.push([width, height, `q_${q}`].filter(Boolean).join(','));
-  } else {
-    transformations.push('q_auto');
-  }
-
-  const transform = transformations.length > 0 ? `/${transformations.join('/')}` : '';
-  return `${baseUrl}${transform}/${path}`;
-};
-
-// Get all images from a category
-export const getCloudinaryImages = (category: keyof typeof CLOUDINARY_GALLERY.categories): string[] => {
-  return CLOUDINARY_GALLERY.categories[category].map(path => getCloudinaryImageUrl(path));
-};
-
-// Get random image
-export const getRandomCloudinaryImage = (category?: keyof typeof CLOUDINARY_GALLERY.categories): string => {
-  const cat = category || 'showcase';
-  const images = getCloudinaryImages(cat);
-  return images[Math.floor(Math.random() * images.length)];
-};
-
-// Batch image URLs
-export const batchCloudinaryImages = (paths: string[], options?: { width?: number; height?: number; quality?: string }): string[] => {
-  return paths.map(path => getCloudinaryImageUrl(path, options));
-};
-
-// Image optimization presets
 export const imagePresets = {
   thumbnail: { width: 300, height: 300, quality: 'auto' },
   card: { width: 500, height: 350, quality: 'auto' },
   hero: { width: 1200, height: 600, quality: 'auto' },
   gallery: { width: 800, height: 600, quality: 'auto' },
   full: { width: 1920, height: 1080, quality: 'auto' },
+} as const;
+
+export type ImagePresetName = keyof typeof imagePresets;
+export type ImageTransformOptions = { width?: number; height?: number; quality?: string };
+
+const trimSlashes = (value: string) => value.replace(/^\/+|\/+$/g, '');
+const isAbsoluteUrl = (value: string) => /^(https?:)?\/\//i.test(value);
+const isSpecialUrl = (value: string) => /^(data:|blob:|mailto:|tel:)/i.test(value);
+
+export const normalizePublicPath = (path: string): string => {
+  const cleanPath = path.trim();
+  if (!cleanPath) return DEFAULT_IMAGE_FALLBACK;
+  if (isAbsoluteUrl(cleanPath) || isSpecialUrl(cleanPath)) return cleanPath;
+
+  const base = typeof import.meta !== 'undefined' ? import.meta.env.BASE_URL || '/' : '/';
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+  return `${normalizedBase}${trimSlashes(cleanPath)}`;
 };
 
-// Safe image URL getter with fallback
+export const getAWSImageUrl = (filename: string): string => {
+  const cleanFilename = trimSlashes(filename.trim());
+  if (!cleanFilename) return DEFAULT_IMAGE_FALLBACK;
+  if (isAbsoluteUrl(cleanFilename) || isSpecialUrl(cleanFilename)) return cleanFilename;
+  return `${AWS_S3_GALLERY.baseUrl}/${cleanFilename}`;
+};
+
+const stripCloudinaryBase = (urlOrPath: string): string => {
+  const cleanValue = urlOrPath.trim();
+  if (!cleanValue) return '';
+
+  if (!cleanValue.includes('cloudinary.com')) {
+    return trimSlashes(cleanValue);
+  }
+
+  const marker = '/image/upload/';
+  const markerIndex = cleanValue.indexOf(marker);
+  if (markerIndex === -1) return trimSlashes(cleanValue);
+
+  const afterUpload = cleanValue.slice(markerIndex + marker.length);
+  const parts = afterUpload.split('/').filter(Boolean);
+
+  // Remove common transformation segments, but preserve version segment v123... and public id.
+  while (parts.length > 0) {
+    const segment = parts[0];
+    if (/^v\d+$/.test(segment)) break;
+    if (segment.includes(',') || /^[a-z]_[^/]+$/.test(segment) || segment === 'f_auto' || segment === 'q_auto') {
+      parts.shift();
+      continue;
+    }
+    break;
+  }
+
+  return parts.join('/');
+};
+
+const buildCloudinaryTransform = (options?: ImageTransformOptions): string => {
+  const transformations = ['f_auto'];
+
+  if (options?.width) transformations.push(`w_${options.width}`);
+  if (options?.height) transformations.push(`h_${options.height}`);
+  transformations.push(`q_${options?.quality || 'auto'}`);
+
+  return transformations.filter(Boolean).join(',');
+};
+
+export const getCloudinaryImageUrl = (urlOrPath: string, options?: ImageTransformOptions): string => {
+  const cleanValue = urlOrPath.trim();
+  if (!cleanValue) return DEFAULT_IMAGE_FALLBACK;
+  if (isSpecialUrl(cleanValue)) return cleanValue;
+
+  // Non-Cloudinary absolute URLs should remain untouched.
+  if (isAbsoluteUrl(cleanValue) && !cleanValue.includes('cloudinary.com')) {
+    return cleanValue;
+  }
+
+  const publicPath = stripCloudinaryBase(cleanValue);
+  if (!publicPath) return DEFAULT_IMAGE_FALLBACK;
+
+  return `${CLOUDINARY_GALLERY.baseUrl}/${buildCloudinaryTransform(options)}/${publicPath}`;
+};
+
+export const getCloudinaryImages = (
+  category: CloudinaryCategory,
+  options?: ImageTransformOptions
+): string[] => {
+  return CLOUDINARY_GALLERY.categories[category].map(path => getCloudinaryImageUrl(path, options));
+};
+
+export const getAllCloudinaryImages = (options?: ImageTransformOptions): string[] => {
+  return (Object.keys(CLOUDINARY_GALLERY.categories) as CloudinaryCategory[])
+    .flatMap(category => getCloudinaryImages(category, options));
+};
+
+export const getRandomCloudinaryImage = (category?: CloudinaryCategory): string => {
+  const cat = category || 'showcase';
+  const images = getCloudinaryImages(cat);
+  return images[Math.floor(Math.random() * images.length)] || DEFAULT_IMAGE_FALLBACK;
+};
+
+export const batchCloudinaryImages = (paths: string[], options?: ImageTransformOptions): string[] => {
+  return paths.map(path => getCloudinaryImageUrl(path, options));
+};
+
 export const getSafeImageUrl = (
   url: string | undefined,
-  fallback = 'https://via.placeholder.com/500x500?text=Image'
+  fallback = DEFAULT_IMAGE_FALLBACK
 ): string => {
-  return url && url.trim().length > 0 ? url : fallback;
+  if (!url || url.trim().length === 0) return fallback;
+  const cleanUrl = url.trim();
+
+  if (cleanUrl.includes('cloudinary.com')) return getCloudinaryImageUrl(cleanUrl);
+  if (isAbsoluteUrl(cleanUrl) || isSpecialUrl(cleanUrl)) return cleanUrl;
+  if (cleanUrl.startsWith('/')) return normalizePublicPath(cleanUrl);
+
+  return cleanUrl;
+};
+
+export const getStaticGalleryImages = (category?: string): StaticGalleryImage[] => {
+  const categories = Object.keys(CLOUDINARY_GALLERY.categories) as CloudinaryCategory[];
+  const selectedCategories = category && categories.includes(category as CloudinaryCategory)
+    ? [category as CloudinaryCategory]
+    : categories;
+
+  return selectedCategories.flatMap((cat) =>
+    CLOUDINARY_GALLERY.categories[cat].map((path, index) => ({
+      id: `${cat}-${index + 1}`,
+      title: `Alazab ${cat.replace(/_/g, ' ')} ${index + 1}`,
+      url: getCloudinaryImageUrl(path, imagePresets.gallery),
+      category: cat,
+      description: 'صورة من معرض أعمال مجموعة العزب',
+      alt_text: `صورة من معرض ${cat.replace(/_/g, ' ')}`,
+      created_at: '2026-01-01T00:00:00.000Z',
+    }))
+  );
 };
