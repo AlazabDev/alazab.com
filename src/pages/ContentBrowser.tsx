@@ -1,13 +1,21 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Search, BookOpen, HelpCircle, Globe, FileText, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import PageLayout from '@/components/layout/PageLayout';
-import { useContentIndex, type ContentItem } from '@/hooks/useContentIndex';
+import { useContentIndex } from '@/hooks/useContentIndex';
+
+const validSections = ['all', 'blogs', 'faq', 'brands', 'knowledge'] as const;
+
+const getValidSection = (section: string | null) => {
+  return validSections.includes(section as typeof validSections[number]) ? section as string : 'all';
+};
 
 const ContentBrowser: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedSection, setSelectedSection] = useState('all');
+  const [selectedSection, setSelectedSection] = useState(() => getValidSection(searchParams.get('section')));
   const { content, stats, loading, error } = useContentIndex();
 
   const sections = [
@@ -17,6 +25,19 @@ const ContentBrowser: React.FC = () => {
     { id: 'brands', label: 'العلامات التجارية', icon: BookOpen },
     { id: 'knowledge', label: 'قاعدة المعرفة', icon: BookOpen },
   ];
+
+  useEffect(() => {
+    setSelectedSection(getValidSection(searchParams.get('section')));
+  }, [searchParams]);
+
+  const handleSectionChange = (sectionId: string) => {
+    setSelectedSection(sectionId);
+    if (sectionId === 'all') {
+      setSearchParams({});
+      return;
+    }
+    setSearchParams({ section: sectionId });
+  };
 
   const filteredContent = useMemo(() => {
     if (loading) return [];
@@ -40,7 +61,7 @@ const ContentBrowser: React.FC = () => {
 
   if (error) {
     return (
-      <PageLayout title="متصفح المحتوى" description="خطأ في تحميل المحتوى">
+      <PageLayout title="بوابة المعرفة" description="خطأ في تحميل المحتوى">
         <div className="text-center py-12">
           <p className="text-destructive text-lg">{error}</p>
         </div>
@@ -49,20 +70,19 @@ const ContentBrowser: React.FC = () => {
   }
 
   return (
-    <PageLayout title="متصفح المحتوى" description="استعرض جميع المحتوى والموارد المتاحة">
+    <PageLayout title="بوابة المعرفة" description="استعرض جميع محتوى العزب من المقالات والأسئلة الشائعة والبراندات وقاعدة المعرفة">
       <div className="space-y-8">
-        {/* رأس البحث */}
         <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-8 rounded-lg border border-primary/20">
-          <h1 className="text-3xl font-bold text-foreground mb-2">متصفح المحتوى</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">بوابة المعرفة</h1>
           <p className="text-muted-foreground mb-6">
-            اكتشف مقالاتنا وأسئلتك الشائعة والمعلومات عن العلامات التجارية ({stats.totalItems} عنصر)
+            اكتشف محتوى العزب: المقالات، الأسئلة الشائعة، العلامات التجارية، وقاعدة المعرفة ({stats.totalItems} عنصر)
           </p>
           
           <div className="relative">
             <Search className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="ابحث عن محتوى..."
+              placeholder="ابحث في بوابة المعرفة..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 py-6 text-lg"
@@ -71,7 +91,6 @@ const ContentBrowser: React.FC = () => {
           </div>
         </div>
 
-        {/* الأقسام */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {sections.map(section => {
             const Icon = section.icon;
@@ -81,7 +100,7 @@ const ContentBrowser: React.FC = () => {
             return (
               <Button
                 key={section.id}
-                onClick={() => setSelectedSection(section.id)}
+                onClick={() => handleSectionChange(section.id)}
                 variant={isActive ? 'default' : 'outline'}
                 className="h-auto flex flex-col items-center justify-center gap-2 p-4 relative"
                 disabled={loading}
@@ -96,7 +115,6 @@ const ContentBrowser: React.FC = () => {
           })}
         </div>
 
-        {/* نتائج البحث */}
         <div className="space-y-4">
           <h2 className="text-2xl font-bold">
             {loading ? 'جاري التحميل...' : `النتائج (${filteredContent.length})`}
@@ -113,8 +131,8 @@ const ContentBrowser: React.FC = () => {
                 .sort((a, b) => a.order - b.order)
                 .map(item => (
                   <div
-                    key={item.slug}
-                    className="p-6 border rounded-lg hover:border-primary hover:bg-primary/5 transition-all cursor-pointer"
+                    key={`${item.section}-${item.slug}`}
+                    className="p-6 border rounded-lg hover:border-primary hover:bg-primary/5 transition-all"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
