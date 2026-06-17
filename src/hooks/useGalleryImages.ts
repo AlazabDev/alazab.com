@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import {
-  CLOUDINARY_GALLERY,
   type CloudinaryCategory,
   getCloudinaryImageUrl,
   getCloudinaryImages,
