@@ -39,10 +39,10 @@ const navigationItems = [
 ];
 
 const contentItems = [
-  { title: "متصفح المحتوى", url: "/content-browser", icon: Globe },
-  { title: "المقالات", url: "/content-browser?section=blogs", icon: FileText },
-  { title: "الأسئلة الشائعة", url: "/content-browser?section=faq", icon: HelpCircle },
-  { title: "العلامات التجارية", url: "/content-browser?section=brands", icon: BookOpen },
+  { title: "بوابة المعرفة", url: "/knowledge", icon: Globe },
+  { title: "المقالات", url: "/knowledge?section=blogs", icon: FileText },
+  { title: "الأسئلة الشائعة", url: "/knowledge?section=faq", icon: HelpCircle },
+  { title: "العلامات التجارية", url: "/knowledge?section=brands", icon: BookOpen },
 ];
 
 const bottomItems = [
@@ -54,7 +54,8 @@ export function AppSidebar() {
   const location = useLocation();
   const { user } = useAuth();
   
-  const isActive = (path: string) => location.pathname === path;
+  const normalizePath = (path: string) => path.split('?')[0];
+  const isActive = (path: string) => location.pathname === normalizePath(path);
   
   const getNavClass = (path: string) => 
     isActive(path) 
