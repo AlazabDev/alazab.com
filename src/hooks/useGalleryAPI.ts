@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { getStaticGalleryImages } from '@/data/imageUrls';
 
 export interface GalleryImage {
   id: string;
@@ -20,31 +21,47 @@ export interface UseGalleryReturn {
   refetch: () => Promise<void>;
 }
 
+const getFallbackImages = (category?: string): GalleryImage[] => {
+  return getStaticGalleryImages(category) as GalleryImage[];
+};
+
 export const useGallery = (category?: string): UseGalleryReturn => {
-  const [images, setImages] = useState<GalleryImage[]>([]);
+  const [images, setImages] = useState<GalleryImage[]>(() => getFallbackImages(category));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchImages = useCallback(async () => {
     setLoading(true);
     setError(null);
+
     try {
       const url = category 
-        ? `/api/gallery/images?category=${category}`
+        ? `/api/gallery/images?category=${encodeURIComponent(category)}`
         : '/api/gallery/images';
       
+      const token = localStorage.getItem('token');
       const response = await fetch(url, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
 
-      if (!response.ok) throw new Error('Failed to fetch images');
+      if (!response.ok) {
+        throw new Error(`Gallery API unavailable: ${response.status}`);
+      }
       
       const data = await response.json();
-      setImages(data.data.images || []);
+      const apiImages = data?.data?.images;
+
+      if (!Array.isArray(apiImages)) {
+        throw new Error('Gallery API returned invalid payload');
+      }
+
+      setImages(apiImages.length > 0 ? apiImages : getFallbackImages(category));
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Unknown error';
-      setError(message);
-      console.error('Error fetching gallery images:', err);
+      // Static hosting does not provide /api/gallery/images. Keep gallery working from src/data/imageUrls.ts.
+      const fallbackImages = getFallbackImages(category);
+      setImages(fallbackImages);
+      setError(null);
+      console.info('Gallery API fallback to static image data:', err);
     } finally {
       setLoading(false);
     }
@@ -56,17 +73,17 @@ export const useGallery = (category?: string): UseGalleryReturn => {
 
   const addImage = useCallback(async (image: Omit<GalleryImage, 'id' | 'created_at'>) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch('/api/gallery/images', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(image)
+        body: JSON.stringify(image),
       });
 
       if (!response.ok) throw new Error('Failed to add image');
-      
       await fetchImages();
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error';
@@ -77,17 +94,17 @@ export const useGallery = (category?: string): UseGalleryReturn => {
 
   const updateImage = useCallback(async (id: string, updates: Partial<GalleryImage>) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`/api/gallery/images/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(updates)
+        body: JSON.stringify(updates),
       });
 
       if (!response.ok) throw new Error('Failed to update image');
-      
       await fetchImages();
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error';
@@ -98,13 +115,13 @@ export const useGallery = (category?: string): UseGalleryReturn => {
 
   const deleteImage = useCallback(async (id: string) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`/api/gallery/images/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
 
       if (!response.ok) throw new Error('Failed to delete image');
-      
       await fetchImages();
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error';
@@ -120,7 +137,7 @@ export const useGallery = (category?: string): UseGalleryReturn => {
     addImage,
     updateImage,
     deleteImage,
-    refetch: fetchImages
+    refetch: fetchImages,
   };
 };
 
