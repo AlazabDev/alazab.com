@@ -9,7 +9,11 @@ import {
   ClipboardList, 
   FolderOpen,
   MessageSquare,
-  Search
+  Search,
+  BookOpen,
+  HelpCircle,
+  FileText,
+  Globe
 } from 'lucide-react';
 import {
   Sidebar,
@@ -32,6 +36,13 @@ const navigationItems = [
   { title: "طلبات الصيانة", url: "/maintenance-list", icon: ClipboardList },
   { title: "المشاريع", url: "/project-management", icon: FolderOpen },
   { title: "الرسائل", url: "/messages", icon: MessageSquare },
+];
+
+const contentItems = [
+  { title: "متصفح المحتوى", url: "/content-browser", icon: Globe },
+  { title: "المقالات", url: "/content-browser?section=blogs", icon: FileText },
+  { title: "الأسئلة الشائعة", url: "/content-browser?section=faq", icon: HelpCircle },
+  { title: "العلامات التجارية", url: "/content-browser?section=brands", icon: BookOpen },
 ];
 
 const bottomItems = [
@@ -72,6 +83,29 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink 
+                      to={item.url} 
+                      className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${getNavClass(item.url)}`}
+                    >
+                      <item.icon className="w-5 h-5" />
+                      <span>{item.title}</span>
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>
+            المحتوى والموارد
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {contentItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 

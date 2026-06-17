@@ -61,6 +61,7 @@ const FacebookPage = lazy(() => import("./pages/FacebookPage"));
 const SitemapPage = lazy(() => import("./pages/SitemapPage"));
 const MetaAccountsPage = lazy(() => import("./pages/MetaAccountsPage"));
 const InternalWebhookPage = lazy(() => import("./pages/InternalWebhookPage"));
+const ContentBrowser = lazy(() => import("./pages/ContentBrowser"));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
@@ -143,6 +144,7 @@ function App() {
         } />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/furniture-gallery" element={<FurnitureGallery />} />
+        <Route path="/content-browser" element={<ContentBrowser />} />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         <Route path="/terms-of-service" element={<TermsOfServicePage />} />
         <Route path="/cookie-policy" element={<CookiePolicyPage />} />

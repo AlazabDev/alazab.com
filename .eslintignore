@@ -1,0 +1,24 @@
+export default [
+  {
+    ignores: [
+      'dist',
+      'node_modules',
+      'coverage',
+      'build',
+      '.env',
+      '.env.local',
+      '*.log',
+    ],
+  },
+  {
+    languageOptions: {
+      ecmaVersion: 2020,
+      sourceType: 'module',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+  },
+];
